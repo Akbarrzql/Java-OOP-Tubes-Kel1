@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRIPINAJA</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/responsive.css}">
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<section class="hero">
+
+    <div class="container hero-content">
+
+        <h1>
+            Where will your curiosity
+            <span>take you?</span>
+        </h1>
+
+        <p>
+            Create personalized itineraries, track budgets,
+            and discover amazing destinations.
+        </p>
+
+        <div class="planner-box">
+
+            <h2>Plan Your Next Adventure</h2>
+
+            <p>
+                Tell us where you want to go and our
+                will craft the perfect itinerary.
+            </p>
+
+            <input type="text" placeholder="Search destination province">
+
+            <div class="row-input">
+                <input type="date">
+                <input type="number" placeholder="1">
+            </div>
+
+            <div class="budget-section">
+                <label>Budget Level</label>
+
+                <div class="budget-buttons">
+                    <button class="active">Budget</button>
+                    <button>Moderate</button>
+                    <button>Luxury</button>
+                </div>
+            </div>
+
+            <button class="generate-btn">
+                ✨ Generate Itinerary
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
