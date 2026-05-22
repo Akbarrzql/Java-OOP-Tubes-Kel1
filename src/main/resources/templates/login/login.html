@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+<body>
+
+<section class="auth-page">
+
+  <div class="auth-container">
+
+    <div class="auth-left">
+
+      <div class="overlay"></div>
+
+      <div class="auth-content">
+        <h4>🧳 TRIPINAJA</h4>
+
+        <h1>
+          Plan your next
+          <span>adventure</span>
+          with confidence
+        </h1>
+
+        <p>Smart Travel Itinerary</p>
+      </div>
+
+    </div>
+
+    <div class="auth-right">
+
+      <div class="auth-form">
+
+        <h1>Login Now!</h1>
+        <p>Welcome back! Please enter your details</p>
+
+        <form>
+
+          <div class="input-group">
+            <label>Email</label>
+            <input type="email" placeholder="example@gmail.com">
+          </div>
+
+          <div class="input-group">
+            <label>Password</label>
+            <input type="password" placeholder="********">
+          </div>
+
+          <div class="auth-options">
+            <div>
+              <input type="checkbox"> Remember me
+            </div>
+
+            <a href="/forgot-password">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="auth-btn">
+            Log in
+          </button>
+
+        </form>
+
+        <div class="switch-auth">
+          Don't have an account?
+          <a href="/register">Sign Up</a>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+<link rel="stylesheet" th:href="@{/css/responsive.css}">
+</body>
+</html>

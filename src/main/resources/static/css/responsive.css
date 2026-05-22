@@ -1,0 +1,43 @@
+@media(max-width:900px){
+
+    .auth-container{
+        grid-template-columns:1fr;
+    }
+
+    .auth-left{
+        min-height:350px;
+    }
+
+    .hero h1{
+        font-size:42px;
+    }
+
+    .planner-box{
+        padding:25px;
+    }
+
+    .row-input{
+        flex-direction:column;
+    }
+}
+
+@media(max-width:600px){
+
+    .nav-wrapper{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .hero h1{
+        font-size:34px;
+    }
+
+    .auth-content h1{
+        font-size:38px;
+    }
+
+    .auth-form h1{
+        font-size:32px;
+    }
+
+}
