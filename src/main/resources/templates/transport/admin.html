@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Transport</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet"
+          th:href="@{/css/admin.css}">
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="flex">
+
+    <aside class="
+        w-64
+        bg-white
+        h-screen
+        p-6
+    ">
+
+        <h1 class="text-4xl font-bold mb-8">
+            TRIPINAJA
+        </h1>
+
+        <nav class="space-y-4">
+
+            <a href="#">
+                Dashboard
+            </a>
+
+            <a href="#">
+                Transport
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <main class="flex-1 p-10">
+
+        <div class="
+            flex
+            justify-between
+            items-center
+            mb-8
+        ">
+
+            <div>
+
+                <h2 class="
+                    text-4xl
+                    font-bold
+                ">
+                    Manajemen Transportasi
+                </h2>
+
+                <p class="text-gray-500">
+                    Kelola data transportasi
+                </p>
+
+            </div>
+
+            <button
+                    onclick="tambahTransport()"
+
+                    class="
+                        bg-[#6B5E4A]
+                        text-white
+                        px-6
+                        py-3
+                        rounded-xl
+                    "
+            >
+
+                Tambah Transportasi
+
+            </button>
+
+        </div>
+
+        <div class="
+            bg-white
+            rounded-xl
+            overflow-hidden
+        ">
+
+            <table class="w-full">
+
+                <thead class="bg-gray-100">
+
+                <tr>
+
+                    <th class="p-4">
+                        Jenis
+                    </th>
+
+                    <th class="p-4">
+                        Provider
+                    </th>
+
+                    <th class="p-4">
+                        Harga
+                    </th>
+
+                    <th class="p-4">
+                        Aksi
+                    </th>
+
+                </tr>
+
+                </thead>
+
+                <tbody id="transportTableBody">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script th:src="@{/js/admin.js}"></script>
+
+</body>
+</html>
