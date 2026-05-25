@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore</title>
+
+    <link rel="stylesheet" th:href="@{/css/explore.css}">
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+
+    <h1>Plan Your Dream Journey</h1>
+
+    <div class="search-box">
+        <input type="text" placeholder="Search destination">
+        <button>Cari</button>
+    </div>
+
+</section>
+
+<!-- DESTINATION -->
+<section class="destination-section">
+
+    <h2>Popular Destinations</h2>
+    <p>Top destinations in Indonesia</p>
+
+    <div class="filter-buttons">
+        <button class="active">All</button>
+        <button>Bali</button>
+        <button>Jakarta</button>
+        <button>Bandung</button>
+    </div>
+
+    <div class="destination-grid">
+
+        <!-- CARD -->
+        <div class="card">
+
+            <img th:src="@{/images/bali.jpg}" alt="Bali">
+
+            <div class="card-content">
+
+                <span class="province">Bali</span>
+
+                <h3>Ubud & Kintamani</h3>
+
+                <p class="rating">⭐⭐⭐⭐⭐</p>
+
+                <p class="price">from Rp 850.000/day</p>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <img th:src="@{/images/bali.jpg}" alt="Bali">
+
+            <div class="card-content">
+
+                <span class="province">Bali</span>
+
+                <h3>Ubud & Kintamani</h3>
+
+                <p class="rating">⭐⭐⭐⭐⭐</p>
+
+                <p class="price">from Rp 850.000/day</p>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <img th:src="@{/images/bali.jpg}" alt="Bali">
+
+            <div class="card-content">
+
+                <span class="province">Bali</span>
+
+                <h3>Ubud & Kintamani</h3>
+
+                <p class="rating">⭐⭐⭐⭐⭐</p>
+
+                <p class="price">from Rp 850.000/day</p>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <img th:src="@{/images/bali.jpg}" alt="Bali">
+
+            <div class="card-content">
+
+                <span class="province">Bali</span>
+
+                <h3>Ubud & Kintamani</h3>
+
+                <p class="rating">⭐⭐⭐⭐⭐</p>
+
+                <p class="price">from Rp 850.000/day</p>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <img th:src="@{/images/bali.jpg}" alt="Bali">
+
+            <div class="card-content">
+
+                <span class="province">Bali</span>
+
+                <h3>Ubud & Kintamani</h3>
+
+                <p class="rating">⭐⭐⭐⭐⭐</p>
+
+                <p class="price">from Rp 850.000/day</p>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <img th:src="@{/images/bali.jpg}" alt="Bali">
+
+            <div class="card-content">
+
+                <span class="province">Bali</span>
+
+                <h3>Ubud & Kintamani</h3>
+
+                <p class="rating">⭐⭐⭐⭐⭐</p>
+
+                <p class="price">from Rp 850.000/day</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- CTA -->
+<section class="cta">
+
+    <h1>Ready to start your adventure?</h1>
+
+    <p>Create your first itinerary in 5 minutes</p>
+
+    <button>Get started for free</button>
+
+</section>
+
+<script th:src="@{/js/explore.js}"></script>
+
+</body>
+</html>

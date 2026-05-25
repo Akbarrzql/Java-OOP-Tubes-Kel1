@@ -21,9 +21,19 @@ public class ViewController {
         return "register/register";
     }
 
-    //forgot password
+    // forgot password
     @GetMapping("/forgot-password")
     public String forgotPassword() {
         return "forgotpassword/forgot-password";
+    }
+
+    @GetMapping("/explore")
+    public String explore() {
+        return "explore/explore";
+    }
+
+    @GetMapping("/explore/destination-detail")
+    public String destinationDetail() {
+        return "explore/destination-detail";
     }
 }
