@@ -1,8 +1,10 @@
 package com.tubes.pbo.model;
 
-public interface Manageable {
-    void add();
-    void view();
-    void delete();
-    void edit();
+import java.util.List;
+
+public interface Manageable<T> {
+    void add(T data);
+    List<T> view();
+    void edit(int id, T data);
+    void delete(int id);
 }
