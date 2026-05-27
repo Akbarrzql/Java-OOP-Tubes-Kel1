@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --color-primary: #6B5E4A;
+        --color-accent: #A68A64;
+        --color-bglight: #FAFAFA;
+    }
+}
+
+/* Custom Utilities penunjang jika ada animasi atau layouting tambahan */
+.admin-table-row {
+    transition: all 0.2s ease-in-out;
+}
