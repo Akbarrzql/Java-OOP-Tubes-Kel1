@@ -86,5 +86,10 @@ public class ViewController {
     public String adminAccommodation() {
         return "admin/accommodation/accommodation";
     }
+
+    @GetMapping("/admin/province")
+    public String adminProvince() {
+        return "admin/province/province";
+    }
 }
 

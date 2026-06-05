@@ -42,6 +42,22 @@
 
             </a>
 
+            <a th:href="@{/admin/province}"
+
+               class="sidebar-link"
+
+               th:classappend="${activeMenu == 'province'} ? ' active'">
+
+                <i class="fas fa-map"></i>
+
+                <span>
+
+                    Province
+
+                </span>
+
+            </a>
+
             <a th:href="@{/admin/accommodation}"
                th:class="${activeMenu == 'accommodation'}
    ? 'sidebar-link active'
