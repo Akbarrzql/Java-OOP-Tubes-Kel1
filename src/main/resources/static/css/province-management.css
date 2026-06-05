@@ -1,0 +1,237 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    background: #f5f5f5;
+}
+
+/* ======================
+   SIDEBAR
+====================== */
+
+.sidebar {
+    width: 260px;
+    background: #ffffff;
+    border-right: 1px solid #e5e5e5;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo h2 {
+    color: #8a6a28;
+    margin-bottom: 5px;
+}
+
+.logo p {
+    font-size: 12px;
+    color: #888;
+}
+
+.create-btn {
+    margin-top: 25px;
+    background: #8a6a28;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+nav {
+    margin-top: 30px;
+}
+
+nav a {
+    display: block;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    color: #444;
+    border-radius: 10px;
+    transition: 0.2s;
+}
+
+nav a:hover {
+    background: #f3efe8;
+}
+
+nav a.active {
+    background: #f3efe8;
+    color: #8a6a28;
+    font-weight: 600;
+}
+
+.bottom-menu {
+    margin-top: auto;
+}
+
+.bottom-menu a {
+    display: block;
+    margin-top: 15px;
+    text-decoration: none;
+    color: #666;
+}
+
+/* ======================
+   CONTENT
+====================== */
+
+.content {
+    flex: 1;
+    padding: 40px;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.page-header h1 {
+    font-size: 42px;
+    color: #333;
+}
+
+.page-header p {
+    color: #777;
+    margin-top: 6px;
+}
+
+.add-btn {
+    background: #8a6a28;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    padding: 14px 20px;
+    font-weight: 600;
+}
+
+/* ======================
+   SUMMARY CARD
+====================== */
+
+.summary-card {
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 25px;
+}
+
+.summary-card h3 {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.summary-card span {
+    font-size: 42px;
+    font-weight: 700;
+    color: #333;
+}
+
+/* ======================
+   TABLE
+====================== */
+
+.table-wrapper {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.table-toolbar {
+    padding: 20px;
+    border-bottom: 1px solid #ececec;
+}
+
+.table-toolbar input {
+    width: 320px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+}
+
+.table-toolbar input:focus {
+    border-color: #8a6a28;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #fafafa;
+}
+
+th {
+    text-align: left;
+    padding: 18px;
+    font-size: 13px;
+    color: #666;
+}
+
+td {
+    padding: 18px;
+    border-top: 1px solid #ececec;
+    color: #333;
+}
+
+.edit-btn {
+    background: #8a6a28;
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+}
+
+.edit-btn:hover {
+    opacity: 0.9;
+}
+
+.table-footer {
+    padding: 18px;
+    border-top: 1px solid #ececec;
+    color: #666;
+}
+
+/* ======================
+   RESPONSIVE
+====================== */
+
+@media (max-width: 992px) {
+
+    body {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .table-toolbar input {
+        width: 100%;
+    }
+
+    .content {
+        padding: 20px;
+    }
+
+}

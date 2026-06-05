@@ -1,0 +1,130 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body {
+    display: flex;
+    background: #f6f6f6;
+}
+
+/* Sidebar */
+
+.sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background: white;
+    border-right: 1px solid #ececec;
+    padding: 25px;
+}
+
+.logo h2 {
+    color: #8a6a28;
+}
+
+.logo p {
+    font-size: 11px;
+    color: #777;
+}
+
+.create-btn {
+    width: 100%;
+    margin-top: 25px;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: #8a6a28;
+    color: white;
+    cursor: pointer;
+}
+
+nav {
+    margin-top: 30px;
+}
+
+nav a {
+    display: block;
+    padding: 12px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    color: #444;
+    border-radius: 10px;
+}
+
+nav a.active {
+    background: #f3efe8;
+    color: #8a6a28;
+    font-weight: 600;
+}
+
+/* Content */
+
+.content {
+    flex: 1;
+    padding: 40px;
+}
+
+.page-header h1 {
+    font-size: 40px;
+    color: #333;
+}
+
+.page-header p {
+    color: #777;
+    margin-top: 5px;
+}
+
+.form-card {
+    margin-top: 30px;
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .05);
+    max-width: 700px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #444;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.cancel-btn {
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    background: #ececec;
+    color: #444;
+}
+
+.save-btn {
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    background: #8a6a28;
+    color: white;
+    cursor: pointer;
+}
