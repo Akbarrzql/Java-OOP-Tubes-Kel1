@@ -1,25 +1,27 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<nav class="navbar" th:fragment="navbar">
 
-<body>
+    <div class="container">
 
-<nav th:fragment="navbar" class="navbar">
-
-    <div class="container nav-wrapper">
-
+        <!-- LEFT -->
         <div class="logo">
-            <span>🧳</span>
-            <h2>TRIPINAJA</h2>
+            <span class="logo-icon">◉</span>
+            TRIPINAJA
         </div>
 
-        <div class="nav-buttons">
-            <a href="/login" class="btn-outline">Login</a>
-            <a href="/register" class="btn-gold">Register</a>
+
+        <!-- RIGHT -->
+        <div class="nav-right">
+
+            <a href="/login" class="login-link">
+                Login
+            </a>
+
+            <a href="/register" class="register-btn">
+                Register
+            </a>
+
         </div>
 
     </div>
 
 </nav>
-
-</body>
-</html>

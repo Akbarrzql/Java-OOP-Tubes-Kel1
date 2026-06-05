@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tripinaja</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<main>
+
+    <!-- HERO -->
+    <section class="hero">
+
+        <div class="container">
+
+            <div class="hero-content">
+
+                <h1>
+                    Where will your
+                    <span>curiosity</span>
+                    take you?
+                </h1>
+
+                <p>
+                    Create personalized itineraries, track budgets,
+                    and discover amazing destinations tailored for you.
+                </p>
+
+                <div class="planner-card">
+
+                    <h2>Plan Your Next Adventure</h2>
+
+                    <form>
+
+                        <input type="text"
+                               placeholder="Search destination">
+
+                        <div class="form-row">
+
+                            <input type="date">
+
+                            <select>
+                                <option>2 Travelers</option>
+                                <option>4 Travelers</option>
+                            </select>
+
+                        </div>
+
+                        <div class="budget-buttons">
+                            <button type="button">Budget</button>
+                            <button type="button" class="active">
+                                Moderate
+                            </button>
+                            <button type="button">Luxury</button>
+                        </div>
+
+                        <button class="generate-btn">
+                            Generate Itinerary
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FEATURED -->
+    <section class="featured">
+
+        <div class="container">
+
+            <div class="section-header">
+
+                <div>
+                    <h2>Featured Destinations</h2>
+                    <p>
+                        Discover curated locales for your next escape.
+                    </p>
+                </div>
+
+                <a href="#">View All →</a>
+
+            </div>
+
+            <div class="featured-grid">
+
+                <div class="big-card">
+
+                    <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=1200&auto=format&fit=crop">
+
+                    <div class="overlay">
+                        <h3>Bali, Indonesia</h3>
+                        <p>Experience the Island of Gods.</p>
+                    </div>
+
+                </div>
+
+                <div class="small-cards">
+
+                    <div class="small-card">
+
+                        <img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=1200&auto=format&fit=crop">
+
+                        <div class="overlay">
+                            <h3>London, UK</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="small-card">
+
+                        <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=1200&auto=format&fit=crop">
+
+                        <div class="overlay">
+                            <h3>Tokyo, Japan</h3>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<script src="/js/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Tripinaja</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/responsive.css}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar dashboard-navbar">
+
+    <div class="container">
+
+        <!-- LOGO -->
+        <div class="logo">
+            <span class="logo-icon">◉</span>
+            TRIPINAJA
+        </div>
+
+        <!-- PROFILE -->
+        <div class="profile-menu">
+
+            <div class="profile-avatar">
+                A
+            </div>
+
+            <span class="profile-name">
+                Akbar
+            </span>
+
+            <i class="fas fa-chevron-down"></i>
+
+        </div>
+
+    </div>
+
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="dashboard-main">
+    <div class="container">
+        <!-- WELCOME SECTION -->
+        <section class="welcome-section">
+            <div class="welcome-content">
+                <h1>Selamat datang kembali! 👋</h1>
+                <p>Lanjutkan petualangan Anda atau jelajahi destinasi baru</p>
+            </div>
+            <div class="quick-actions">
+                <a href="/" class="btn-action btn-action-primary">
+                    <i class="fas fa-plus"></i> Buat Itinerary Baru
+                </a>
+                <a href="/explore" class="btn-action btn-action-secondary">
+                    <i class="fas fa-map"></i> Jelajahi Destinasi
+                </a>
+            </div>
+        </section>
+
+        <!-- STATS CARDS -->
+        <!-- SUMMARY CARDS -->
+        <section class="stats-section">
+
+            <!-- ACTIVE ITINERARY -->
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+
+                <div class="stat-content">
+                    <h3>Itinerary Aktif</h3>
+                    <p class="stat-number">3</p>
+                    <span class="stat-label">
+                Dalam perjalanan & perencanaan
+            </span>
+                </div>
+
+            </div>
+
+            <!-- DESTINATION VISITED -->
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    <i class="fas fa-map-marked-alt"></i>
+                </div>
+
+                <div class="stat-content">
+                    <h3>Destinasi Dikunjungi</h3>
+                    <p class="stat-number">12</p>
+                    <span class="stat-label">
+                Kota & negara telah dikunjungi
+            </span>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ONGOING ITINERARIES -->
+        <section class="itineraries-section">
+            <div class="section-header">
+                <h2>Itinerary Sedang Berjalan</h2>
+                <a href="/itinerary/list" class="see-all">
+                    Lihat Semua →
+                </a>
+            </div>
+
+            <div class="itineraries-grid">
+                <!-- Itinerary Card 1 -->
+                <div class="itinerary-card">
+                    <div class="card-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                    <div class="card-content">
+                        <div class="card-badge">Aktif</div>
+                        <h3>Liburan ke Bali</h3>
+                        <p class="card-subtitle">Bali, Indonesia</p>
+                        <div class="card-meta">
+                            <span><i class="fas fa-calendar"></i> 10-17 Juni</span>
+                            <span><i class="fas fa-map-pin"></i> 5 Hari</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 60%"></div>
+                        </div>
+                        <p class="progress-text">60% Selesai</p>
+                        <a href="/itinerary/1" class="btn-card">Lanjutkan →</a>
+                    </div>
+                </div>
+
+                <!-- Itinerary Card 2 -->
+                <div class="itinerary-card">
+                    <div class="card-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+                    <div class="card-content">
+                        <div class="card-badge">Dalam Perencanaan</div>
+                        <h3>Jakarta City Tour</h3>
+                        <p class="card-subtitle">Jakarta, Indonesia</p>
+                        <div class="card-meta">
+                            <span><i class="fas fa-calendar"></i> 25 Juli</span>
+                            <span><i class="fas fa-map-pin"></i> 1 Hari</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 30%"></div>
+                        </div>
+                        <p class="progress-text">30% Selesai</p>
+                        <a href="/itinerary/2" class="btn-card">Lanjutkan →</a>
+                    </div>
+                </div>
+
+                <!-- Itinerary Card 3 -->
+                <div class="itinerary-card">
+                    <div class="card-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                    <div class="card-content">
+                        <div class="card-badge">Dalam Perencanaan</div>
+                        <h3>Eksplorasi Bandung</h3>
+                        <p class="card-subtitle">Bandung, Indonesia</p>
+                        <div class="card-meta">
+                            <span><i class="fas fa-calendar"></i> 15 Agustus</span>
+                            <span><i class="fas fa-map-pin"></i> 3 Hari</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 10%"></div>
+                        </div>
+                        <p class="progress-text">10% Selesai</p>
+                        <a href="/itinerary/3" class="btn-card">Lanjutkan →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURED DESTINATIONS -->
+        <section class="featured-section">
+            <div class="section-header">
+                <h2>Destinasi Pilihan</h2>
+                <a href="/explore" class="see-all">
+                    Jelajahi Semua →
+                </a>
+            </div>
+
+            <div class="destinations-grid">
+                <!-- Destination Card -->
+                <div class="destination-card">
+                    <div class="dest-image" style="background: url('https://images.unsplash.com/photo-1537225228614-b4fad34a7d7f?w=400') center/cover;"></div>
+                    <div class="dest-content">
+                        <h3>Bali</h3>
+                        <p>The Island of Gods</p>
+                        <div class="dest-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>4.8 (324)</span>
+                        </div>
+                        <a href="/explore/destination/1" class="btn-dest">Pelajari Lebih Lanjut</a>
+                    </div>
+                </div>
+
+                <!-- Destination Card -->
+                <div class="destination-card">
+                    <div class="dest-image" style="background: url('https://images.unsplash.com/photo-1509391366360-2e938aa1ef14?w=400') center/cover;"></div>
+                    <div class="dest-content">
+                        <h3>Yogyakarta</h3>
+                        <p>Kota Budaya Indonesia</p>
+                        <div class="dest-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>4.9 (412)</span>
+                        </div>
+                        <a href="/explore/destination/2" class="btn-dest">Pelajari Lebih Lanjut</a>
+                    </div>
+                </div>
+
+                <!-- Destination Card -->
+                <div class="destination-card">
+                    <div class="dest-image" style="background: url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=400') center/cover;"></div>
+                    <div class="dest-content">
+                        <h3>Lombok</h3>
+                        <p>Pantai Eksotis</p>
+                        <div class="dest-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>4.6 (289)</span>
+                        </div>
+                        <a href="/explore/destination/3" class="btn-dest">Pelajari Lebih Lanjut</a>
+                    </div>
+                </div>
+
+                <!-- Destination Card -->
+                <div class="destination-card">
+                    <div class="dest-image" style="background: url('https://images.unsplash.com/photo-1518756131299-26e3c3f81b4b?w=400') center/cover;"></div>
+                    <div class="dest-content">
+                        <h3>Malang</h3>
+                        <p>Kesegaran Pegunungan</p>
+                        <div class="dest-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>4.5 (156)</span>
+                        </div>
+                        <a href="/explore/destination/4" class="btn-dest">Pelajari Lebih Lanjut</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA SECTION -->
+        <section class="cta-section">
+            <div class="cta-content">
+                <h2>Belum punya rencana perjalanan?</h2>
+                <p>Mulai buat itinerary impian Anda sekarang dan jadadkan petualangan menjadi kenyataan</p>
+                <a href="/" class="btn-cta">Buat Itinerary Sekarang</a>
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+
+    <div class="footer-container">
+
+        <!-- BRAND -->
+        <div class="footer-brand">
+
+            <h2>TRIPINAJA</h2>
+
+            <p>
+                Smart Travel Itinerary untuk perjalanan
+                sempurna Anda.
+            </p>
+
+            <span>
+                © 2026 TRIPINAJA. All rights reserved.
+            </span>
+
+        </div>
+
+        <!-- LINKS -->
+        <div class="footer-links">
+
+            <div class="footer-column">
+
+                <h4>Menu</h4>
+
+                <a href="/">Home</a>
+                <a href="/explore">Explore</a>
+                <a href="/itinerary/list">My Itinerary</a>
+
+            </div>
+
+            <div class="footer-column">
+
+                <h4>Bantuan</h4>
+
+                <a href="#">FAQ</a>
+                <a href="#">Kontak Kami</a>
+                <a href="#">Kebijakan Privasi</a>
+
+            </div>
+
+            <div class="footer-column">
+
+                <h4>Legal</h4>
+
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</footer>
+
+</body>
+</html>

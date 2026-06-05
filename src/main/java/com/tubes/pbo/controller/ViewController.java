@@ -6,10 +6,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ViewController {
 
+    /* =========================
+       PUBLIC PAGE
+    ========================= */
+
     @GetMapping("/")
     public String home() {
-        return "index";
+        return "home/index";
     }
+
+    /* =========================
+       AUTH PAGE
+    ========================= */
 
     @GetMapping("/login")
     public String login() {
@@ -21,19 +29,36 @@ public class ViewController {
         return "register/register";
     }
 
-    // forgot password
     @GetMapping("/forgot-password")
     public String forgotPassword() {
         return "forgotpassword/forgot-password";
     }
 
-    @GetMapping("/explore")
-    public String explore() {
-        return "explore/explore";
+    /* =========================
+       DASHBOARD
+    ========================= */
+
+    @GetMapping("/dashboard")
+    public String dashboard() {
+        return "traveler/dashboard/dashboard";
     }
 
-    @GetMapping("/explore/destination-detail")
-    public String destinationDetail() {
-        return "explore/destination-detail";
+    /* =========================
+       ITINERARY
+    ========================= */
+
+    @GetMapping("/itinerary/list")
+    public String itineraryList() {
+        return "traveler/itinerary/list";
     }
+
+    /* =========================
+       EXPLORE
+    ========================= */
+
+    @GetMapping("/explore")
+    public String explore() {
+        return "traveler/explore/index";
+    }
+
 }
