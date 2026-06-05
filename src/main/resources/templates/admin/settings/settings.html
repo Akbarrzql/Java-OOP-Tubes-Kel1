@@ -1,10 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
+
   <meta charset="UTF-8">
-  <title>$Title$</title>
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>
+    Admin Settings
+  </title>
+
+  <link rel="stylesheet"
+        th:href="@{/css/admin.css}">
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 </head>
-<body>
-$END$
+
+<body class="admin-body">
+
+<!-- SIDEBAR -->
+<div th:replace="
+fragments/admin-sidebar ::
+adminSidebar('settings')">
+</div>
+
+<!-- MAIN -->
+<main class="main-content">
+
+  <!-- TOPBAR -->
+  <div th:replace="
+    fragments/admin-topbar ::
+    adminTopbar(
+        'Settings',
+        'Konfigurasi sistem administrator'
+    )">
+  </div>
+
+  <section class="settings-wrapper">
+
+    <!-- GENERAL -->
+    <div class="settings-card">
+
+      <h3>General Settings</h3>
+
+      <div class="settings-group">
+
+        <label>Website Name</label>
+
+        <input type="text"
+               value="TRIPINAJA">
+
+      </div>
+
+      <div class="settings-group">
+
+        <label>Timezone</label>
+
+        <select>
+          <option>Asia/Jakarta</option>
+        </select>
+
+      </div>
+
+    </div>
+
+    <!-- SYSTEM -->
+    <div class="settings-card">
+
+      <h3>System Settings</h3>
+
+      <div class="settings-toggle">
+
+        <div>
+          <strong>Email Notifications</strong>
+          <p>Aktifkan notifikasi email</p>
+        </div>
+
+        <input type="checkbox" checked>
+
+      </div>
+
+      <div class="settings-toggle">
+
+        <div>
+          <strong>Maintenance Mode</strong>
+          <p>Nonaktifkan akses user sementara</p>
+        </div>
+
+        <input type="checkbox">
+
+      </div>
+
+    </div>
+
+    <button class="btn-primary save-btn">
+
+      Simpan Pengaturan
+
+    </button>
+
+  </section>
+
+</main>
+
 </body>
 </html>
+```

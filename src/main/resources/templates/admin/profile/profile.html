@@ -1,10 +1,218 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Admin Profile
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/admin.css}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 </head>
-<body>
-$END$
+
+<body class="admin-body">
+
+<!-- SIDEBAR -->
+<div th:replace="
+fragments/admin-sidebar ::
+adminSidebar('profile')">
+</div>
+
+<!-- MAIN -->
+<main class="main-content">
+
+    <!-- TOPBAR -->
+    <div th:replace="
+    fragments/admin-topbar ::
+    adminTopbar(
+        'Admin Profile',
+        'Kelola informasi akun administrator'
+    )">
+    </div>
+
+    <!-- PROFILE CARD -->
+    <section class="profile-wrapper">
+
+        <div class="profile-layout">
+
+            <!-- LEFT -->
+            <div class="profile-sidebar-card">
+
+                <div class="profile-avatar-large">
+                    A
+                </div>
+
+                <h2>
+                    Akbar Rizqullah
+                </h2>
+
+                <p class="profile-role">
+                    Super Administrator
+                </p>
+
+                <div class="profile-status">
+
+                    <div class="status-item">
+
+                        <span>Status</span>
+
+                        <strong class="active-status">
+                            Active
+                        </strong>
+
+                    </div>
+
+                    <div class="status-item">
+
+                        <span>Last Login</span>
+
+                        <strong>
+                            05 June 2026
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+            <div class="profile-form-card">
+
+                <div class="form-section-header">
+
+                    <h3>Personal Information</h3>
+
+                    <p>
+                        Update administrator account information.
+                    </p>
+
+                </div>
+
+                <form class="profile-form">
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label>
+                                Full Name
+                            </label>
+
+                            <input type="text"
+                                   value="Akbar Rizqullah">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>
+                                Username
+                            </label>
+
+                            <input type="text"
+                                   value="akbaradmin">
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label>
+                                Email Address
+                            </label>
+
+                            <input type="email"
+                                   value="admin@tripinaja.com">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>
+                                Phone Number
+                            </label>
+
+                            <input type="text"
+                                   value="+62 812 3456 7890">
+
+                        </div>
+
+                    </div>
+
+                    <div class="security-section">
+
+                        <h4>Security</h4>
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label>
+                                    New Password
+                                </label>
+
+                                <input type="password">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>
+                                    Confirm Password
+                                </label>
+
+                                <input type="password">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-actions">
+
+                        <button type="button"
+                                class="btn-secondary">
+
+                            Cancel
+
+                        </button>
+
+                        <button type="submit"
+                                class="btn-primary">
+
+                            Save Changes
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
 </body>
 </html>
+

@@ -1,10 +1,102 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html lang="id"
+      xmlns:th="http://www.thymeleaf.org">
+
 <body>
+
+<aside class="sidebar"
+       th:fragment="adminSidebar(activeMenu)">
+
+    <div>
+
+        <!-- BRAND -->
+        <div class="sidebar-brand">
+
+            <h1>TRIPINAJA</h1>
+
+            <p>Admin Management</p>
+
+        </div>
+
+        <!-- MENU -->
+        <nav class="sidebar-menu">
+
+            <a th:href="@{/admin/dashboard}"
+               th:class="${activeMenu == 'dashboard'}
+       ? 'sidebar-link active'
+       : 'sidebar-link'">
+
+                <i class="fas fa-chart-pie"></i>
+                <span>Dashboard</span>
+
+            </a>
+
+            <a th:href="@{/admin/destination}"
+               th:class="${activeMenu == 'destination'}
+   ? 'sidebar-link active'
+   : 'sidebar-link'">
+
+                <i class="fas fa-map-marked-alt"></i>
+
+                <span>Destination</span>
+
+            </a>
+
+            <a th:href="@{/admin/accommodation}"
+               th:class="${activeMenu == 'accommodation'}
+   ? 'sidebar-link active'
+   : 'sidebar-link'">
+
+                <i class="fas fa-hotel"></i>
+
+                <span>Accommodation</span>
+
+            </a>
+
+            <a th:href="@{/admin/transport}"
+               th:class="${activeMenu == 'transport'}
+       ? 'sidebar-link active'
+       : 'sidebar-link'">
+
+                <i class="fas fa-bus"></i>
+                <span>Transport</span>
+
+            </a>
+
+            <a th:href="@{/admin/settings}"
+               th:class="${activeMenu == 'settings'}
+       ? 'sidebar-link active'
+       : 'sidebar-link'">
+
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+
+            </a>
+
+        </nav>
+
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="sidebar-footer">
+
+        <a th:href="@{/admin/profile}"
+           th:class="${activeMenu == 'profile'}
+       ? 'sidebar-link active'
+       : 'sidebar-link'">
+            <i class="fas fa-user-circle"></i>
+            Admin Profile
+        </a>
+
+        <a href="/">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </a>
+
+    </div>
+
+</aside>
 
 </body>
 </html>

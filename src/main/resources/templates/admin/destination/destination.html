@@ -1,10 +1,458 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
+
   <meta charset="UTF-8">
-  <title>$Title$</title>
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>
+    Destination Management
+  </title>
+
+  <link rel="stylesheet"
+        th:href="@{/css/admin.css}">
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 </head>
-<body>
-$END$
+
+<body class="admin-body">
+
+<!-- SIDEBAR -->
+<div th:replace="
+fragments/admin-sidebar ::
+adminSidebar('destination')">
+</div>
+
+<!-- MAIN -->
+<main class="main-content">
+
+  <!-- TOPBAR -->
+  <div th:replace="
+    fragments/admin-topbar ::
+    adminTopbar(
+        'Destination Management',
+        'Kelola seluruh destinasi wisata'
+    )">
+  </div>
+
+  <!-- ACTION -->
+  <div class="page-action">
+
+    <button class="btn-primary"
+            onclick="openDestinationModal()">
+
+      <i class="fas fa-plus"></i>
+
+      Tambah Destinasi
+
+    </button>
+
+  </div>
+
+  <!-- TABLE -->
+  <section class="table-wrapper">
+
+    <table class="transport-table">
+
+      <thead>
+
+      <tr>
+
+        <th>Nama</th>
+        <th>Lokasi</th>
+        <th>Harga</th>
+        <th>Rating</th>
+        <th>Aksi</th>
+
+      </tr>
+
+      </thead>
+
+      <tbody>
+
+      <tr>
+
+        <td>Bali</td>
+        <td>Indonesia</td>
+        <td>Rp 2.500.000</td>
+        <td>4.9 ⭐</td>
+
+        <td>
+
+          <div class="table-actions">
+
+            <!-- BUTTON EDIT -->
+            <button
+                    onclick="
+openEditDestinationModal(
+'1',
+'Bali',
+'Indonesia',
+'2500000',
+'4.9',
+'Pulau wisata terbaik'
+)
+">
+
+              Edit
+
+            </button>
+
+            <!-- EDIT MODAL -->
+            <div class="modal-overlay"
+                 id="editDestinationModal">
+
+              <div class="modern-modal">
+
+                <button class="modal-close"
+                        onclick="closeEditDestinationModal()">
+
+                  <i class="fas fa-times"></i>
+
+                </button>
+
+                <div class="modal-header">
+
+                  <div class="modal-icon">
+
+                    <i class="fas fa-map-marked-alt"></i>
+
+                  </div>
+
+                  <div>
+
+                    <h3>Edit Destination</h3>
+
+                    <p>Update destinasi wisata</p>
+
+                  </div>
+
+                </div>
+
+                <form class="modern-form">
+
+                  <input type="hidden"
+                         id="editDestinationId">
+
+                  <div class="form-grid">
+
+                    <div class="form-group">
+
+                      <label>Nama</label>
+
+                      <input type="text"
+                             id="editDestinationName">
+
+                    </div>
+
+                    <div class="form-group">
+
+                      <label>Lokasi</label>
+
+                      <input type="text"
+                             id="editDestinationLocation">
+
+                    </div>
+
+                  </div>
+
+                  <div class="form-grid">
+
+                    <div class="form-group">
+
+                      <label>Harga</label>
+
+                      <input type="number"
+                             id="editDestinationPrice">
+
+                    </div>
+
+                    <div class="form-group">
+
+                      <label>Rating</label>
+
+                      <input type="number"
+                             step="0.1"
+                             id="editDestinationRating">
+
+                    </div>
+
+                  </div>
+
+                  <div class="form-group">
+
+                    <label>Deskripsi</label>
+
+                    <textarea rows="5"
+                              id="editDestinationDescription"></textarea>
+
+                  </div>
+
+                  <div class="form-actions">
+
+                    <button type="button"
+                            class="btn-secondary"
+                            onclick="closeEditDestinationModal()">
+
+                      Cancel
+
+                    </button>
+
+                    <button type="submit"
+                            class="btn-primary">
+
+                      Update Destination
+
+                    </button>
+
+                  </div>
+
+                </form>
+
+              </div>
+
+            </div>
+
+            <script>
+
+              const editDestinationModal =
+                      document.getElementById(
+                              'editDestinationModal'
+                      );
+
+              function openEditDestinationModal(
+                      id,
+                      name,
+                      location,
+                      price,
+                      rating,
+                      description
+              ){
+
+                editDestinationModal.classList.add(
+                        'active'
+                );
+
+                document.getElementById(
+                        'editDestinationId'
+                ).value = id;
+
+                document.getElementById(
+                        'editDestinationName'
+                ).value = name;
+
+                document.getElementById(
+                        'editDestinationLocation'
+                ).value = location;
+
+                document.getElementById(
+                        'editDestinationPrice'
+                ).value = price;
+
+                document.getElementById(
+                        'editDestinationRating'
+                ).value = rating;
+
+                document.getElementById(
+                        'editDestinationDescription'
+                ).value = description;
+
+              }
+
+              function closeEditDestinationModal(){
+
+                editDestinationModal.classList.remove(
+                        'active'
+                );
+
+              }
+
+            </script>
+
+
+            <a href="#">
+              Hapus
+            </a>
+
+          </div>
+
+        </td>
+
+      </tr>
+
+      </tbody>
+
+    </table>
+
+  </section>
+
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay"
+     id="destinationModal">
+
+  <div class="modern-modal">
+
+    <button class="modal-close"
+            onclick="closeDestinationModal()">
+
+      <i class="fas fa-times"></i>
+
+    </button>
+
+    <div class="modal-header">
+
+      <div class="modal-icon">
+
+        <i class="fas fa-map-marked-alt"></i>
+
+      </div>
+
+      <div>
+
+        <h3>
+          Tambah Destinasi
+        </h3>
+
+        <p>
+          Tambahkan destinasi wisata baru
+        </p>
+
+      </div>
+
+    </div>
+
+    <form class="modern-form">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+
+          <label>
+            Nama Destinasi
+          </label>
+
+          <input type="text"
+                 placeholder="Bali">
+
+        </div>
+
+        <div class="form-group">
+
+          <label>
+            Lokasi
+          </label>
+
+          <input type="text"
+                 placeholder="Indonesia">
+
+        </div>
+
+      </div>
+
+      <div class="form-grid">
+
+        <div class="form-group">
+
+          <label>
+            Harga Estimasi
+          </label>
+
+          <input type="number"
+                 placeholder="2500000">
+
+        </div>
+
+        <div class="form-group">
+
+          <label>
+            Rating
+          </label>
+
+          <input type="number"
+                 step="0.1"
+                 placeholder="4.9">
+
+        </div>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>
+          Deskripsi
+        </label>
+
+        <textarea rows="5"></textarea>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>
+          Upload Gambar
+        </label>
+
+        <input type="file">
+
+      </div>
+
+      <div class="form-actions">
+
+        <button type="button"
+                class="btn-secondary"
+                onclick="closeDestinationModal()">
+
+          Cancel
+
+        </button>
+
+        <button type="submit"
+                class="btn-primary">
+
+          Save Destination
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+<script>
+
+  const destinationModal =
+          document.getElementById(
+                  'destinationModal'
+          );
+
+  function openDestinationModal(){
+
+    destinationModal.classList.add(
+            'active'
+    );
+
+  }
+
+  function closeDestinationModal(){
+
+    destinationModal.classList.remove(
+            'active'
+    );
+
+  }
+
+</script>
+
 </body>
 </html>

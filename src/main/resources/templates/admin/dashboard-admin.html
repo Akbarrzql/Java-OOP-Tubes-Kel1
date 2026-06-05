@@ -1,66 +1,74 @@
 <!DOCTYPE html>
-<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<html lang="id"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Tripinaja</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Admin Dashboard
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/admin.css}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 </head>
-<body>
 
-<nav class="navbar">
-    <div class="container">
-        <div class="nav-wrapper">
-            <div class="logo">
-                <h2>🧳 TRIPINAJA - Admin</h2>
-            </div>
-            <div class="nav-buttons">
-                <a href="/admin/transport" class="btn-outline">Manage Transport</a>
-                <a href="/admin/users" class="btn-outline">Manage Users</a>
-                <a href="/admin/reports" class="btn-outline">Reports</a>
-                <a href="/logout" class="btn-gold">Logout</a>
-            </div>
+<body class="admin-body">
+
+<!-- SIDEBAR -->
+<div th:replace="fragments/admin-sidebar :: adminSidebar('dashboard')">
+</div>
+
+<!-- MAIN -->
+<main class="main-content">
+
+    <!-- TOPBAR -->
+    <div th:replace="
+        fragments/admin-topbar ::
+        adminTopbar(
+            'Dashboard',
+            'Ringkasan aktivitas admin'
+        )">
+    </div>
+
+    <!-- STATS -->
+    <section class="admin-stats">
+
+        <div class="admin-card">
+
+            <h3>Total Users</h3>
+
+            <p>1,245</p>
+
         </div>
-    </div>
-</nav>
 
-<main class="dashboard-main">
-    <div class="container">
-        <section class="welcome-section">
-            <div class="welcome-content">
-                <h1>Welcome, <span th:text="${username}">Admin</span> 👋</h1>
-                <p>This is the admin dashboard. Use the links above to manage the system.</p>
-            </div>
-        </section>
+        <div class="admin-card">
 
-        <section class="admin-links">
-            <div class="card-grid">
-                <div class="card">
-                    <h3>Manage Transport</h3>
-                    <p>CRUD transport items, providers and schedules.</p>
-                    <a href="/admin/transport" class="btn-card">Open</a>
-                </div>
-                <div class="card">
-                    <h3>Manage Users</h3>
-                    <p>View and manage user accounts.</p>
-                    <a href="/admin/users" class="btn-card">Open</a>
-                </div>
-                <div class="card">
-                    <h3>Reports</h3>
-                    <p>View usage and financial reports.</p>
-                    <a href="/admin/reports" class="btn-card">Open</a>
-                </div>
-            </div>
-        </section>
-    </div>
+            <h3>Total Transport</h3>
+
+            <p>84</p>
+
+        </div>
+
+        <div class="admin-card">
+
+            <h3>Active Trips</h3>
+
+            <p>329</p>
+
+        </div>
+
+    </section>
+
 </main>
-
-<footer class="footer">
-    <div class="container">
-        <p>&copy; 2026 TRIPINAJA. Admin Panel.</p>
-    </div>
-</footer>
 
 </body>
 </html>

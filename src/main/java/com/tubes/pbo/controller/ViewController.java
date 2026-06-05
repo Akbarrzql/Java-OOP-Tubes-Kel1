@@ -35,7 +35,7 @@ public class ViewController {
     }
 
     /* =========================
-       DASHBOARD
+       TRAVELER PAGE
     ========================= */
 
     @GetMapping("/dashboard")
@@ -43,22 +43,48 @@ public class ViewController {
         return "traveler/dashboard/dashboard";
     }
 
-    /* =========================
-       ITINERARY
-    ========================= */
-
     @GetMapping("/itinerary/list")
     public String itineraryList() {
         return "traveler/itinerary/list";
     }
-
-    /* =========================
-       EXPLORE
-    ========================= */
 
     @GetMapping("/explore")
     public String explore() {
         return "traveler/explore/index";
     }
 
+    /* =========================
+       ADMIN PAGE
+    ========================= */
+
+    @GetMapping("/admin/dashboard")
+    public String adminDashboard() {
+        return "admin/dashboard-admin";
+    }
+
+    @GetMapping("/admin/transport")
+    public String adminTransport() {
+        return "admin/transport/transport";
+    }
+
+    @GetMapping("/admin/profile")
+    public String adminProfile() {
+        return "admin/profile/profile";
+    }
+
+    @GetMapping("/admin/settings")
+    public String adminSettings() {
+        return "admin/settings/settings";
+    }
+
+    @GetMapping("/admin/destination")
+    public String adminDestination() {
+        return "admin/destination/destination";
+    }
+
+    @GetMapping("/admin/accommodation")
+    public String adminAccommodation() {
+        return "admin/accommodation/accommodation";
+    }
 }
+

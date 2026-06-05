@@ -1,10 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
+<html lang="id"
+      xmlns:th="http://www.thymeleaf.org">
+
 <body>
-$END$
+
+<header class="topbar"
+        th:fragment="adminTopbar(title, subtitle)">
+
+    <div>
+
+        <h2 th:text="${title}">
+            Dashboard
+        </h2>
+
+        <p th:text="${subtitle}">
+            Subtitle
+        </p>
+
+    </div>
+
+</header>
+
 </body>
 </html>

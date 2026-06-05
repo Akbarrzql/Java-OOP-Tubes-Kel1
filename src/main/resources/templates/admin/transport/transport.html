@@ -1,10 +1,618 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Transport Management
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/admin.css}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 </head>
-<body>
-$END$
+
+<body class="admin-body">
+
+<!-- SIDEBAR -->
+<div th:replace="
+fragments/admin-sidebar ::
+adminSidebar('transport')">
+</div>
+
+<!-- MAIN -->
+<main class="main-content">
+
+    <!-- TOPBAR -->
+    <div th:replace="
+        fragments/admin-topbar ::
+        adminTopbar(
+            'Transport Management',
+            'Kelola seluruh data transportasi'
+        )">
+    </div>
+
+    <!-- ACTION -->
+    <div class="page-action">
+
+        <button class="btn-primary"
+                onclick="openTransportModal()">
+
+            <i class="fas fa-plus"></i>
+
+            Tambah Transport
+
+        </button>
+
+    </div>
+
+    <!-- TABLE -->
+    <section class="table-wrapper">
+
+        <table class="transport-table">
+
+            <thead>
+
+            <tr>
+
+                <th>Jenis</th>
+                <th>Provider</th>
+                <th>Jadwal</th>
+                <th>Harga</th>
+                <th>Total Cost</th>
+                <th>Aksi</th>
+
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            <tr th:each="transport : ${listTransport}">
+
+                <!-- JENIS -->
+                <td>
+
+                    <div class="transport-type">
+
+                        <div class="transport-icon">
+
+                            <i th:class="${transport.jenis == 'Flight'
+                            ? 'fas fa-plane'
+                            : (transport.jenis == 'Train'
+                            ? 'fas fa-train'
+                            : 'fas fa-bus')}"></i>
+
+                        </div>
+
+                        <span th:text="${transport.jenis}">
+                            Flight
+                        </span>
+
+                    </div>
+
+                </td>
+
+                <!-- PROVIDER -->
+                <td th:text="${transport.provider}">
+                    Garuda Indonesia
+                </td>
+
+                <!-- JADWAL -->
+                <td th:text="${transport.jadwal}">
+                    08:00 - 10:00
+                </td>
+
+                <!-- HARGA -->
+                <td class="price"
+                    th:text="'Rp ' + ${#numbers.formatDecimal(
+                    transport.harga,
+                    0,
+                    'POINT',
+                    0,
+                    'COMMA')}">
+
+                    Rp 1.500.000
+
+                </td>
+
+                <!-- TOTAL -->
+                <td class="price">
+
+                    Rp 1.750.000
+
+                </td>
+
+                <!-- ACTION -->
+                <td>
+
+                    <div class="table-actions">
+
+                        <!-- BUTTON EDIT -->
+                        <button
+                                th:onclick="|openEditTransportModal(
+'${transport.transportId}',
+'${transport.jenis}',
+'${transport.provider}',
+'${transport.jadwal}',
+'${transport.harga}'
+)|">
+
+                            Edit
+
+                        </button>
+
+                        <!-- EDIT MODAL -->
+                        <div class="modal-overlay"
+                             id="editTransportModal">
+
+                            <div class="modern-modal">
+
+                                <button class="modal-close"
+                                        onclick="closeEditTransportModal()">
+
+                                    <i class="fas fa-times"></i>
+
+                                </button>
+
+                                <div class="modal-header">
+
+                                    <div class="modal-icon">
+
+                                        <i class="fas fa-pen"></i>
+
+                                    </div>
+
+                                    <div>
+
+                                        <h3>Edit Transport</h3>
+
+                                        <p>Update data transportasi</p>
+
+                                    </div>
+
+                                </div>
+
+                                <form class="modern-form"
+                                      th:action="@{/admin/transport/update}"
+                                      method="POST">
+
+                                    <input type="hidden"
+                                           id="editTransportId"
+                                           name="transportId">
+
+                                    <div class="form-grid">
+
+                                        <div class="form-group">
+
+                                            <label>Jenis</label>
+
+                                            <select id="editJenis"
+                                                    name="jenis">
+
+                                                <option value="Flight">
+                                                    Flight
+                                                </option>
+
+                                                <option value="Train">
+                                                    Train
+                                                </option>
+
+                                                <option value="Bus">
+                                                    Bus
+                                                </option>
+
+                                            </select>
+
+                                        </div>
+
+                                        <div class="form-group">
+
+                                            <label>Provider</label>
+
+                                            <input type="text"
+                                                   id="editProvider"
+                                                   name="provider">
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-grid">
+
+                                        <div class="form-group">
+
+                                            <label>Jadwal</label>
+
+                                            <input type="text"
+                                                   id="editJadwal"
+                                                   name="jadwal">
+
+                                        </div>
+
+                                        <div class="form-group">
+
+                                            <label>Harga</label>
+
+                                            <input type="number"
+                                                   id="editHarga"
+                                                   name="harga">
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-actions">
+
+                                        <button type="button"
+                                                class="btn-secondary"
+                                                onclick="closeEditTransportModal()">
+
+                                            Cancel
+
+                                        </button>
+
+                                        <button type="submit"
+                                                class="btn-primary">
+
+                                            Update Transport
+
+                                        </button>
+
+                                    </div>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                        <script>
+
+                            const editTransportModal =
+                                document.getElementById(
+                                    'editTransportModal'
+                                );
+
+                            function openEditTransportModal(
+                                id,
+                                jenis,
+                                provider,
+                                jadwal,
+                                harga
+                            ){
+
+                                editTransportModal.classList.add(
+                                    'active'
+                                );
+
+                                document.getElementById(
+                                    'editTransportId'
+                                ).value = id;
+
+                                document.getElementById(
+                                    'editJenis'
+                                ).value = jenis;
+
+                                document.getElementById(
+                                    'editProvider'
+                                ).value = provider;
+
+                                document.getElementById(
+                                    'editJadwal'
+                                ).value = jadwal;
+
+                                document.getElementById(
+                                    'editHarga'
+                                ).value = harga;
+
+                            }
+
+                            function closeEditTransportModal(){
+
+                                editTransportModal.classList.remove(
+                                    'active'
+                                );
+
+                            }
+
+                        </script>
+
+
+                        <a href="#">
+
+                            Hapus
+
+                        </a>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+            </tbody>
+
+        </table>
+
+    </section>
+
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay"
+     id="transportModal">
+
+    <div class="modern-modal">
+
+        <!-- CLOSE -->
+        <button class="modal-close"
+                onclick="closeTransportModal()">
+
+            <i class="fas fa-times"></i>
+
+        </button>
+
+        <!-- HEADER -->
+        <div class="modal-header">
+
+            <div class="modal-icon">
+
+                <i class="fas fa-bus"></i>
+
+            </div>
+
+            <div>
+
+                <h3>
+                    Tambah Transport
+                </h3>
+
+                <p>
+                    Tambahkan data transportasi baru
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- FORM -->
+        <form class="modern-form"
+              th:action="@{/admin/transport/save}"
+              method="POST">
+
+            <!-- ROW -->
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>
+                        Jenis Transport
+                    </label>
+
+                    <select name="jenis">
+
+                        <option value="Flight">
+                            Flight
+                        </option>
+
+                        <option value="Train">
+                            Train
+                        </option>
+
+                        <option value="Bus">
+                            Bus
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+                        Nama Provider
+                    </label>
+
+                    <input type="text"
+                           name="provider"
+                           placeholder="Garuda Indonesia">
+
+                </div>
+
+            </div>
+
+            <!-- ROW -->
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>
+                        Jadwal
+                    </label>
+
+                    <input type="text"
+                           name="jadwal"
+                           placeholder="08:00 - 10:00">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+                        Harga Base
+                    </label>
+
+                    <input type="number"
+                           id="hargaInput"
+                           name="harga"
+                           placeholder="1500000">
+
+                </div>
+
+            </div>
+
+            <!-- ROW -->
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>
+                        Pajak & Biaya Tambahan
+                    </label>
+
+                    <input type="number"
+                           id="feeInput"
+                           placeholder="250000">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+                        Estimasi Total Cost
+                    </label>
+
+                    <input type="text"
+                           id="totalCost"
+                           readonly>
+
+                </div>
+
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="form-group">
+
+                <label>
+                    Deskripsi
+                </label>
+
+                <textarea rows="4"
+                          placeholder="Deskripsi transportasi"></textarea>
+
+            </div>
+
+            <!-- ACTION -->
+            <div class="form-actions">
+
+                <button type="button"
+                        class="btn-secondary"
+                        onclick="closeTransportModal()">
+
+                    Cancel
+
+                </button>
+
+                <button type="submit"
+                        class="btn-primary">
+
+                    Save Transport
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    const modal =
+        document.getElementById(
+            'transportModal'
+        );
+
+    function openTransportModal(){
+
+        modal.classList.add(
+            'active'
+        );
+
+    }
+
+    function closeTransportModal(){
+
+        modal.classList.remove(
+            'active'
+        );
+
+    }
+
+    // CLOSE OUTSIDE
+    modal.addEventListener(
+        'click',
+        function(e){
+
+            if(e.target === modal){
+
+                closeTransportModal();
+
+            }
+
+        }
+    );
+
+    // CALCULATE COST
+    const hargaInput =
+        document.getElementById(
+            'hargaInput'
+        );
+
+    const feeInput =
+        document.getElementById(
+            'feeInput'
+        );
+
+    const totalCost =
+        document.getElementById(
+            'totalCost'
+        );
+
+    function calculateTotal(){
+
+        const harga =
+            parseInt(hargaInput.value) || 0;
+
+        const fee =
+            parseInt(feeInput.value) || 0;
+
+        const total =
+            harga + fee;
+
+        totalCost.value =
+            'Rp ' +
+            total.toLocaleString('id-ID');
+
+    }
+
+    hargaInput.addEventListener(
+        'input',
+        calculateTotal
+    );
+
+    feeInput.addEventListener(
+        'input',
+        calculateTotal
+    );
+
+</script>
+
+
+
 </body>
 </html>
+
