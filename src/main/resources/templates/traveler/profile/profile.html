@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Tripinaja</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/responsive.css}">
+<base target="_blank">
+</head>
+<body>
+
+    <!--  NAVBAR  -->
+    <nav class="navbar dashboard-navbar">
+        <div class="container">
+            <!-- LOGO -->
+            <div class="logo">
+                <span class="logo-icon">◉</span>
+                TRIPINAJA
+            </div>
+
+            <!-- NAV CENTER (MENU) -->
+            <div class="nav-center">
+                <a href="/">Home</a>
+                <a href="/dashboard">Dashboard</a>
+                <a href="/explore">Explore</a>
+                <a href="/itinerary/list">My Trips</a>
+                <a href="/profile" class="active">Profile</a>
+            </div>
+
+            <!-- PROFILE  -->
+            <div class="profile-menu">
+                <div class="profile-avatar">A</div>
+                <span class="profile-name">Akbar</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </nav>
+
+    <main class="profile-main">
+        <div class="container">
+
+            <section class="profile-header-section">
+                <div class="profile-header">
+                    <div class="avatar-container">
+                        <div class="profile-avatar-large">A</div>
+                        <div class="verified-badge">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                    <div class="profile-details">
+                        <h1 class="profile-name-display">Akbar</h1>
+                        <p class="membership-status">
+                            <i class="fas fa-crown"></i>
+                            Premium Member since 2022
+                        </p>
+                        <div class="stats-row">
+                            <div class="stat-item">
+                                <span class="stat-number">12</span>
+                                <span class="stat-label">Destinations<br>Visited</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">12,450</span>
+                                <span class="stat-label">Points<br>Earned</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">4.9</span>
+                                <span class="stat-label">Traveler<br>Rating</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="profile-content-grid">
+
+                <div class="profile-left">
+
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-user"></i> Personal Details</h2>
+                            <a href="#" class="edit-link" onclick="enableEditMode(event)">Edit Info</a>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" value="Akbar" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" value="akbar@mail.com" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" value="0821335566" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Home Base</label>
+                                <input type="text" value="Semarang, Indonesia" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-shield-alt"></i> Security</h2>
+                        </div>
+                        <div class="security-section">
+                            <div class="security-item">
+                                <div class="security-info">
+                                    <h3>Password</h3>
+                                    <p>Last changed 1 month ago</p>
+                                </div>
+                                <button class="btn-outline" onclick="openChangePasswordModal()">Change Password</button>
+                            </div>
+                            <div class="security-item">
+                                <div class="security-info">
+                                    <h3>Two-Factor Authentication</h3>
+                                    <p>Protect your account with an extra layer of security</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked onchange="toggle2FA(this)">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-right">
+
+                    <div class="premium-card">
+                        <span class="premium-badge">CURRENT TIER</span>
+                        <h2>Premium Explorer</h2>
+                        <p>You have access to airport lounge and priority booking assistance 24/7</p>
+                        <button class="btn-premium" onclick="window.location.href='/profile/benefits'">
+                            View Benefits <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="help-card">
+                        <h3>Need help?</h3>
+                        <p>Our dedicated support team is available 24/7 for Premium members</p>
+                        <a href="#" class="chat-link" onclick="openLiveChat(event)">
+                            <i class="far fa-comment-alt"></i> Start Live Chat
+                        </a>
+                    </div>
+
+                    <a href="/logout" class="logout-link" onclick="return confirmLogout(event)">
+                        <i class="fas fa-sign-out-alt"></i> Log Out
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h2>TRIPINAJA</h2>
+                <p>Smart Travel Itinerary untuk perjalanan sempurna Anda.</p>
+                <span>© 2026 TRIPINAJA. All rights reserved.</span>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Menu</h4>
+                    <a href="/">Home</a>
+                    <a href="/explore">Explore</a>
+                    <a href="/itinerary/list">My Itinerary</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Bantuan</h4>
+                    <a href="#">FAQ</a>
+                    <a href="#">Kontak Kami</a>
+                    <a href="#">Kebijakan Privasi</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script th:src="@{/js/profile.js}"></script>
+</body>
+</html>
