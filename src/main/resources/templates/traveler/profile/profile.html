@@ -8,7 +8,6 @@
     <link rel="stylesheet" th:href="@{/css/profile.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/responsive.css}">
-<base target="_blank">
 </head>
 <body>
 
@@ -23,19 +22,15 @@
 
             <!-- NAV CENTER (MENU) -->
             <div class="nav-center">
-                <a href="/">Home</a>
                 <a href="/dashboard">Dashboard</a>
-                <a href="/explore">Explore</a>
                 <a href="/itinerary/list">My Trips</a>
-                <a href="/profile" class="active">Profile</a>
             </div>
 
             <!-- PROFILE  -->
-            <div class="profile-menu">
+            <a href="/profile" class="profile-menu">
                 <div class="profile-avatar">A</div>
                 <span class="profile-name">Akbar</span>
-                <i class="fas fa-chevron-down"></i>
-            </div>
+            </a>
         </div>
     </nav>
 

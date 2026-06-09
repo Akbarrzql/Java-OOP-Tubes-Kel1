@@ -454,3 +454,19 @@ a{
 .footer-column a{
     color:#d8d8d8;
 }
+/* DASHBOARD NAVBAR SPECIFIC */
+.dashboard-navbar .container {
+    justify-content: flex-start !important;
+}
+
+.dashboard-navbar .nav-center {
+    margin-left: 60px;
+}
+
+.dashboard-navbar .profile-menu {
+    margin-left: auto;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
