@@ -8,18 +8,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 public class ViewController {
 
-    /* =========================
-       PUBLIC PAGE
-    ========================= */
+    /*
+     * =========================
+     * PUBLIC PAGE
+     * =========================
+     */
 
     @GetMapping("/")
     public String home() {
         return "home/index";
     }
 
-    /* =========================
-       AUTH PAGE
-    ========================= */
+    /*
+     * =========================
+     * AUTH PAGE
+     * =========================
+     */
 
     @GetMapping("/login")
     public String login() {
@@ -36,9 +40,11 @@ public class ViewController {
         return "forgotpassword/forgot-password";
     }
 
-    /* =========================
-       TRAVELER PAGE
-    ========================= */
+    /*
+     * =========================
+     * TRAVELER PAGE
+     * =========================
+     */
 
     @GetMapping("/dashboard")
     public String dashboard() {
@@ -60,7 +66,7 @@ public class ViewController {
         // TODO: uncomment ini setelah service siap
         // Itinerary itinerary = itineraryService.findById(id);
         // model.addAttribute("itinerary", itinerary);
-        return "traveler/itinerary/detail-itinerary"; 
+        return "traveler/itinerary/detail-itinerary";
     }
 
     @GetMapping("/profile")
@@ -68,9 +74,11 @@ public class ViewController {
         return "traveler/profile/profile";
     }
 
-    /* =========================
-       ADMIN PAGE
-    ========================= */
+    /*
+     * =========================
+     * ADMIN PAGE
+     * =========================
+     */
 
     @GetMapping("/admin/dashboard")
     public String adminDashboard() {
@@ -100,10 +108,5 @@ public class ViewController {
     @GetMapping("/admin/accommodation")
     public String adminAccommodation() {
         return "admin/accommodation/accommodation";
-    }
-
-    @GetMapping("/admin/province")
-    public String adminProvince() {
-        return "admin/province/province";
-    }
+    }    
 }
