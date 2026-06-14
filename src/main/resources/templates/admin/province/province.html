@@ -1,506 +1,211 @@
 <!DOCTYPE html>
-<html lang="id"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>
-        Province Management
-    </title>
-
-    <link rel="stylesheet"
-          th:href="@{/css/admin.css}">
-
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Province Management</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body class="admin-body">
 
-<!-- SIDEBAR -->
-<div th:replace="
-fragments/admin-sidebar ::
-adminSidebar('province')">
-</div>
+    <!-- SIDEBAR -->
+    <div th:replace="fragments/admin-sidebar :: adminSidebar('province')"></div>
 
-<!-- MAIN -->
-<main class="main-content">
+    <!-- MAIN -->
+    <main class="main-content">
 
-    <!-- TOPBAR -->
-    <div th:replace="
-    fragments/admin-topbar ::
-    adminTopbar(
-        'Province Management',
-        'Kelola seluruh data provinsi'
-    )">
-    </div>
-
-    <!-- ACTION -->
-    <div class="page-action">
-
-        <button class="btn-primary"
-                onclick="openProvinceModal()">
-
-            <i class="fas fa-plus"></i>
-
-            Tambah Province
-
-        </button>
-
-    </div>
-
-    <!-- STATS -->
-    <section class="stats-grid">
-
-        <div class="stat-card">
-
-            <div class="stat-icon">
-
-                <i class="fas fa-map"></i>
-
-            </div>
-
-            <div>
-
-                <h3>38</h3>
-
-                <p>Total Province</p>
-
-            </div>
-
+        <!-- TOPBAR -->
+        <div th:replace="fragments/admin-topbar :: adminTopbar('Province Management', 'Kelola seluruh data provinsi')">
         </div>
 
-        <div class="stat-card">
-
-            <div class="stat-icon">
-
-                <i class="fas fa-location-dot"></i>
-
-            </div>
-
-            <div>
-
-                <h3>1204</h3>
-
-                <p>Total Destination</p>
-
-            </div>
-
+        <!-- ACTION -->
+        <div class="page-action">
+            <button class="btn-primary" onclick="openProvinceModal()">
+                <i class="fas fa-plus"></i>
+                Tambah Province
+            </button>
         </div>
 
-        <div class="stat-card">
+        <!-- STATS -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-map"></i></div>
+                <div>
+                    <h3 th:text="${totalProvince}">0</h3>
+                    <p>Total Province</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-location-dot"></i></div>
+                <div>
+                    <h3 th:text="${totalDestination}">0</h3>
+                    <p>Total Destination</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-fire"></i></div>
+                <div>
+                    <h3 th:text="${mostPopular}">-</h3>
+                    <p>Most Popular</p>
+                </div>
+            </div>
+        </section>
 
-            <div class="stat-icon">
-
-                <i class="fas fa-fire"></i>
-
+        <!-- TABLE -->
+        <section class="table-wrapper">
+            <div class="table-header">
+                <div class="table-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Cari province...">
+                </div>
             </div>
 
-            <div>
+            <table class="transport-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Province</th>
+                        <th>City</th>
+                        <th>Description</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="provinsi, iterStat : ${provinsiList}">
+                        <td th:text="${iterStat.count}"></td>
+                        <td th:text="${provinsi.nama}"></td>
+                        <td th:text="${provinsi.kota}"></td>
+                        <td th:text="${provinsi.deskripsi}"></td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn-edit" th:data-id="${provinsi.provinsiId}"
+                                    th:data-nama="${provinsi.nama}" th:data-kota="${provinsi.kota}"
+                                    th:data-deskripsi="${provinsi.deskripsi}" onclick="editFromData(this)">
+                                    Edit
+                                </button>
+                                <a th:href="@{/admin/province/delete/{id}(id=${provinsi.provinsiId})}"
+                                    onclick="return confirm('Yakin ingin menghapus provinsi ini?')">
+                                    Hapus
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
 
-                <h3>Bali</h3>
+    </main>
 
-                <p>Most Popular</p>
+    <!-- ADD MODAL -->
+    <div class="modal-overlay" id="provinceModal">
+        <div class="modern-modal">
 
+            <button class="modal-close" onclick="closeProvinceModal()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="modal-header">
+                <div class="modal-icon"><i class="fas fa-map"></i></div>
+                <div>
+                    <h3>Tambah Province</h3>
+                    <p>Tambahkan province baru</p>
+                </div>
             </div>
 
-        </div>
-
-    </section>
-
-    <!-- TABLE -->
-    <section class="table-wrapper">
-
-        <!-- SEARCH -->
-        <div class="table-header">
-
-            <div class="table-search">
-
-                <i class="fas fa-search"></i>
-
-                <input type="text"
-                       placeholder="Cari province...">
-
-            </div>
-
-        </div>
-
-        <table class="transport-table">
-
-            <thead>
-
-            <tr>
-
-                <th>ID</th>
-                <th>Province</th>
-                <th>Capital City</th>
-                <th>Description</th>
-                <th>Aksi</th>
-
-            </tr>
-
-            </thead>
-
-            <tbody>
-
-            <tr>
-
-                <td>#1</td>
-
-                <td>Bali</td>
-
-                <td>Denpasar</td>
-
-                <td>
-                    Island tourism destination
-                </td>
-
-                <td>
-
-                    <div class="table-actions">
-
-                        <button onclick="
-                        openEditProvinceModal(
-                        '1',
-                        'Bali',
-                        'Denpasar',
-                        'Island tourism destination'
-                        )">
-
-                            Edit
-
-                        </button>
-
-                        <a href="#">
-                            Hapus
-                        </a>
-
+            <form class="modern-form" action="/admin/province/add" method="post">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Province Name</label>
+                        <input type="text" name="nama" placeholder="Enter province name" required>
                     </div>
-
-                </td>
-
-            </tr>
-
-            <tr>
-
-                <td>#2</td>
-
-                <td>Jawa Barat</td>
-
-                <td>Bandung</td>
-
-                <td>
-                    Cultural and mountain tourism
-                </td>
-
-                <td>
-
-                    <div class="table-actions">
-
-                        <button onclick="
-                        openEditProvinceModal(
-                        '2',
-                        'Jawa Barat',
-                        'Bandung',
-                        'Cultural and mountain tourism'
-                        )">
-
-                            Edit
-
-                        </button>
-
-                        <a href="#">
-                            Hapus
-                        </a>
-
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" name="kota" placeholder="Enter city name" required>
                     </div>
-
-                </td>
-
-            </tr>
-
-            </tbody>
-
-        </table>
-
-    </section>
-
-</main>
-
-<!-- ADD MODAL -->
-<div class="modal-overlay"
-     id="provinceModal">
-
-    <div class="modern-modal">
-
-        <button class="modal-close"
-                onclick="closeProvinceModal()">
-
-            <i class="fas fa-times"></i>
-
-        </button>
-
-        <div class="modal-header">
-
-            <div class="modal-icon">
-
-                <i class="fas fa-map"></i>
-
-            </div>
-
-            <div>
-
-                <h3>
-                    Tambah Province
-                </h3>
-
-                <p>
-                    Tambahkan province baru
-                </p>
-
-            </div>
-
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea rows="5" name="deskripsi" placeholder="Enter province description"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeProvinceModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Province</button>
+                </div>
+            </form>
         </div>
-
-        <form class="modern-form">
-
-            <div class="form-grid">
-
-                <div class="form-group">
-
-                    <label>
-                        Province Name
-                    </label>
-
-                    <input type="text"
-                           placeholder="Bali">
-
-                </div>
-
-                <div class="form-group">
-
-                    <label>
-                        Capital City
-                    </label>
-
-                    <input type="text"
-                           placeholder="Denpasar">
-
-                </div>
-
-            </div>
-
-            <div class="form-group">
-
-                <label>
-                    Description
-                </label>
-
-                <textarea rows="5"
-                          placeholder="Deskripsi province"></textarea>
-
-            </div>
-
-            <div class="form-actions">
-
-                <button type="button"
-                        class="btn-secondary"
-                        onclick="closeProvinceModal()">
-
-                    Cancel
-
-                </button>
-
-                <button type="submit"
-                        class="btn-primary">
-
-                    Save Province
-
-                </button>
-
-            </div>
-
-        </form>
-
     </div>
 
-</div>
+    <!-- EDIT MODAL -->
+    <div class="modal-overlay" id="editProvinceModal">
+        <div class="modern-modal">
 
-<!-- EDIT MODAL -->
-<div class="modal-overlay"
-     id="editProvinceModal">
+            <button class="modal-close" onclick="closeEditProvinceModal()">
+                <i class="fas fa-times"></i>
+            </button>
 
-    <div class="modern-modal">
-
-        <button class="modal-close"
-                onclick="closeEditProvinceModal()">
-
-            <i class="fas fa-times"></i>
-
-        </button>
-
-        <div class="modal-header">
-
-            <div class="modal-icon">
-
-                <i class="fas fa-pen"></i>
-
+            <div class="modal-header">
+                <div class="modal-icon"><i class="fas fa-pen"></i></div>
+                <div>
+                    <h3>Edit Province</h3>
+                    <p>Update province data</p>
+                </div>
             </div>
 
-            <div>
-
-                <h3>
-                    Edit Province
-                </h3>
-
-                <p>
-                    Update province data
-                </p>
-
-            </div>
-
+            <form class="modern-form" id="editProvinceForm" action="#" method="post">
+                <input type="hidden" id="editProvinceId">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Province Name</label>
+                        <input type="text" id="editProvinceName" name="nama" placeholder="Enter province name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" id="editProvinceCapital" name="kota" placeholder="Enter city name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea rows="5" id="editProvinceDescription" name="deskripsi"
+                        placeholder="Enter province description"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeEditProvinceModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Update Province</button>
+                </div>
+            </form>
         </div>
-
-        <form class="modern-form">
-
-            <input type="hidden"
-                   id="editProvinceId">
-
-            <div class="form-grid">
-
-                <div class="form-group">
-
-                    <label>
-                        Province Name
-                    </label>
-
-                    <input type="text"
-                           id="editProvinceName">
-
-                </div>
-
-                <div class="form-group">
-
-                    <label>
-                        Capital City
-                    </label>
-
-                    <input type="text"
-                           id="editProvinceCapital">
-
-                </div>
-
-            </div>
-
-            <div class="form-group">
-
-                <label>
-                    Description
-                </label>
-
-                <textarea rows="5"
-                          id="editProvinceDescription"></textarea>
-
-            </div>
-
-            <div class="form-actions">
-
-                <button type="button"
-                        class="btn-secondary"
-                        onclick="closeEditProvinceModal()">
-
-                    Cancel
-
-                </button>
-
-                <button type="submit"
-                        class="btn-primary">
-
-                    Update Province
-
-                </button>
-
-            </div>
-
-        </form>
-
     </div>
 
-</div>
+    <script>
+        const provinceModal = document.getElementById('provinceModal');
+        function openProvinceModal() { provinceModal.classList.add('active'); }
+        function closeProvinceModal() { provinceModal.classList.remove('active'); }
 
-<script>
+        const editProvinceModal = document.getElementById('editProvinceModal');
 
-    const provinceModal =
-        document.getElementById(
-            'provinceModal'
-        );
+        function editFromData(btn) {
+            const id = btn.getAttribute('data-id');
+            const nama = btn.getAttribute('data-nama');
+            const kota = btn.getAttribute('data-kota');
+            const deskripsi = btn.getAttribute('data-deskripsi');
+            openEditProvinceModal(id, nama, kota, deskripsi);
+        }
 
-    function openProvinceModal(){
+        function openEditProvinceModal(id, name, capital, description) {
+            editProvinceModal.classList.add('active');
+            document.getElementById('editProvinceId').value = id;
+            document.getElementById('editProvinceName').value = name;
+            document.getElementById('editProvinceCapital').value = capital;
+            document.getElementById('editProvinceDescription').value = description;
+            document.getElementById('editProvinceForm').action = '/admin/province/edit/' + id;
+        }
 
-        provinceModal.classList.add(
-            'active'
-        );
-
-    }
-
-    function closeProvinceModal(){
-
-        provinceModal.classList.remove(
-            'active'
-        );
-
-    }
-
-    const editProvinceModal =
-        document.getElementById(
-            'editProvinceModal'
-        );
-
-    function openEditProvinceModal(
-        id,
-        name,
-        capital,
-        description
-    ){
-
-        editProvinceModal.classList.add(
-            'active'
-        );
-
-        document.getElementById(
-            'editProvinceId'
-        ).value = id;
-
-        document.getElementById(
-            'editProvinceName'
-        ).value = name;
-
-        document.getElementById(
-            'editProvinceCapital'
-        ).value = capital;
-
-        document.getElementById(
-            'editProvinceDescription'
-        ).value = description;
-
-    }
-
-    function closeEditProvinceModal(){
-
-        editProvinceModal.classList.remove(
-            'active'
-        );
-
-    }
-
-</script>
+        function closeEditProvinceModal() { editProvinceModal.classList.remove('active'); }
+    </script>
 
 </body>
-</html>
 
+</html>
