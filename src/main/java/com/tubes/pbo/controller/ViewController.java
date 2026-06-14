@@ -85,10 +85,10 @@ public class ViewController {
         return "admin/dashboard-admin";
     }
 
-    @GetMapping("/admin/transport")
-    public String adminTransport() {
-        return "admin/transport/transport";
-    }
+    // @GetMapping("/admin/transport")
+    // public String adminTransport() {
+    //     return "admin/transport/transport";
+    // }
 
     @GetMapping("/admin/profile")
     public String adminProfile() {
