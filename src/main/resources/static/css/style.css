@@ -265,34 +265,6 @@ a{
     gap:20px;
 }
 
-.budget-buttons{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:12px;
-
-    margin-bottom:24px;
-}
-
-.budget-buttons button{
-    border:none;
-
-    padding:15px;
-
-    border-radius:12px;
-
-    background:#F1F1F1;
-
-    cursor:pointer;
-
-    font-weight:500;
-
-    transition:0.3s;
-}
-
-.budget-buttons .active{
-    background:var(--primary);
-    color:white;
-}
 
 .generate-btn{
     width:100%;

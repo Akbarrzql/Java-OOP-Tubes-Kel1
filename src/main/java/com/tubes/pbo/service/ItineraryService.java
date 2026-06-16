@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.tubes.pbo.model.Itinerary;
+import com.tubes.pbo.dto.GenerateItineraryRequest;
 
 public interface ItineraryService {
     List<Itinerary> getAllItinerary();
@@ -11,4 +12,6 @@ public interface ItineraryService {
     Itinerary saveItinerary(Itinerary itinerary);
     Itinerary updateItinerary(Itinerary itinerary);
     void deleteItinerary(Integer id);
+    List<Itinerary> getItineraryByTravelerId(Integer travelerId);
+    Itinerary generateItinerary(GenerateItineraryRequest request, Integer travelerId);
 }

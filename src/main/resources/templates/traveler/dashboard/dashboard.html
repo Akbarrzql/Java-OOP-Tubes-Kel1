@@ -114,7 +114,7 @@
                 </div>
                 <div class="stat-content">
                     <h3>Itinerary Aktif</h3>
-                    <p class="stat-number">3</p>
+                    <p class="stat-number" th:text="${totalItineraries}">3</p>
                     <span class="stat-label">Dalam perjalanan & perencanaan</span>
                 </div>
             </div>
@@ -138,56 +138,32 @@
             </div>
 
             <div class="itineraries-grid">
-                <div class="itinerary-card">
+                <div class="itinerary-card" th:each="itinerary : ${itineraries}">
                     <div class="card-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
                     <div class="card-content">
-                        <div class="card-badge">Aktif</div>
-                        <h3>Liburan ke Bali</h3>
-                        <p class="card-subtitle">Bali, Indonesia</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+                            <div class="card-badge" th:text="${itinerary.status}">Aktif</div>
+                            <form th:action="@{/itinerary/delete/{id}(id=${itinerary.itineraryId})}" method="GET" style="display: inline;">
+                                <button type="submit" style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 16px;"
+                                        onclick="return confirm('Yakin ingin menghapus itinerary ini?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                        <h3 th:text="${itinerary.title}">Liburan ke Bali</h3>
+                        <p class="card-subtitle" th:text="'Dibuat: ' + ${itinerary.createdAt != null ? #temporals.format(itinerary.createdAt, 'dd MMM yyyy') : '-'}">Dibuat: -</p>
                         <div class="card-meta">
-                            <span><i class="fas fa-calendar"></i> 10-17 Juni</span>
-                            <span><i class="fas fa-map-pin"></i> 5 Hari</span>
+                            <span><i class="fas fa-calendar"></i> <span th:text="${itinerary.createdAt != null ? #temporals.format(itinerary.createdAt, 'dd MMM yyyy') : '-'}">-</span></span>
+                            <span><i class="fas fa-map-pin"></i> <span th:text="${itinerary.totalHari} + ' Hari'">5 Hari</span></span>
                         </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 60%"></div>
+                        <div class="card-meta" style="margin-top:-8px; margin-bottom:12px;">
+                            <span><i class="fas fa-wallet"></i> <span th:text="'Rp ' + ${#numbers.formatInteger(itinerary.totalBiaya, 0, 'DEFAULT')}">Rp 0</span></span>
                         </div>
-                        <p class="progress-text">60% Selesai</p>
-                        <a href="/itinerary/1" class="btn-card">Lanjutkan →</a>
+                        <a th:href="@{/itinerary/{id}(id=${itinerary.itineraryId})}" class="btn-card">Lanjutkan →</a>
                     </div>
                 </div>
-                <div class="itinerary-card">
-                    <div class="card-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
-                    <div class="card-content">
-                        <div class="card-badge">Dalam Perencanaan</div>
-                        <h3>Jakarta City Tour</h3>
-                        <p class="card-subtitle">Jakarta, Indonesia</p>
-                        <div class="card-meta">
-                            <span><i class="fas fa-calendar"></i> 25 Juli</span>
-                            <span><i class="fas fa-map-pin"></i> 1 Hari</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 30%"></div>
-                        </div>
-                        <p class="progress-text">30% Selesai</p>
-                        <a href="/itinerary/2" class="btn-card">Lanjutkan →</a>
-                    </div>
-                </div>
-                <div class="itinerary-card">
-                    <div class="card-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
-                    <div class="card-content">
-                        <div class="card-badge">Dalam Perencanaan</div>
-                        <h3>Eksplorasi Bandung</h3>
-                        <p class="card-subtitle">Bandung, Indonesia</p>
-                        <div class="card-meta">
-                            <span><i class="fas fa-calendar"></i> 15 Agustus</span>
-                            <span><i class="fas fa-map-pin"></i> 3 Hari</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 10%"></div>
-                        </div>
-                        <p class="progress-text">10% Selesai</p>
-                        <a href="/itinerary/3" class="btn-card">Lanjutkan →</a>
-                    </div>
+                <div th:if="${itineraries.isEmpty()}" style="padding: 20px; text-align: center; color: #666;">
+                    <p>Belum ada itinerary. <a href="/">Buat sekarang</a></p>
                 </div>
             </div>
         </section>

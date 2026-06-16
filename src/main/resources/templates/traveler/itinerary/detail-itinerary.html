@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,19 +13,45 @@
 </head>
 <body>
 
-<!-- ==================== NAVBAR ==================== -->
+<!-- NAVBAR -->
 <nav class="navbar dashboard-navbar">
+
     <div class="container">
+
+        <!-- LOGO -->
         <div class="logo">
-            <span class="logo-icon">&#9673;</span>
+            <span class="logo-icon">◉</span>
             TRIPINAJA
         </div>
-        <div class="profile-menu">
-            <div class="profile-avatar">A</div>
-            <span class="profile-name">Akbar</span>
-            <i class="fas fa-chevron-down"></i>
+
+        <!-- NAV CENTER (MENU) -->
+        <div class="nav-center">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/itinerary/list">My Trips</a>
         </div>
+
+        <!-- PROFILE -->
+        <a href="/profile" class="profile-menu">
+
+            <div class="profile-avatar">
+                <span th:text="${session.loggedInUserName != null ? #strings.substring(session.loggedInUserName, 0, 1) : 'U'}">U</span>
+            </div>
+
+            <span class="profile-name">
+                <span th:text="${session.loggedInUserName != null ? session.loggedInUserName : 'Guest'}">Guest</span>
+            </span>
+
+        </a>
+
+        <a th:href="@{/auth/logout}" class="profile-menu" style="margin-left:16px; text-decoration:none;">
+            <div class="profile-avatar" style="background:#f3f4f6; color:#111827;">
+                <i class="fas fa-right-from-bracket"></i>
+            </div>
+            <span class="profile-name">Logout</span>
+        </a>
+
     </div>
+
 </nav>
 
 <!-- ==================== HERO ==================== -->
@@ -38,25 +64,19 @@
         <div class="hero-left">
             <div class="hero-meta-top">
                 <span class="hero-badge">
-                    <span class="badge-label">PLANNED</span>
+                    <span class="badge-label" th:text="${itinerary.status}">ITINERARY</span>
                     <span class="badge-divider"></span>
                     <span class="badge-type">ITINERARY</span>
                 </span>
-                <span class="hero-date">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Oct 12 – Oct 16, 2024</span>
-                </span>
             </div>
-            <h1 class="trip-hero__title">Bali Explorer: Culture &amp; Coast</h1>
+            <h1 class="trip-hero__title" th:text="${itinerary.title}">Trip Title</h1>
             <div class="hero-meta-bottom">
-                <span class="meta-item"><i class="fas fa-map-marker-alt"></i><span>Bali, Indonesia</span></span>
-                <span class="meta-item"><i class="fas fa-moon"></i><span>5 Days, 4 Nights</span></span>
-                <span class="meta-item"><i class="fas fa-users"></i><span>2 Travelers</span></span>
+                <span class="meta-item"><i class="fas fa-moon"></i><span th:text="${itinerary.totalHari} + ' Days'">5 Days</span></span>
             </div>
         </div>
         <div class="hero-budget-card">
             <span class="budget-label">EST. TOTAL BUDGET</span>
-            <span class="budget-amount">$1,250</span>
+            <span class="budget-amount" th:text="'Rp ' + ${#numbers.formatInteger(itinerary.totalBiaya, 0, 'DEFAULT')}">Rp 0</span>
         </div>
     </div>
 </section>
@@ -86,216 +106,92 @@
             <!-- DAYS COLUMN -->
             <div class="days-column">
 
-                <!-- ===== DAY 1 ===== -->
-                <div class="day-card">
+                <!-- LOOP EACH DAY FROM DATABASE -->
+                <div class="day-card" th:each="day : ${itineraryDays}">
                     <div class="day-card__header">
                         <div class="day-card__header-left">
-                            <span class="day-label">Day 1: Arrival &amp; Sunset Vibes</span>
-                            <span class="day-date">Saturday, Oct 12 • Seminyak Area</span>
+                            <span class="day-label" th:text="'Day ' + ${day.hariKe} + ': Adventure'">Day 1</span>
+                            <span class="day-date" th:text="${day.catatan}">Notes</span>
                         </div>
                         <div class="day-card__header-right">
-                            <span class="tag tag--relax">Relax</span>
-                            <span class="tag tag--leisure">Leisure</span>
-                            <button class="icon-btn" onclick="confirmDeleteDay(1, 'Day 1: Arrival &amp; Sunset Vibes')" title="Delete Day">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            <span class="tag tag--relax">Day <span th:text="${day.hariKe}">1</span></span>
                         </div>
                     </div>
 
                     <div class="activity-list">
 
-                        <!-- Transport: Airport Transfer -->
-                        <div class="activity-item activity-item--transport" data-activity-id="1" data-activity-type="transport">
-                            <div class="activity-time">13:00</div>
-                            <div class="activity-dot">
-                                <span class="dot dot--transport"></span>
-                            </div>
-                            <div class="activity-body">
-                                <div class="activity-header">
-                                    <span class="activity-name">Airport Transfer</span>
-                                    <span class="activity-type-badge activity-type-badge--transport">
-                                        <i class="fas fa-car"></i> Transport
-                                    </span>
-                                    <span class="activity-price">-$15</span>
-                                    <div class="activity-actions">
-                                        <button class="icon-btn icon-btn--edit" onclick="editActivity(1, 'transport')" title="Edit Transport">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </button>
-                                        <button class="icon-btn" onclick="confirmDeleteActivity(1, 'Airport Transfer')" title="Delete Activity">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <p class="activity-desc">Private car transfer from Ngurah Rai Airport to hotel.</p>
-                                <div class="activity-footer">
-                                    <span class="activity-detail">
-                                        <i class="fas fa-shuttle-van"></i>
-                                        <span>Private Car · Bali Transfer Co.</span>
-                                    </span>
-                                    <span class="activity-detail">
-                                        <i class="fas fa-clock"></i>
-                                        <span>45 mins</span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Accommodation: Hotel Check-in -->
-                        <div class="activity-item activity-item--accommodation" data-activity-id="2" data-activity-type="accommodation">
-                            <div class="activity-time">14:00</div>
-                            <div class="activity-dot">
-                                <span class="dot dot--accommodation"></span>
-                            </div>
-                            <div class="activity-body">
-                                <div class="activity-header">
-                                    <span class="activity-name">Hotel Check-in</span>
-                                    <span class="activity-type-badge activity-type-badge--accommodation">
-                                        <i class="fas fa-hotel"></i> Accommodation
-                                    </span>
-                                    <span class="activity-price">-$180</span>
-                                    <div class="activity-actions">
-                                        <button class="icon-btn icon-btn--edit" onclick="editActivity(2, 'accommodation')" title="Edit Accommodation">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </button>
-                                        <button class="icon-btn" onclick="confirmDeleteActivity(2, 'Hotel Check-in')" title="Delete Activity">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <p class="activity-desc">Check-in at W Bali – Seminyak. Ocean view room for 4 nights.</p>
-                                <div class="activity-footer">
-                                    <span class="activity-detail">
-                                        <i class="fas fa-map-pin"></i>
-                                        <span>Jl. Petitenget, Seminyak</span>
-                                    </span>
-                                    <span class="activity-detail">
-                                        <i class="fas fa-star"></i>
-                                        <span>Rating 4.8</span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Activity: Sunset Dinner -->
-                        <div class="activity-item" data-activity-id="3" data-activity-type="activity">
-                            <div class="activity-time">17:30</div>
-                            <div class="activity-dot">
-                                <span class="dot"></span>
-                            </div>
-                            <div class="activity-body">
-                                <div class="activity-header">
-                                    <span class="activity-name">Sunset Cocktails &amp; Dinner</span>
-                                    <span class="activity-price">-$46</span>
-                                    <div class="activity-actions">
-                                        <button class="icon-btn icon-btn--edit" onclick="editActivity(3, 'activity')" title="Edit Activity">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </button>
-                                        <button class="icon-btn" onclick="confirmDeleteActivity(3, 'Sunset Cocktails &amp; Dinner')" title="Delete Activity">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <p class="activity-desc">Enjoy iconic beachfront views and Mediterranean cuisine.</p>
-                                <div class="activity-footer">
-                                    <span class="activity-detail">
-                                        <i class="fas fa-map-pin"></i>
-                                        <span>Potato Head Beach Club</span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="add-activity-row">
-                        <a href="#" class="add-activity-btn" onclick="openAddActivityModal(1); return false;">
-                            <i class="fas fa-plus-circle"></i> Add Activity
-                        </a>
-                    </div>
-                </div>
-
-                <!-- ===== DAY 2 ===== -->
-                <div class="day-card">
-                    <div class="day-card__header">
-                        <div class="day-card__header-left">
-                            <span class="day-label">Day 2: Cultural Heart of Ubud</span>
-                            <span class="day-date">Sunday, Oct 13 • Central Bali</span>
-                        </div>
-                        <div class="day-card__header-right">
-                            <span class="tag tag--explore">Explore</span>
-                            <span class="tag tag--culture">Exploration</span>
-                            <button class="icon-btn" onclick="confirmDeleteDay(2, 'Day 2: Cultural Heart of Ubud')" title="Delete Day">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="activity-list">
-
-                        <!-- Transport: Seminyak to Ubud -->
-                        <div class="activity-item activity-item--transport" data-activity-id="4" data-activity-type="transport">
-                            <div class="activity-time">08:00</div>
-                            <div class="activity-dot">
-                                <span class="dot dot--transport"></span>
-                            </div>
-                            <div class="activity-body">
-                                <div class="activity-header">
-                                    <span class="activity-name">Seminyak → Ubud</span>
-                                    <span class="activity-type-badge activity-type-badge--transport">
-                                        <i class="fas fa-car"></i> Transport
-                                    </span>
-                                    <span class="activity-price">-$20</span>
-                                    <div class="activity-actions">
-                                        <button class="icon-btn icon-btn--edit" onclick="editActivity(4, 'transport')" title="Edit Transport">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </button>
-                                        <button class="icon-btn" onclick="confirmDeleteActivity(4, 'Seminyak → Ubud')" title="Delete Activity">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <p class="activity-desc">Private car from hotel to Ubud city center.</p>
-                                <div class="activity-footer">
-                                    <span class="activity-detail">
-                                        <i class="fas fa-shuttle-van"></i>
-                                        <span>Private Car · Ubud Driver</span>
-                                    </span>
-                                    <span class="activity-detail">
-                                        <i class="fas fa-clock"></i>
-                                        <span>1.5 hours</span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Activity: Monkey Forest -->
-                        <div class="activity-item" data-activity-id="5" data-activity-type="activity">
+                        <!-- DESTINASI LIST -->
+                        <div class="activity-item" th:each="dest : ${day.destinasiList}">
                             <div class="activity-time">09:00</div>
                             <div class="activity-dot">
                                 <span class="dot"></span>
                             </div>
                             <div class="activity-body">
                                 <div class="activity-header">
-                                    <span class="activity-name">Sacred Monkey Forest Sanctuary</span>
-                                    <span class="activity-price">-$10</span>
-                                    <div class="activity-actions">
-                                        <button class="icon-btn icon-btn--edit" onclick="editActivity(5, 'activity')" title="Edit Activity">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </button>
-                                        <button class="icon-btn" onclick="confirmDeleteActivity(5, 'Sacred Monkey Forest Sanctuary')" title="Delete Activity">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
+                                    <span class="activity-name" th:text="${dest.destinasiObj?.nama}">Destination Name</span>
+                                    <span class="activity-price" th:text="'Rp ' + ${#numbers.formatInteger(dest.biaya, 0, 'DEFAULT')}">Rp 0</span>
                                 </div>
-                                <p class="activity-desc">Walk among macaques of long-tailed monkeys in their natural temple habitat.</p>
+                                <p class="activity-desc" th:text="${dest.destinasiObj?.deskripsi}">Description</p>
                                 <div class="activity-footer">
                                     <span class="activity-detail">
                                         <i class="fas fa-map-pin"></i>
-                                        <span>Ubud</span>
+                                        <span th:text="${dest.destinasiObj?.lokasi}">Location</span>
                                     </span>
-                                    <span class="activity-detail">
+                                    <span class="activity-detail" th:if="${dest.durasiMenit}">
                                         <i class="fas fa-clock"></i>
-                                        <span>2 hours</span>
+                                        <span th:text="${dest.durasiMenit} + ' mins'">Duration</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TRANSPORT LIST -->
+                        <div class="activity-item activity-item--transport" th:each="trans : ${day.transportList}">
+                            <div class="activity-time">08:00</div>
+                            <div class="activity-dot">
+                                <span class="dot dot--transport"></span>
+                            </div>
+                            <div class="activity-body">
+                                <div class="activity-header">
+                                    <span class="activity-name" th:text="${trans.transportObj?.provider}">Transport Provider</span>
+                                    <span class="activity-type-badge activity-type-badge--transport">
+                                        <i class="fas fa-car"></i> Transport
+                                    </span>
+                                    <span class="activity-price" th:text="'Rp ' + ${#numbers.formatInteger(trans.biaya, 0, 'DEFAULT')}">Rp 0</span>
+                                </div>
+                                <p class="activity-desc" th:text="${trans.transportObj?.jenis}">Transport Type</p>
+                                <div class="activity-footer">
+                                    <span class="activity-detail">
+                                        <i class="fas fa-shuttle-van"></i>
+                                        <span th:text="${trans.transportObj?.jenis}">Type</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ACCOMMODATION LIST -->
+                        <div class="activity-item activity-item--accommodation" th:each="acc : ${day.accommodationList}">
+                            <div class="activity-time">14:00</div>
+                            <div class="activity-dot">
+                                <span class="dot dot--accommodation"></span>
+                            </div>
+                            <div class="activity-body">
+                                <div class="activity-header">
+                                    <span class="activity-name" th:text="${acc.accommodationObj?.nama}">Hotel Name</span>
+                                    <span class="activity-type-badge activity-type-badge--accommodation">
+                                        <i class="fas fa-hotel"></i> Accommodation
+                                    </span>
+                                    <span class="activity-price" th:text="'Rp ' + ${#numbers.formatInteger(acc.biaya, 0, 'DEFAULT')}">Rp 0</span>
+                                </div>
+                                <p class="activity-desc" th:text="${acc.accommodationObj?.lokasi}">Location</p>
+                                <div class="activity-footer">
+                                    <span class="activity-detail">
+                                        <i class="fas fa-map-pin"></i>
+                                        <span th:text="${acc.accommodationObj?.lokasi}">Location</span>
+                                    </span>
+                                    <span class="activity-detail" th:if="${acc.accommodationObj?.rating}">
+                                        <i class="fas fa-star"></i>
+                                        <span th:text="${#numbers.formatDecimal(acc.accommodationObj.rating, 1, 2)}">4.5</span>
                                     </span>
                                 </div>
                             </div>
@@ -304,9 +200,8 @@
                     </div>
 
                     <div class="add-activity-row">
-                        <a href="#" class="add-activity-btn" onclick="openAddActivityModal(2); return false;">
-                            <i class="fas fa-plus-circle"></i> Add Activity
-                        </a>
+                        <strong style="font-size: 14px;">Day Cost: </strong>
+                        <span style="font-size: 14px; color: #666;" th:text="'Rp ' + ${#numbers.formatInteger(day.biayaHari, 0, 'DEFAULT')}">Rp 0</span>
                     </div>
                 </div>
 
@@ -322,28 +217,25 @@
                     <div class="budget-total">
                         <span class="budget-total__label">ESTIMATED TOTAL</span>
                         <div class="budget-total__row">
-                            <span class="budget-total__amount">$1,250</span>
-                            <span class="budget-total__per">Per Person</span>
-                        </div>
-                        <div class="budget-progress-bar">
-                            <div class="progress-fill"></div>
+                            <span class="budget-total__amount" th:text="'Rp ' + ${#numbers.formatInteger(itinerary.totalBiaya, 0, 'DEFAULT')}">Rp 0</span>
+                            <span class="budget-total__per">Total</span>
                         </div>
                     </div>
                     <ul class="budget-breakdown">
                         <li class="budget-item">
                             <span class="budget-dot" style="background:#6C63FF"></span>
-                            <span class="budget-item__name">Accommodation</span>
-                            <span class="budget-item__amount">$900</span>
+                            <span class="budget-item__name">Itinerary</span>
+                            <span class="budget-item__amount" th:text="${itinerary.title}">Trip Title</span>
                         </li>
                         <li class="budget-item">
                             <span class="budget-dot" style="background:#3B82F6"></span>
-                            <span class="budget-item__name">Transport</span>
-                            <span class="budget-item__amount">$375</span>
+                            <span class="budget-item__name">Total Days</span>
+                            <span class="budget-item__amount" th:text="${itinerary.totalHari} + ' Days'">Days</span>
                         </li>
                         <li class="budget-item">
                             <span class="budget-dot" style="background:#10B981"></span>
-                            <span class="budget-item__name">Activities</span>
-                            <span class="budget-item__amount">$250</span>
+                            <span class="budget-item__name">Status</span>
+                            <span class="budget-item__amount" th:text="${itinerary.status}">Status</span>
                         </li>
                     </ul>
                 </div>

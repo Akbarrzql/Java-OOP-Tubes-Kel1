@@ -61,9 +61,6 @@
         border-radius:18px;
     }
 
-    .budget-buttons{
-        grid-template-columns:1fr;
-    }
 
     .nav-center{
         gap:20px;

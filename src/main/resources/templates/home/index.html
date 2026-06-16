@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,31 +37,55 @@
 
                     <h2>Plan Your Next Adventure</h2>
 
-                    <form>
+                    <form method="POST" th:action="@{/itinerary/generate}">
 
-                        <input type="text"
-                               placeholder="Search destination">
+                        <div class="autocomplete-field">
+                            <input type="text"
+                                   id="provinceInput"
+                                   name="destination"
+                                   list="provinceOptions"
+                                   placeholder="Search destination / province">
+                            <input type="hidden" name="province" id="provinceId">
+                            <datalist id="provinceOptions">
+                                <option th:each="prov : ${provinsiList}"
+                                        th:value="${prov.nama}"
+                                        th:attr="data-id=${prov.provinsiId}">
+                                </option>
+                            </datalist>
+                        </div>
 
                         <div class="form-row">
 
-                            <input type="date">
+                            <input type="date" name="travelDate" required>
 
-                            <select>
-                                <option>2 Travelers</option>
-                                <option>4 Travelers</option>
+                            <select name="days" required>
+                                <option value="1">1 Day</option>
+                                <option value="2">2 Days</option>
+                                <option value="3" selected>3 Days</option>
+                                <option value="4">4 Days</option>
+                                <option value="5">5 Days</option>
+                                <option value="6">6 Days</option>
+                                <option value="7">7 Days</option>
                             </select>
 
                         </div>
 
-                        <div class="budget-buttons">
-                            <button type="button">Budget</button>
-                            <button type="button" class="active">
-                                Moderate
-                            </button>
-                            <button type="button">Luxury</button>
+                        <div class="form-row">
+
+                            <select name="travelers" required>
+                                <option value="1">1 Traveler</option>
+                                <option value="2" selected>2 Travelers</option>
+                                <option value="3">3 Travelers</option>
+                                <option value="4">4 Travelers</option>
+                            </select>
+
+                            <div></div>
+
                         </div>
 
-                        <button class="generate-btn">
+
+
+                        <button type="submit" class="generate-btn">
                             Generate Itinerary
                         </button>
 
@@ -140,7 +164,28 @@
 
 <div th:replace="fragments/footer :: footer"></div>
 
-<script src="/js/main.js"></script>
+<script>
+    const provinceInput = document.getElementById('provinceInput');
+    const provinceIdInput = document.getElementById('provinceId');
+    const provinceOptions = Array.from(document.querySelectorAll('#provinceOptions option'));
+
+    function syncProvinceId() {
+        const match = provinceOptions.find(option => option.value.toLowerCase() === provinceInput.value.trim().toLowerCase());
+        provinceIdInput.value = match ? match.dataset.id : '';
+    }
+
+    provinceInput.addEventListener('input', syncProvinceId);
+    provinceInput.addEventListener('change', syncProvinceId);
+
+    document.querySelector('form[action="/itinerary/generate"]')?.addEventListener('submit', (event) => {
+        syncProvinceId();
+        if (!provinceIdInput.value) {
+            event.preventDefault();
+            alert('Silakan pilih province dari dropdown autocomplete.');
+        }
+    });
+
+</script>
 
 </body>
 </html>

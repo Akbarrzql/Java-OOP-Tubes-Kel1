@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
 <head>
 
     <meta charset="UTF-8">
@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 </head>
 <body>
@@ -30,8 +31,19 @@
 
         <!-- PROFILE -->
         <a href="/profile" class="profile-menu">
-            <div class="profile-avatar">A</div>
-            <span class="profile-name">Akbar</span>
+            <div class="profile-avatar">
+                <span th:text="${session.loggedInUserName != null ? #strings.substring(session.loggedInUserName, 0, 1) : 'U'}">U</span>
+            </div>
+            <span class="profile-name">
+                <span th:text="${session.loggedInUserName != null ? session.loggedInUserName : 'Guest'}">Guest</span>
+            </span>
+        </a>
+
+        <a th:href="@{/auth/logout}" class="profile-menu" style="margin-left:16px; text-decoration:none;">
+            <div class="profile-avatar" style="background:#f3f4f6; color:#111827;">
+                <i class="fas fa-right-from-bracket"></i>
+            </div>
+            <span class="profile-name">Logout</span>
         </a>
 
     </div>
@@ -47,13 +59,14 @@
             <div class="section-header">
 
                 <h2>Semua Itinerary</h2>
+                <a href="/" class="see-all">+ Buat Baru →</a>
 
             </div>
 
             <div class="itineraries-grid">
 
-                <!-- CARD -->
-                <div class="itinerary-card">
+                <!-- LOOP ITINERARY -->
+                <div class="itinerary-card" th:each="itinerary : ${itineraries}">
 
                     <div class="card-image"
                          style="background:linear-gradient(135deg,#667eea,#764ba2)">
@@ -61,23 +74,45 @@
 
                     <div class="card-content">
 
-                        <div class="card-badge">
-                            Aktif
+                        <div class="card-badge" th:text="${itinerary.status}">
+                            Status
                         </div>
 
-                        <h3>Liburan ke Bali</h3>
+                        <h3 th:text="${itinerary.title}">Liburan ke Bali</h3>
 
-                        <p class="card-subtitle">
-                            Bali, Indonesia
+                        <p class="card-subtitle" th:text="'Dibuat: ' + ${itinerary.createdAt != null ? #temporals.format(itinerary.createdAt, 'dd MMM yyyy') : '-'}">
+                            Dibuat: -
                         </p>
 
-                        <a href="#"
-                           class="btn-card">
-                            Detail Itinerary
-                        </a>
+                        <div class="card-meta">
+                            <span><i class="fas fa-calendar"></i> <span th:text="${itinerary.createdAt != null ? #temporals.format(itinerary.createdAt, 'dd MMM yyyy') : '-'}">16 Jun 2026</span></span>
+                            <span><i class="fas fa-map-pin"></i> <span th:text="${itinerary.totalHari} + ' Hari'">Days</span></span>
+                        </div>
+
+                        <div class="card-meta" style="margin-top:-8px; margin-bottom:12px;">
+                            <span><i class="fas fa-wallet"></i> <span th:text="'Rp ' + ${#numbers.formatInteger(itinerary.totalBiaya, 0, 'DEFAULT')}">Rp 0</span></span>
+                        </div>
+
+                        <div class="card-actions" style="display: flex; gap: 10px; margin-top: 12px;">
+                            <a th:href="@{/itinerary/{id}(id=${itinerary.itineraryId})}"
+                               class="btn-card" style="flex: 1;">
+                                Detail →
+                            </a>
+                            <form th:action="@{/itinerary/delete/{id}(id=${itinerary.itineraryId})}" method="GET" style="flex: 0.3;">
+                                <button type="submit" class="btn-card" style="background-color: #ef4444; width: 100%; border: none; cursor: pointer;"
+                                        onclick="return confirm('Yakin ingin menghapus itinerary ini?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
 
                     </div>
 
+                </div>
+
+                <!-- EMPTY STATE -->
+                <div th:if="${itineraries.isEmpty()}" style="text-align: center; padding: 40px; color: #666;">
+                    <p>Belum ada itinerary. <a href="/">Buat sekarang</a></p>
                 </div>
 
             </div>
