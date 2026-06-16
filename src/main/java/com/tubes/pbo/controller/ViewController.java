@@ -1,14 +1,18 @@
 package com.tubes.pbo.controller;
 
+import com.tubes.pbo.repository.ProvinsiRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ViewController {
+
+    @Autowired
+    private ProvinsiRepository provinsiRepository;
 
     /*
      * =========================
@@ -17,7 +21,8 @@ public class ViewController {
      */
 
     @GetMapping("/")
-    public String home() {
+    public String home(Model model) {
+        model.addAttribute("provinsiList", provinsiRepository.findAll());
         return "home/index";
     }
 
@@ -62,29 +67,11 @@ public class ViewController {
      * =========================
      */
 
-    @GetMapping("/dashboard")
-    public String dashboard(HttpSession session) {
-        if ("ADMIN".equals(session.getAttribute("userRole"))) {
-            return "redirect:/admin/dashboard";
-        }
-        return "traveler/dashboard/dashboard";
-    }
-
-    @GetMapping("/itinerary/list")
-    public String itineraryList() {
-        return "traveler/itinerary/list";
-    }
-
     @GetMapping("/explore")
     public String explore() {
         return "traveler/explore/index";
     }
 
-    @GetMapping("/itinerary/{id}")
-    public String itineraryDetail(@PathVariable Long id, Model model) {
-        model.addAttribute("itineraryId", id);
-        return "traveler/itinerary/detail-itinerary";
-    }
 
     @GetMapping("/profile")
     public String profile() {

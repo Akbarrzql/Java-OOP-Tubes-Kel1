@@ -616,19 +616,6 @@ trip-hero-wrapper {
     font-weight: 600;
 }
 
-.budget-progress-bar {
-    height: 10px;
-    border-radius: 999px;
-    background: #ECECEC;
-    overflow: hidden;
-}
-
-.progress-fill {
-    height: 100%;
-    width: 72%;
-    border-radius: 999px;
-    background: var(--brand-primary);
-}
 
 .budget-breakdown {
     list-style: none;

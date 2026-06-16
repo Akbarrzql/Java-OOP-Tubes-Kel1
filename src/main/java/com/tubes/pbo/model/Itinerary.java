@@ -36,9 +36,6 @@ public class Itinerary {
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", insertable = false, updatable = false)
-    private LocalDateTime updatedAt;
-
     // Constructors
     public Itinerary() {}
 
@@ -99,11 +96,4 @@ public class Itinerary {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }
