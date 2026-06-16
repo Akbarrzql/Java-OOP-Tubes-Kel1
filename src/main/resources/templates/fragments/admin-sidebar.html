@@ -83,12 +83,10 @@
         <!-- FOOTER -->
         <div class="sidebar-footer">
 
-            <a th:href="@{/admin/profile}" th:class="${activeMenu == 'profile'}
-       ? 'sidebar-link active'
-       : 'sidebar-link'">
+            <div class="sidebar-link">
                 <i class="fas fa-user-circle"></i>
-                Profil Admin
-            </a>
+                Admin
+            </div>
 
             <a th:href="@{/auth/logout}">
                 <i class="fas fa-sign-out-alt"></i>
