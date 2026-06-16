@@ -25,25 +25,6 @@ Saat ini project sudah menyediakan:
 - sistem login dan register berbasis role untuk `admin` dan `traveler`
 - redirect otomatis ke dashboard yang sesuai setelah login
 
-## Fitur Autentikasi
-
-### Role yang didukung
-- **Admin**: akun diambil dari tabel `user` yang memiliki pasangan data di tabel `admin`.
-- **Traveler**: akun diambil dari tabel `user` yang memiliki pasangan data di tabel `traveler`.
-
-### Alur Login
-1. User memasukkan email dan password pada halaman `/login`.
-2. Sistem mencari data pada tabel `user`.
-3. Jika password cocok, sistem mengecek role:
-   - ada data di tabel `admin` → redirect ke `/admin/dashboard`
-   - ada data di tabel `traveler` → redirect ke `/dashboard`
-4. Jika kredensial salah, user kembali ke halaman login dengan pesan error.
-
-### Alur Register
-1. User mengisi nama, email, dan password pada halaman `/register`.
-2. Sistem menyimpan data ke tabel `user`.
-3. Sistem otomatis membuat data pasangan di tabel `traveler`.
-4. Setelah berhasil, user diarahkan kembali ke halaman login.
 
 ### Catatan Penting
 - Di `database.sql`, nama tabel autentikasi yang dipakai adalah **`user`** (bukan `users`).
@@ -99,25 +80,6 @@ Pastikan untuk membuat database `db_tripinaja` di MySQL sebelum menjalankan apli
 ```sql
 CREATE DATABASE db_tripinaja;
 ```
-
-### Contoh akun sample
-- **Admin**
-  - Email: `admin@gmail.com`
-  - Password: `admin123`
-- **Traveler**
-  - Email: `akbar@gmail.com`
-  - Password: `akbar123`
-
-### Endpoint utama autentikasi
-- `GET /login` → halaman login
-- `GET /register` → halaman register traveler
-- `POST /auth/login` → proses login
-- `POST /auth/register` → proses register
-- `GET /auth/logout` → logout
-
-### Redirect setelah login
-- Admin → `/admin/dashboard`
-- Traveler → `/dashboard`
 
 ### Jalankan aplikasi
 
