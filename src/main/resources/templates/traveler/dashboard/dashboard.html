@@ -8,6 +8,28 @@
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/responsive.css}">
+    <style>
+        .feedback-message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .feedback-success {
+            background-color: #e8f7ec;
+            color: #16794c;
+            border: 1px solid #bfe7cf;
+        }
+        .feedback-error {
+            background-color: #fdecec;
+            color: #b42318;
+            border: 1px solid #f5c2c7;
+        }
+    </style>
 </head>
 <body>
 
@@ -32,13 +54,20 @@
         <a href="/profile" class="profile-menu">
 
             <div class="profile-avatar">
-                A
+                <span th:text="${session.loggedInUserName != null ? #strings.substring(session.loggedInUserName, 0, 1) : 'U'}">U</span>
             </div>
 
             <span class="profile-name">
-                Akbar
+                <span th:text="${session.loggedInUserName != null ? session.loggedInUserName : 'Guest'}">Guest</span>
             </span>
 
+        </a>
+
+        <a th:href="@{/auth/logout}" class="profile-menu" style="margin-left:16px; text-decoration:none;">
+            <div class="profile-avatar" style="background:#f3f4f6; color:#111827;">
+                <i class="fas fa-right-from-bracket"></i>
+            </div>
+            <span class="profile-name">Logout</span>
         </a>
 
     </div>
@@ -48,10 +77,23 @@
 <!-- MAIN CONTENT -->
 <main class="dashboard-main">
     <div class="container">
+
+        <!-- Static Feedback -->
+        <div th:if="${success}" class="feedback-message feedback-success">
+            <i class="fas fa-check-circle"></i>
+            <span th:text="${success}"></span>
+        </div>
+        <div th:if="${error}" class="feedback-message feedback-error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span th:text="${error}"></span>
+        </div>
+
         <!-- WELCOME SECTION -->
         <section class="welcome-section">
             <div class="welcome-content">
-                <h1>Selamat datang kembali! 👋</h1>
+                <h1 th:text="'Selamat datang kembali, ' + (${session.loggedInUserName != null ? session.loggedInUserName : 'traveler'}) + ' 👋'">
+                    Selamat datang kembali! 👋
+                </h1>
                 <p>Lanjutkan petualangan Anda atau jelajahi destinasi baru</p>
             </div>
             <div class="quick-actions">
@@ -65,56 +107,37 @@
         </section>
 
         <!-- STATS CARDS -->
-        <!-- SUMMARY CARDS -->
         <section class="stats-section">
-
-            <!-- ACTIVE ITINERARY -->
             <div class="stat-card">
-
                 <div class="stat-icon">
                     <i class="fas fa-calendar-check"></i>
                 </div>
-
                 <div class="stat-content">
                     <h3>Itinerary Aktif</h3>
                     <p class="stat-number">3</p>
-                    <span class="stat-label">
-                Dalam perjalanan & perencanaan
-            </span>
+                    <span class="stat-label">Dalam perjalanan & perencanaan</span>
                 </div>
-
             </div>
-
-            <!-- DESTINATION VISITED -->
             <div class="stat-card">
-
                 <div class="stat-icon">
                     <i class="fas fa-map-marked-alt"></i>
                 </div>
-
                 <div class="stat-content">
                     <h3>Destinasi Dikunjungi</h3>
                     <p class="stat-number">12</p>
-                    <span class="stat-label">
-                Kota & negara telah dikunjungi
-            </span>
+                    <span class="stat-label">Kota & negara telah dikunjungi</span>
                 </div>
-
             </div>
-
         </section>
 
         <!-- ONGOING ITINERARIES -->
         <section class="itineraries-section">
             <div class="section-header">
                 <h2>Itinerary Sedang Berjalan</h2>
-                <a href="/itinerary/list" class="see-all">
-                    Lihat Semua →
-                </a>
+                <a href="/itinerary/list" class="see-all">Lihat Semua →</a>
             </div>
 
             <div class="itineraries-grid">
-                <!-- Itinerary Card 1 -->
                 <div class="itinerary-card">
                     <div class="card-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
                     <div class="card-content">
@@ -132,8 +155,6 @@
                         <a href="/itinerary/1" class="btn-card">Lanjutkan →</a>
                     </div>
                 </div>
-
-                <!-- Itinerary Card 2 -->
                 <div class="itinerary-card">
                     <div class="card-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
                     <div class="card-content">
@@ -151,8 +172,6 @@
                         <a href="/itinerary/2" class="btn-card">Lanjutkan →</a>
                     </div>
                 </div>
-
-                <!-- Itinerary Card 3 -->
                 <div class="itinerary-card">
                     <div class="card-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
                     <div class="card-content">
@@ -177,13 +196,10 @@
         <section class="featured-section">
             <div class="section-header">
                 <h2>Destinasi Pilihan</h2>
-                <a href="/explore" class="see-all">
-                    Jelajahi Semua →
-                </a>
+                <a href="/explore" class="see-all">Jelajahi Semua →</a>
             </div>
 
             <div class="destinations-grid">
-                <!-- Destination Card -->
                 <div class="destination-card">
                     <div class="dest-image" style="background: url('https://images.unsplash.com/photo-1537225228614-b4fad34a7d7f?w=400') center/cover;"></div>
                     <div class="dest-content">
@@ -200,8 +216,6 @@
                         <a href="/explore/destination/1" class="btn-dest">Pelajari Lebih Lanjut</a>
                     </div>
                 </div>
-
-                <!-- Destination Card -->
                 <div class="destination-card">
                     <div class="dest-image" style="background: url('https://images.unsplash.com/photo-1509391366360-2e938aa1ef14?w=400') center/cover;"></div>
                     <div class="dest-content">
@@ -218,8 +232,6 @@
                         <a href="/explore/destination/2" class="btn-dest">Pelajari Lebih Lanjut</a>
                     </div>
                 </div>
-
-                <!-- Destination Card -->
                 <div class="destination-card">
                     <div class="dest-image" style="background: url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=400') center/cover;"></div>
                     <div class="dest-content">
@@ -236,8 +248,6 @@
                         <a href="/explore/destination/3" class="btn-dest">Pelajari Lebih Lanjut</a>
                     </div>
                 </div>
-
-                <!-- Destination Card -->
                 <div class="destination-card">
                     <div class="dest-image" style="background: url('https://images.unsplash.com/photo-1518756131299-26e3c3f81b4b?w=400') center/cover;"></div>
                     <div class="dest-content">
@@ -270,61 +280,32 @@
 
 <!-- FOOTER -->
 <footer class="footer">
-
     <div class="footer-container">
-
-        <!-- BRAND -->
         <div class="footer-brand">
-
             <h2>TRIPINAJA</h2>
-
-            <p>
-                Smart Travel Itinerary untuk perjalanan
-                sempurna Anda.
-            </p>
-
-            <span>
-                © 2026 TRIPINAJA. All rights reserved.
-            </span>
-
+            <p>Smart Travel Itinerary untuk perjalanan sempurna Anda.</p>
+            <span>© 2026 TRIPINAJA. All rights reserved.</span>
         </div>
-
-        <!-- LINKS -->
         <div class="footer-links">
-
             <div class="footer-column">
-
                 <h4>Menu</h4>
-
                 <a href="/">Home</a>
                 <a href="/explore">Explore</a>
                 <a href="/itinerary/list">My Itinerary</a>
-
             </div>
-
             <div class="footer-column">
-
                 <h4>Bantuan</h4>
-
                 <a href="#">FAQ</a>
                 <a href="#">Kontak Kami</a>
                 <a href="#">Kebijakan Privasi</a>
-
             </div>
-
             <div class="footer-column">
-
                 <h4>Legal</h4>
-
                 <a href="#">Terms of Service</a>
                 <a href="#">Privacy Policy</a>
-
             </div>
-
         </div>
-
     </div>
-
 </footer>
 
 </body>

@@ -18,6 +18,29 @@
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .feedback-message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .feedback-success {
+            background-color: #e8f7ec;
+            color: #16794c;
+            border: 1px solid #bfe7cf;
+        }
+        .feedback-error {
+            background-color: #fdecec;
+            color: #b42318;
+            border: 1px solid #f5c2c7;
+        }
+    </style>
 
 </head>
 
@@ -37,6 +60,18 @@
             'Dashboard',
             'Ringkasan aktivitas admin'
         )">
+    </div>
+
+    <div style="padding: 0 32px;">
+        <!-- Static Feedback -->
+        <div th:if="${success}" class="feedback-message feedback-success">
+            <i class="fas fa-check-circle"></i>
+            <span th:text="${success}"></span>
+        </div>
+        <div th:if="${error}" class="feedback-message feedback-error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span th:text="${error}"></span>
+        </div>
     </div>
 
     <!-- STATS -->

@@ -1,5 +1,7 @@
 package com.tubes.pbo.controller;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,12 +28,26 @@ public class ViewController {
      */
 
     @GetMapping("/login")
-    public String login() {
+    public String login(HttpSession session) {
+        String role = (String) session.getAttribute("userRole");
+        if ("ADMIN".equals(role)) {
+            return "redirect:/admin/dashboard";
+        }
+        if ("TRAVELER".equals(role)) {
+            return "redirect:/dashboard";
+        }
         return "login/login";
     }
 
     @GetMapping("/register")
-    public String register() {
+    public String register(HttpSession session) {
+        String role = (String) session.getAttribute("userRole");
+        if ("ADMIN".equals(role)) {
+            return "redirect:/admin/dashboard";
+        }
+        if ("TRAVELER".equals(role)) {
+            return "redirect:/dashboard";
+        }
         return "register/register";
     }
 
@@ -47,7 +63,10 @@ public class ViewController {
      */
 
     @GetMapping("/dashboard")
-    public String dashboard() {
+    public String dashboard(HttpSession session) {
+        if ("ADMIN".equals(session.getAttribute("userRole"))) {
+            return "redirect:/admin/dashboard";
+        }
         return "traveler/dashboard/dashboard";
     }
 
@@ -63,9 +82,7 @@ public class ViewController {
 
     @GetMapping("/itinerary/{id}")
     public String itineraryDetail(@PathVariable Long id, Model model) {
-        // TODO: uncomment ini setelah service siap
-        // Itinerary itinerary = itineraryService.findById(id);
-        // model.addAttribute("itinerary", itinerary);
+        model.addAttribute("itineraryId", id);
         return "traveler/itinerary/detail-itinerary";
     }
 
