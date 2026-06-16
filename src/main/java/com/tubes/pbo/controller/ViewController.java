@@ -97,10 +97,10 @@ public class ViewController {
      * =========================
      */
 
-    @GetMapping("/admin/dashboard")
-    public String adminDashboard() {
-        return "admin/dashboard-admin";
-    }
+    // @GetMapping("/admin/dashboard")
+    // public String adminDashboard() {
+    //     return "admin/dashboard-admin";
+    // }
 
     // @GetMapping("/admin/transport")
     // public String adminTransport() {
