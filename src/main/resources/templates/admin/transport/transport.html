@@ -7,27 +7,127 @@
     <title>Transport Management</title>
     <link rel="stylesheet" th:href="@{/css/admin.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --modal-primary: #9B6B43;
+            --modal-primary-dark: #7c5433;
+            --modal-surface: #FDF8F3;
+        }
+
+        /* Override Desain Overlay */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(17, 24, 39, 0.5);
+            backdrop-filter: blur(4px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9999;
+            opacity: 0; visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+
+        /* Override Desain Kotak Modal Utama */
+        .modern-modal {
+            background: white;
+            width: 100%; max-width: 600px;
+            border-radius: 32px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            position: relative;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .modal-overlay.active .modern-modal { transform: scale(1); }
+
+        /* Tombol Close Silang */
+        .modal-close {
+            position: absolute; top: 24px; right: 24px;
+            width: 32px; height: 32px;
+            border-radius: 50%; border: none;
+            background: #f3f4f6; color: #6b7280;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: 0.2s;
+        }
+        .modal-close:hover { background: #e5e7eb; color: #1f2937; }
+
+        /* Header Modal */
+        .modal-header { display: flex; align-items: center; gap: 20px; margin-bottom: 32px; }
+        .modal-icon {
+            width: 56px; height: 56px;
+            background: var(--modal-surface); color: var(--modal-primary);
+            border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px; flex-shrink: 0;
+        }
+        .modal-header h3 { margin: 0 0 4px 0; font-size: 24px; color: #1f2937; font-weight: bold; }
+        .modal-header p { margin: 0; font-size: 14px; color: #9ca3af; }
+
+        /* Form Layout */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block; font-size: 13px; font-weight: 700; color: #374151; margin-bottom: 8px;
+        }
+        
+        /* Desain Input/Select Elegan */
+        .modern-modal input, .modern-modal select {
+            width: 100%; border: 1px solid #e5e7eb; border-radius: 12px;
+            padding: 14px 16px; font-size: 14px; color: #374151;
+            outline: none; transition: border-color 0.2s; background: white; box-sizing: border-box;
+        }
+        .modern-modal input:focus, .modern-modal select:focus {
+            border-color: var(--modal-primary); box-shadow: 0 0 0 1px var(--modal-primary);
+        }
+
+        /* BOX ESTIMASI TOTAL COST (KREM) */
+        .total-cost-box {
+            background: var(--modal-surface); border-radius: 16px;
+            padding: 24px; text-align: center; margin-bottom: 32px;
+            border: 1px solid rgba(155, 107, 67, 0.05);
+        }
+        .total-cost-box p {
+            font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
+            color: rgba(155, 107, 67, 0.6); text-transform: uppercase; margin: 0 0 8px 0;
+        }
+        .total-cost-box h4 {
+            font-size: 36px; font-weight: 700; color: var(--modal-primary); margin: 0;
+        }
+
+        /* Action Buttons */
+        .form-actions { display: flex; justify-content: flex-end; gap: 12px; }
+        .btn-secondary {
+            padding: 14px 24px; background: #f9fafb; color: #4b5563;
+            border: none; border-radius: 12px; font-weight: 600; font-size: 14px;
+            cursor: pointer; transition: 0.2s;
+        }
+        .btn-secondary:hover { background: #f3f4f6; }
+        
+        .btn-primary {
+            padding: 14px 32px; background: var(--modal-primary); color: white;
+            border: none; border-radius: 12px; font-weight: 600; font-size: 14px;
+            cursor: pointer; transition: 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(155, 107, 67, 0.2);
+        }
+        .btn-primary:hover { background: var(--modal-primary-dark); }
+    </style>
 </head>
 
 <body class="admin-body">
 
-<!-- SIDEBAR -->
 <div th:replace="~{fragments/admin-sidebar :: adminSidebar('transport')}"></div>
 
-<!-- MAIN -->
 <main class="main-content">
 
-    <!-- TOPBAR -->
     <div th:replace="~{fragments/admin-topbar :: adminTopbar('Transport Management', 'Kelola seluruh data transportasi')}"></div>
 
-    <!-- ACTION -->
     <div class="page-action">
         <button class="btn-primary" onclick="openTransportModal()">
             <i class="fas fa-plus"></i> Tambah Transport
         </button>
     </div>
 
-    <!-- TABLE -->
     <section class="table-wrapper">
         <table class="transport-table">
             <thead>
@@ -64,7 +164,6 @@
     </section>
 </main>
 
-<!-- ==================== MODAL EDIT ==================== -->
 <div class="modal-overlay" id="editTransportModal">
     <div class="modern-modal">
         <button class="modal-close" onclick="closeEditTransportModal()">
@@ -77,12 +176,13 @@
                 <p>Update data transportasi</p>
             </div>
         </div>
-        <form class="modern-form" th:action="@{/admin/transport/update}" method="POST">
+        <form th:action="@{/admin/transport/update}" method="POST">
             <input type="hidden" id="editTransportId" name="transportId">
             <input type="hidden" id="editProvinsiId" name="provinsiId">
+            
             <div class="form-grid">
                 <div class="form-group">
-                    <label>Jenis</label>
+                    <label>Jenis Transport</label>
                     <select id="editJenis" name="jenis">
                         <option value="Flight">Flight</option>
                         <option value="Train">Train</option>
@@ -90,7 +190,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Provider</label>
+                    <label>Nama Provider</label>
                     <input type="text" id="editProvider" name="provider" required>
                 </div>
             </div>
@@ -100,10 +200,21 @@
                     <input type="text" id="editJadwal" name="jadwal" required>
                 </div>
                 <div class="form-group">
-                    <label>Harga</label>
+                    <label>Harga Base</label>
                     <input type="number" id="editHarga" name="harga" required>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label>Pajak & Biaya Tambahan</label>
+                <input type="number" id="editFeeInput" placeholder="Masukkan pajak (opsional)">
+            </div>
+
+            <div class="total-cost-box">
+                <p>Estimasi Total Cost</p>
+                <h4 id="editTotalCostDisplay">Rp 0</h4>
+            </div>
+
             <div class="form-actions">
                 <button type="button" class="btn-secondary" onclick="closeEditTransportModal()">Cancel</button>
                 <button type="submit" class="btn-primary">Update Transport</button>
@@ -112,7 +223,6 @@
     </div>
 </div>
 
-<!-- ==================== MODAL TAMBAH ==================== -->
 <div class="modal-overlay" id="transportModal">
     <div class="modern-modal">
         <button class="modal-close" onclick="closeTransportModal()">
@@ -125,8 +235,9 @@
                 <p>Tambahkan data transportasi baru</p>
             </div>
         </div>
-        <form class="modern-form" th:action="@{/admin/transport/save}" method="POST">
+        <form th:action="@{/admin/transport/save}" method="POST">
             <input type="hidden" name="provinsiId" value="1">
+            
             <div class="form-grid">
                 <div class="form-group">
                     <label>Jenis Transport</label>
@@ -138,29 +249,30 @@
                 </div>
                 <div class="form-group">
                     <label>Nama Provider</label>
-                    <input type="text" name="provider" placeholder="Garuda Indonesia" required>
+                    <input type="text" name="provider" placeholder="Masukkan nama provider" required>
                 </div>
             </div>
             <div class="form-grid">
                 <div class="form-group">
                     <label>Jadwal</label>
-                    <input type="text" name="jadwal" placeholder="08:00 - 10:00" required>
+                    <input type="text" name="jadwal" placeholder="Contoh: 08:00 - 10:00" required>
                 </div>
                 <div class="form-group">
-                    <label>Harga Base</label>
-                    <input type="number" id="hargaInput" name="harga" placeholder="1500000" required>
+                    <label>Harga Dasar</label>
+                    <input type="number" id="hargaInput" name="harga" placeholder="Masukkan harga" required>
                 </div>
             </div>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Pajak & Biaya Tambahan</label>
-                    <input type="number" id="feeInput" placeholder="250000">
-                </div>
-                <div class="form-group">
-                    <label>Estimasi Total Cost</label>
-                    <input type="text" id="totalCost" readonly>
-                </div>
+            
+            <div class="form-group">
+                <label>Pajak & Biaya Tambahan</label>
+                <input type="number" id="feeInput" placeholder="Masukkan pajak dan biaya tambahan">
             </div>
+            
+            <div class="total-cost-box">
+                <p>Estimasi Total Cost</p>
+                <h4 id="totalCostDisplay">Rp 0</h4>
+            </div>
+
             <div class="form-actions">
                 <button type="button" class="btn-secondary" onclick="closeTransportModal()">Cancel</button>
                 <button type="submit" class="btn-primary">Save Transport</button>
@@ -177,46 +289,59 @@
     function openTransportModal(){ modal.classList.add('active'); }
     function closeTransportModal(){ modal.classList.remove('active'); }
 
-    // ========== MODAL EDIT (dari data attribute) ==========
+    // ========== MODAL EDIT (Diisi Otomatis dari Tabel) ==========
     function openEditFromRow(button) {
         const row = button.closest('tr');
-        const id = row.getAttribute('data-id');
-        const jenis = row.getAttribute('data-jenis');
-        const provider = row.getAttribute('data-provider');
-        const jadwal = row.getAttribute('data-jadwal');
-        const harga = row.getAttribute('data-harga');
-        const provinsiId = row.getAttribute('data-provinsi');
+        
+        // Mengambil data dari atribut TH:DATA
+        document.getElementById('editTransportId').value = row.getAttribute('data-id');
+        document.getElementById('editProvinsiId').value = row.getAttribute('data-provinsi');
+        document.getElementById('editJenis').value = row.getAttribute('data-jenis');
+        document.getElementById('editProvider').value = row.getAttribute('data-provider');
+        document.getElementById('editJadwal').value = row.getAttribute('data-jadwal');
+        document.getElementById('editHarga').value = row.getAttribute('data-harga');
 
-        document.getElementById('editTransportId').value = id;
-        document.getElementById('editProvinsiId').value = provinsiId;
-        document.getElementById('editJenis').value = jenis;
-        document.getElementById('editProvider').value = provider;
-        document.getElementById('editJadwal').value = jadwal;
-        document.getElementById('editHarga').value = harga;
+        // Jalankan Kalkulator Edit otomatis saat modal dibuka
+        calculateEditTotal();
 
         editTransportModal.classList.add('active');
     }
 
     function closeEditTransportModal(){ editTransportModal.classList.remove('active'); }
 
-    // ========== CLOSE KETIKA KLIK DI LUAR ==========
+    // Menutup modal jika user klik layar di luar kotak putih
     modal.addEventListener('click', function(e){ if(e.target === modal){ closeTransportModal(); } });
     editTransportModal.addEventListener('click', function(e){ if(e.target === editTransportModal){ closeEditTransportModal(); } });
 
-    // ========== KALKULASI TOTAL COST ==========
+    // ========== KALKULATOR TOTAL COST (TAMBAH) ==========
     const hargaInput = document.getElementById('hargaInput');
     const feeInput = document.getElementById('feeInput');
-    const totalCost = document.getElementById('totalCost');
+    const totalCostDisplay = document.getElementById('totalCostDisplay');
 
     function calculateTotal(){
         const harga = parseInt(hargaInput.value) || 0;
         const fee = parseInt(feeInput.value) || 0;
         const total = harga + fee;
-        totalCost.value = 'Rp ' + total.toLocaleString('id-ID');
+        totalCostDisplay.textContent = 'Rp ' + total.toLocaleString('id-ID');
     }
 
     hargaInput.addEventListener('input', calculateTotal);
     feeInput.addEventListener('input', calculateTotal);
+
+    // ========== KALKULATOR TOTAL COST (EDIT) ==========
+    const editHarga = document.getElementById('editHarga');
+    const editFeeInput = document.getElementById('editFeeInput');
+    const editTotalCostDisplay = document.getElementById('editTotalCostDisplay');
+
+    function calculateEditTotal(){
+        const harga = parseInt(editHarga.value) || 0;
+        const fee = parseInt(editFeeInput.value) || 0;
+        const total = harga + fee;
+        editTotalCostDisplay.textContent = 'Rp ' + total.toLocaleString('id-ID');
+    }
+
+    editHarga.addEventListener('input', calculateEditTotal);
+    if(editFeeInput) editFeeInput.addEventListener('input', calculateEditTotal);
 </script>
 
 </body>
