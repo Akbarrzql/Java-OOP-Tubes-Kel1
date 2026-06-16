@@ -16,7 +16,7 @@ USE db_tripinaja;
 -- TABLE user
 -- Base table untuk login / register
 -- =========================================================
-CREATE TABLE `user` (
+CREATE TABLE user (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   name VARCHAR(100) NOT NULL,
   email VARCHAR(100) NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE admin (
   UNIQUE KEY ux_admin_user_id (user_id),
   CONSTRAINT fk_admin_user
     FOREIGN KEY (user_id)
-    REFERENCES `user` (id)
+    REFERENCES user (id)
     ON DELETE CASCADE
     ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -54,13 +54,12 @@ CREATE TABLE traveler (
   user_id INT UNSIGNED NOT NULL,
   preference VARCHAR(255) DEFAULT NULL,
   budget DECIMAL(14,2) NOT NULL DEFAULT 0.00,
-  account_type ENUM('FREE','PREMIUM') NOT NULL DEFAULT 'FREE',
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE KEY ux_traveler_user_id (user_id),
   CONSTRAINT fk_traveler_user
     FOREIGN KEY (user_id)
-    REFERENCES `user` (id)
+    REFERENCES user (id)
     ON DELETE CASCADE
     ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -272,17 +271,17 @@ CREATE TABLE itinerary_day_transport (
 -- =========================================================
 
 -- USER
-INSERT INTO `user` (name, email, password) VALUES
+INSERT INTO user (name, email, password) VALUES
 ('Admin Utama', 'admin@gmail.com', 'admin123'),
 ('Akbar Rizqullah', 'akbar@gmail.com', 'akbar123');
 
 -- ADMIN
 INSERT INTO admin (user_id, admin_level) VALUES
-((SELECT id FROM `user` WHERE email='admin@gmail.com' LIMIT 1), 1);
+(1, 1);
 
 -- TRAVELER
-INSERT INTO traveler (user_id, preference, budget, account_type) VALUES
-((SELECT id FROM `user` WHERE email='akbar@gmail.com' LIMIT 1), 'Pantai dan wisata alam', 5000000.00, 'PREMIUM');
+INSERT INTO traveler (user_id, preference, budget) VALUES
+(2, 'Pantai dan wisata alam', 5000000.00);
 
 -- PROVINSI
 INSERT INTO provinsi (nama, deskripsi) VALUES
@@ -291,75 +290,43 @@ INSERT INTO provinsi (nama, deskripsi) VALUES
 
 -- DESTINASI
 INSERT INTO destinasi (provinsi_id, nama, lokasi, deskripsi, harga, rating) VALUES
-((SELECT provinsi_id FROM provinsi WHERE nama='Bali' LIMIT 1), 'Pantai Kuta', 'Bali', 'Pantai terkenal di Bali', 50000.00, 4.80),
-((SELECT provinsi_id FROM provinsi WHERE nama='Bali' LIMIT 1), 'Tanah Lot', 'Bali', 'Destinasi wisata religi dan sunset', 60000.00, 4.90),
-((SELECT provinsi_id FROM provinsi WHERE nama='Jawa Barat' LIMIT 1), 'Kawah Putih', 'Bandung', 'Wisata alam kawah', 30000.00, 4.70);
+(1, 'Pantai Kuta', 'Bali', 'Pantai terkenal di Bali', 50000.00, 4.80),
+(1, 'Tanah Lot', 'Bali', 'Destinasi wisata religi dan sunset', 60000.00, 4.90),
+(2, 'Kawah Putih', 'Bandung', 'Wisata alam kawah', 30000.00, 4.70);
 
 -- ACCOMMODATION
 INSERT INTO accommodation (provinsi_id, nama, lokasi, harga_per_malam, rating) VALUES
-((SELECT provinsi_id FROM provinsi WHERE nama='Bali' LIMIT 1), 'Hotel Kuta Indah', 'Bali', 750000.00, 4.50),
-((SELECT provinsi_id FROM provinsi WHERE nama='Jawa Barat' LIMIT 1), 'Villa Bandung Asri', 'Bandung', 500000.00, 4.40);
+(1, 'Hotel Kuta Indah', 'Bali', 750000.00, 4.50),
+(2, 'Villa Bandung Asri', 'Bandung', 500000.00, 4.40);
 
 -- TRANSPORT
 INSERT INTO transport (provinsi_id, jenis, provider, harga) VALUES
-((SELECT provinsi_id FROM provinsi WHERE nama='Bali' LIMIT 1), 'Pesawat', 'Garuda Indonesia', 1500000.00),
-((SELECT provinsi_id FROM provinsi WHERE nama='Bali' LIMIT 1), 'Mobil Sewa', 'Bali Rent Car', 300000.00),
-((SELECT provinsi_id FROM provinsi WHERE nama='Jawa Barat' LIMIT 1), 'Kereta', 'KAI', 250000.00);
+(1, 'Pesawat', 'Garuda Indonesia', 1500000.00),
+(1, 'Mobil Sewa', 'Bali Rent Car', 300000.00),
+(2, 'Kereta', 'KAI', 250000.00);
 
 -- ITINERARY TOTAL
 INSERT INTO itinerary_total (traveler_id, title, total_hari, total_biaya, status) VALUES
-((SELECT id FROM traveler WHERE user_id = (SELECT id FROM `user` WHERE email='akbar@gmail.com' LIMIT 1) LIMIT 1),
- 'Liburan ke Bali',
- 2,
- 0.00,
- 'DRAFT');
+(1, 'Liburan ke Bali', 2, 0.00, 'DRAFT');
 
 -- ITINERARY DAY
 INSERT INTO itinerary_day (itinerary_id, hari_ke, catatan, biaya_hari) VALUES
-((SELECT itinerary_id FROM itinerary_total WHERE title='Liburan ke Bali' LIMIT 1), 1, 'Hari pertama: tiba di Bali, check-in hotel, jalan ke Pantai Kuta', 0.00),
-((SELECT itinerary_id FROM itinerary_total WHERE title='Liburan ke Bali' LIMIT 1), 2, 'Hari kedua: wisata Tanah Lot dan transport lokal', 0.00);
+(1, 1, 'Hari pertama: tiba di Bali, check-in hotel, jalan ke Pantai Kuta', 0.00),
+(1, 2, 'Hari kedua: wisata Tanah Lot dan transport lokal', 0.00);
 
 -- RELASI DAY - DESTINASI
 INSERT INTO itinerary_day_destinasi (day_id, destinasi_id, urutan, durasi_menit, biaya, catatan) VALUES
-((SELECT day_id FROM itinerary_day WHERE itinerary_id = (SELECT itinerary_id FROM itinerary_total WHERE title='Liburan ke Bali' LIMIT 1) AND hari_ke=1 LIMIT 1),
- (SELECT destinasi_id FROM destinasi WHERE nama='Pantai Kuta' LIMIT 1),
- 1,
- 180,
- 50000.00,
- 'Sunset di Pantai Kuta'),
-((SELECT day_id FROM itinerary_day WHERE itinerary_id = (SELECT itinerary_id FROM itinerary_total WHERE title='Liburan ke Bali' LIMIT 1) AND hari_ke=2 LIMIT 1),
- (SELECT destinasi_id FROM destinasi WHERE nama='Tanah Lot' LIMIT 1),
- 1,
- 120,
- 60000.00,
- 'Wisata sore');
+(1, 1, 1, 180, 50000.00, 'Sunset di Pantai Kuta'),
+(2, 2, 1, 120, 60000.00, 'Wisata sore');
 
 -- RELASI DAY - ACCOMMODATION
 INSERT INTO itinerary_day_accommodation (day_id, accommodation_id, checkin_time, checkout_time, malam, biaya, catatan) VALUES
-((SELECT day_id FROM itinerary_day WHERE itinerary_id = (SELECT itinerary_id FROM itinerary_total WHERE title='Liburan ke Bali' LIMIT 1) AND hari_ke=1 LIMIT 1),
- (SELECT accommodation_id FROM accommodation WHERE nama='Hotel Kuta Indah' LIMIT 1),
- '2026-07-01 14:00:00',
- '2026-07-02 12:00:00',
- 1,
- 750000.00,
- 'Ocean view');
+(1, 1, '2026-07-01 14:00:00', '2026-07-02 12:00:00', 1, 750000.00, 'Ocean view');
 
 -- RELASI DAY - TRANSPORT
 INSERT INTO itinerary_day_transport (day_id, transport_id, urutan, waktu_berangkat, waktu_tiba, biaya, catatan) VALUES
-((SELECT day_id FROM itinerary_day WHERE itinerary_id = (SELECT itinerary_id FROM itinerary_total WHERE title='Liburan ke Bali' LIMIT 1) AND hari_ke=1 LIMIT 1),
- (SELECT transport_id FROM transport WHERE provider='Garuda Indonesia' LIMIT 1),
- 1,
- '2026-07-01 07:00:00',
- '2026-07-01 09:00:00',
- 1500000.00,
- 'Penerbangan ke Bali'),
-((SELECT day_id FROM itinerary_day WHERE itinerary_id = (SELECT itinerary_id FROM itinerary_total WHERE title='Liburan ke Bali' LIMIT 1) AND hari_ke=2 LIMIT 1),
- (SELECT transport_id FROM transport WHERE provider='Bali Rent Car' LIMIT 1),
- 1,
- '2026-07-02 08:00:00',
- '2026-07-02 17:00:00',
- 300000.00,
- 'Transport lokal');
+(1, 1, 1, '2026-07-01 07:00:00', '2026-07-01 09:00:00', 1500000.00, 'Penerbangan ke Bali'),
+(2, 2, 1, '2026-07-02 08:00:00', '2026-07-02 17:00:00', 300000.00, 'Transport lokal');
 
 -- =========================================================
 -- UPDATE BIAYA HARI & TOTAL ITINERARY

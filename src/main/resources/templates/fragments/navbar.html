@@ -1,4 +1,4 @@
-<nav class="navbar" th:fragment="navbar">
+<nav class="navbar" th:fragment="navbar" xmlns:th="http://www.thymeleaf.org">
 
     <div class="container">
 
@@ -10,7 +10,7 @@
 
 
         <!-- RIGHT -->
-        <div class="nav-right">
+        <div class="nav-right" th:if="${session.userRole == null}">
 
             <a href="/login" class="login-link">
                 Login
@@ -18,6 +18,22 @@
 
             <a href="/register" class="register-btn">
                 Register
+            </a>
+
+        </div>
+
+        <div class="nav-right" th:if="${session.userRole != null}">
+
+            <a th:if="${session.userRole == 'ADMIN'}" th:href="@{/admin/dashboard}" class="login-link">
+                <span th:text="${session.loggedInUserName != null ? session.loggedInUserName : 'User'}">User</span>
+            </a>
+
+            <a th:if="${session.userRole != 'ADMIN'}" th:href="@{/dashboard}" class="login-link">
+                <span th:text="${session.loggedInUserName != null ? session.loggedInUserName : 'User'}">User</span>
+            </a>
+
+            <a th:href="@{/auth/logout}" class="register-btn">
+                Logout
             </a>
 
         </div>

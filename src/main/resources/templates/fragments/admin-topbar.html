@@ -19,6 +19,13 @@
 
     </div>
 
+    <div class="topbar-user-actions">
+        <div class="topbar-user-info">
+            <strong th:text="${session.loggedInUserName != null ? session.loggedInUserName : 'Admin'}">Admin</strong>
+            <span th:text="${session.userRole != null ? session.userRole : 'ADMIN'}">ADMIN</span>
+        </div>
+    </div>
+
 </header>
 
 </body>

@@ -7,6 +7,7 @@
 
   <link rel="stylesheet" th:href="@{/css/style.css}">
   <link rel="stylesheet" th:href="@{/css/auth.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
@@ -39,21 +40,31 @@
         <h1>Login Now!</h1>
         <p>Welcome back! Please enter your details</p>
 
-        <form>
+        <!-- Static Feedback Messages -->
+        <div th:if="${success}" class="auth-feedback auth-feedback-success" style="margin-bottom: 20px;">
+            <i class="fas fa-check-circle"></i> <span th:text="${success}"></span>
+        </div>
+
+        <div th:if="${error}" class="auth-feedback auth-feedback-error" style="margin-bottom: 20px;">
+            <i class="fas fa-exclamation-circle"></i> <span th:text="${error}"></span>
+        </div>
+
+        <form th:action="@{/auth/login}" method="post">
 
           <div class="input-group">
-            <label>Email</label>
-            <input type="email" placeholder="example@gmail.com">
+            <label class="sr-only" for="loginEmail">Email</label>
+            <input id="loginEmail" type="email" name="email" placeholder="example@gmail.com" title="Masukkan email yang valid" required>
           </div>
 
           <div class="input-group">
-            <label>Password</label>
-            <input type="password" placeholder="********">
+            <label class="sr-only" for="loginPassword">Password</label>
+            <input id="loginPassword" type="password" name="password" placeholder="********" title="Masukkan password Anda" required>
           </div>
 
           <div class="auth-options">
             <div>
-              <input type="checkbox"> Remember me
+              <input id="rememberMe" type="checkbox" name="rememberMe">
+              <label for="rememberMe">Remember me</label>
             </div>
 
             <a href="/forgot-password">Forgot password?</a>
@@ -78,5 +89,6 @@
 
 </section>
 <link rel="stylesheet" th:href="@{/css/responsive.css}">
+<script th:src="@{/js/auth.js}"></script>
 </body>
 </html>
