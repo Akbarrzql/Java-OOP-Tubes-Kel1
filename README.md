@@ -27,9 +27,9 @@ Saat ini project sudah menyediakan:
 
 
 ### Catatan Penting
-- Di `database.sql`, nama tabel autentikasi yang dipakai adalah **`user`** (bukan `users`).
+- Di `database_tripinaja.sql`, nama tabel autentikasi yang dipakai adalah **`user`** (bukan `users`).
 - Akun admin **tidak** dibuat dari form register, tetapi dari data di database pada tabel `admin`.
-- Password baru dari register disimpan dalam bentuk hash, tetapi sample data lama tetap bisa dibaca oleh sistem ini agar kompatibel dengan isi `database.sql`.
+- Password baru dari register disimpan dalam bentuk hash, tetapi sample data lama tetap bisa dibaca oleh sistem ini agar kompatibel dengan isi `database_tripinaja.sql`.
 
 ## Teknologi yang Digunakan
 
@@ -70,7 +70,7 @@ src/main/resources/
 ## Cara
 1. Pastikan MySQL sudah terinstal dan berjalan di komputer Anda.
 2. Buat database baru dengan nama `db_tripinaja` (atau sesuaikan dengan konfigurasi di `application.properties`).
-3. Import file `database.sql` agar tabel `user`, `admin`, `traveler`, dan tabel lainnya terbentuk beserta sample data.
+3. Import file `database_tripinaja.sql` agar tabel `user`, `admin`, `traveler`, dan tabel lainnya terbentuk beserta sample data.
 4. Jalankan aplikasi menggunakan IDE atau perintah `mvn spring-boot:run` di terminal.
 5. Akses aplikasi melalui browser di `http://localhost:8080/`.
 
