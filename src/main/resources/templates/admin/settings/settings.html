@@ -1,420 +1,200 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="id">
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Management - Tripinaja</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Link ke CSS Admin bawaan kamu -->
+    <title>Pengaturan Admin</title>
     <link rel="stylesheet" th:href="@{/css/admin.css}">
-    
-    <!-- Google Font Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#fbf8f5',
-                            100: '#f4ece3',
-                            500: '#a27c54', // Brown/Tan Accent Color
-                            600: '#8e6943',
-                            700: '#755333',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
     <style>
-        /* Custom scrollbar to match premium aesthetics */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+        .settings-section {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid #E5E7EB;
+            margin-bottom: 24px;
         }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
+
+        .settings-section h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 8px;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
+
+        .settings-section>p {
+            font-size: 13px;
+            color: #6B7280;
+            margin-bottom: 24px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+
+        .input-row {
+            display: flex;
+            gap: 16px;
+            align-items: flex-end;
+        }
+
+        .input-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #374151;
+            outline: none;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            border-color: #A57249;
+            box-shadow: 0 0 0 3px rgba(165, 114, 73, 0.15);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px 0;
+            color: #9CA3AF;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .badge-admin {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            background-color: #F0FDF4;
+            color: #16A34A;
+            border: 1px solid #BBF7D0;
+        }
+
+        .feedback-message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback-success {
+            background-color: #e8f7ec;
+            color: #16794c;
+            border: 1px solid #bfe7cf;
+        }
+
+        .feedback-error {
+            background-color: #fdecec;
+            color: #b42318;
+            border: 1px solid #f5c2c7;
         }
     </style>
 </head>
 
-<!-- STRUKTUR LAYOUT UTAMA: FLEXBOX (KIRI SIDEBAR, KANAN KONTEN) -->
-<body class="font-sans antialiased text-slate-800 flex h-screen bg-slate-50 overflow-hidden">
+<body class="admin-body">
 
-    <!-- ========================================== -->
-    <!-- SIDEBAR KIRI (TRIPINAJA)                   -->
-    <!-- ========================================== -->
-  <div th:replace="fragments/admin-sidebar :: adminSidebar('Pengaturan')"></div>        <!-- Bagian Atas Sidebar -->          
-       
-    <!-- ========================================== -->
-    <!-- KONTEN KANAN UTAMA                         -->
-    <!-- ========================================== -->
-    <main class="flex-1 overflow-y-auto relative w-full">
-        <!-- Main Container yang kamu buat sebelumnya -->
-        <div class="max-w-5xl mx-auto px-6 py-8 md:py-12">
+    <!-- SIDEBAR -->
+    <div th:replace="fragments/admin-sidebar :: adminSidebar('settings')"></div>
 
-            <!-- Header Section -->
-            <div class="flex items-start gap-4 mb-8">
-                <div class="p-3 bg-white rounded-xl text-brand-600 flex items-center justify-center shadow-sm border border-slate-100">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-                        Admin Management
-                    </h1>
-                    <p class="text-sm md:text-base text-slate-500 mt-1">
-                        Kelola user admin — tambah, edit, nonaktifkan, atau hapus.
-                    </p>
-                </div>
-            </div>
+    <!-- MAIN -->
+    <main class="main-content">
 
-            <!-- Notification Toast Container -->
-            <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3"></div>
+        <!-- TOPBAR -->
+        <div th:replace="fragments/admin-topbar :: adminTopbar('Pengaturan', 'Kelola akses admin sistem')"></div>
 
-            <!-- TAMBAH ADMIN BARU CARD -->
-            <div class="bg-white rounded-2xl border border-slate-100 p-6 md:p-8 shadow-sm hover:shadow-md transition-shadow duration-300 mb-8">
-                <h2 class="text-lg md:text-xl font-bold text-slate-900 mb-2">Tambah Admin Baru</h2>
-                <p class="text-xs md:text-sm text-slate-500 mb-6">
-                    Masukkan email user yang sudah terdaftar di sistem untuk menjadikannya admin.
-                </p>
-
-                <!-- Spring Boot/Thymeleaf form wrapper -->
-                <form id="add-admin-form" th:action="@{/admin/settings/add}" method="POST" onsubmit="event.preventDefault(); handleAddAdmin();">
-                    <div class="flex flex-col md:flex-row items-end md:items-center gap-4">
-                        <div class="w-full flex-1">
-                            <label for="admin-email" class="block text-sm font-semibold text-slate-800 mb-2">Email User</label>
-                            <div class="relative rounded-xl shadow-sm">
-                                <input 
-                                    type="email" 
-                                    id="admin-email" 
-                                    name="email"
-                                    required
-                                    class="block w-full rounded-xl border border-slate-200 bg-slate-50/50 py-3 px-4 text-slate-800 placeholder-slate-400 focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-all duration-200 text-sm md:text-base"
-                                    placeholder="contoh: user@email.com"
-                                    th:value="${email != null ? email : ''}"
-                                />
-                            </div>
-                        </div>
-                        <div class="w-full md:w-auto">
-                            <button 
-                                type="submit" 
-                                class="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-500 hover:bg-brand-600 active:bg-brand-700 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-150 text-sm md:text-base cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-500/50"
-                            >
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
-                                </svg>
-                                <span>Tambahkan</span>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-            <!-- DAFTAR ADMIN CARD -->
-            <div class="bg-white rounded-2xl border border-slate-100 p-6 md:p-8 shadow-sm">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-                    <div>
-                        <h2 class="text-lg md:text-xl font-bold text-slate-900">Daftar Admin</h2>
-                        <p class="text-xs md:text-sm text-slate-400 mt-0.5">Daftar seluruh akun yang memiliki hak akses administratif</p>
-                    </div>
-                    <!-- Interactive helper button to toggle state in preview -->
-                    <div class="flex gap-2">
-                        <button onclick="toggleMockData()" class="px-3 py-1.5 text-xs font-semibold text-brand-700 bg-brand-50 hover:bg-brand-100 rounded-lg transition-all duration-200 border border-brand-100">
-                            <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Demo Isi Data
-                        </button>
-                        <button onclick="clearAllAdmins()" class="px-3 py-1.5 text-xs font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 rounded-lg transition-all duration-200 border border-rose-100">
-                            <i class="fa-regular fa-trash-can mr-1"></i> Kosongkan
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Table Wrapper for Responsiveness -->
-                <div class="overflow-x-auto w-full rounded-xl border border-slate-100 bg-slate-50/20">
-                    <table class="w-full text-left border-collapse min-w-[640px]">
-                        <thead>
-                            <tr class="border-b border-slate-100 bg-slate-50/50">
-                                <th class="py-4 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider w-1/4">Admin</th>
-                                <th class="py-4 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider w-1/4">Email</th>
-                                <th class="py-4 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider w-1/5">Ditambahkan</th>
-                                <th class="py-4 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider w-1/6 text-center">Status</th>
-                                <th class="py-4 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider w-1/6 text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-table-body" class="divide-y divide-slate-100 bg-white">
-                            <!-- Thymeleaf structure ready for real Spring Boot loop:
-                            <tr th:each="admin : ${adminList}" class="hover:bg-slate-50/30 transition-colors">
-                                ...
-                            </tr>
-                            -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- EMPTY STATE COMPONENT -->
-                <div id="empty-state" class="flex flex-col items-center justify-center py-16 px-4">
-                    <div class="w-20 h-20 bg-slate-100/80 text-slate-300 rounded-full flex items-center justify-center mb-4 border border-dashed border-slate-200 shadow-inner">
-                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                        </svg>
-                    </div>
-                    <p class="text-sm font-medium text-slate-400 text-center">
-                        Belum ada admin tambahan.
-                    </p>
-                </div>
-
-            </div>
+        <!-- FEEDBACK -->
+        <div th:if="${success}" class="feedback-message feedback-success">
+            <i class="fas fa-check-circle"></i>
+            <span th:text="${success}"></span>
         </div>
+        <div th:if="${error}" class="feedback-message feedback-error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span th:text="${error}"></span>
+        </div>
+
+        <!-- TAMBAH ADMIN -->
+        <div class="settings-section">
+            <h2>Tambah Admin Baru</h2>
+            <p>Masukkan email user yang sudah terdaftar untuk menjadikannya admin.</p>
+            <form action="/admin/settings/add" method="post">
+                <div class="input-row">
+                    <div class="form-group">
+                        <label>Email User</label>
+                        <input type="email" name="email" placeholder="Masukkan email user" required>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-user-plus"></i>
+                        Tambahkan
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- DAFTAR ADMIN -->
+        <div class="settings-section">
+            <h2>Daftar Admin</h2>
+            <p>Seluruh akun yang memiliki hak akses administratif.</p>
+
+            <div th:if="${adminUserList == null or adminUserList.isEmpty()}" class="empty-state">
+                <i class="fas fa-users"></i>
+                <p>Belum ada admin tambahan.</p>
+            </div>
+
+            <table class="transport-table" th:if="${adminUserList != null and !adminUserList.isEmpty()}">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="user, iterStat : ${adminUserList}">
+                        <td th:text="${iterStat.count}"></td>
+                        <td th:text="${user.name}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td><span class="badge-admin">Aktif</span></td>
+                        <td>
+                            <div class="table-actions">
+                                <a th:href="@{/admin/settings/remove/{id}(id=${user.id})}"
+                                    onclick="return confirm('Yakin ingin mencabut hak akses admin dari user ini?')"
+                                    style="background:#FEF2F2; color:#DC2626;">
+                                    Hapus Akses
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
     </main>
 
-    <!-- CUSTOM DIALOG MODAL FOR CONFIRMATIONS (NO ALERT CONSTRAINTS) -->
-    <div id="confirm-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center px-4 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300">
-        <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl p-6 border border-slate-100 transform transition-transform duration-300 scale-95">
-            <div class="flex items-center gap-3 text-amber-600 mb-4">
-                <div class="p-2 bg-amber-50 rounded-lg">
-                    <i class="fa-solid fa-triangle-exclamation text-xl"></i>
-                </div>
-                <h3 class="text-lg font-bold text-slate-900">Konfirmasi Penghapusan</h3>
-            </div>
-            <p id="confirm-message" class="text-sm text-slate-500 mb-6">
-                Apakah Anda yakin ingin menghapus hak akses admin dari user ini? Tindakan ini tidak dapat dibatalkan.
-            </p>
-            <div class="flex justify-end gap-3">
-                <button onclick="closeConfirmModal()" class="px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all cursor-pointer">
-                    Batal
-                </button>
-                <button id="confirm-action-btn" class="px-4 py-2 text-sm font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-md shadow-rose-600/10 transition-all cursor-pointer">
-                    Hapus Akses
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-        // In-memory data store for the mock admin list
-        let admins = JSON.parse(localStorage.getItem('gabung_yuk_admins')) || [];
-        let deleteTargetIndex = null;
-
-        // On document load, check if we need to show empty state or render stored list
-        document.addEventListener("DOMContentLoaded", () => {
-            renderAdmins();
-        });
-
-        // Toast Helper (replaces alert/confirm blocks)
-        function showToast(message, type = "success") {
-            const container = document.getElementById("toast-container");
-            const toast = document.createElement("div");
-            
-            const bgClass = type === "success" ? "bg-emerald-500" : type === "error" ? "bg-rose-500" : "bg-blue-500";
-            const iconClass = type === "success" ? "fa-circle-check" : type === "error" ? "fa-circle-exclamation" : "fa-circle-info";
-
-            toast.className = `flex items-center gap-3 py-3 px-5 text-white ${bgClass} rounded-xl shadow-xl transition-all duration-300 translate-x-12 opacity-0 text-sm font-semibold max-w-sm`;
-            toast.innerHTML = `
-                <i class="fa-solid ${iconClass} text-lg"></i>
-                <span>${message}</span>
-            `;
-
-            container.appendChild(toast);
-
-            // Trigger animation in
-            setTimeout(() => {
-                toast.classList.remove("translate-x-12", "opacity-0");
-            }, 50);
-
-            // Fade and remove toast
-            setTimeout(() => {
-                toast.classList.add("translate-x-12", "opacity-0");
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        // Render Table & Toggle Empty State Visually
-        function renderAdmins() {
-            const tbody = document.getElementById("admin-table-body");
-            const emptyState = document.getElementById("empty-state");
-
-            // Clear table rows
-            tbody.innerHTML = "";
-
-            if (admins.length === 0) {
-                emptyState.classList.remove("hidden");
-                tbody.closest("div").classList.add("hidden");
-            } else {
-                emptyState.classList.add("hidden");
-                tbody.closest("div").classList.remove("hidden");
-
-                // Populate with current mock data
-                admins.forEach((admin, index) => {
-                    const row = document.createElement("tr");
-                    row.className = "hover:bg-slate-50/50 transition-all duration-150 group";
-                    
-                    // Render status badges with responsive styling
-                    const statusBadge = admin.status === "ACTIVE" 
-                        ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">Aktif</span>`
-                        : `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-500 border border-slate-200">Nonaktif</span>`;
-
-                    const toggleStatusBtnText = admin.status === "ACTIVE" ? "Nonaktifkan" : "Aktifkan";
-                    const toggleStatusIcon = admin.status === "ACTIVE" ? "fa-toggle-on text-brand-500" : "fa-toggle-off text-slate-300";
-
-                    row.innerHTML = `
-                        <td class="py-4 px-6 align-middle">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-full bg-brand-100 text-brand-700 font-bold flex items-center justify-center text-sm shadow-inner uppercase">
-                                    ${admin.name.substring(0, 2)}
-                                </div>
-                                <div>
-                                    <p class="font-bold text-slate-800 text-sm md:text-base">${admin.name}</p>
-                                    <p class="text-xs text-slate-400 md:hidden block mt-0.5">${admin.email}</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="py-4 px-6 align-middle text-slate-600 text-sm font-medium hidden md:table-cell">
-                            ${admin.email}
-                        </td>
-                        <td class="py-4 px-6 align-middle text-slate-500 text-xs md:text-sm">
-                            ${admin.addedAt}
-                        </td>
-                        <td class="py-4 px-6 align-middle text-center">
-                            ${statusBadge}
-                        </td>
-                        <td class="py-4 px-6 align-middle text-center">
-                            <div class="flex items-center justify-center gap-2">
-                                <!-- Toggle status custom helper trigger -->
-                                <button onclick="toggleAdminStatus(${index})" title="${toggleStatusBtnText}" class="p-2 text-slate-400 hover:text-brand-600 rounded-lg hover:bg-slate-100 transition-all cursor-pointer">
-                                    <i class="fa-solid ${toggleStatusIcon} text-lg"></i>
-                                </button>
-                                <!-- Delete Action -->
-                                <button onclick="openDeleteConfirm(${index})" title="Hapus Admin" class="p-2 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-all cursor-pointer">
-                                    <i class="fa-regular fa-trash-can text-sm"></i>
-                                </button>
-                            </div>
-                        </td>
-                    `;
-                    tbody.appendChild(row);
-                });
-            }
-            // Sync with local Storage for robust persistence in demo session
-            localStorage.setItem('gabung_yuk_admins', JSON.stringify(admins));
-        }
-
-        // Action: Add Admin Event Handler
-        function handleAddAdmin() {
-            const emailInput = document.getElementById("admin-email");
-            const email = emailInput.value.trim().toLowerCase();
-
-            if (!email) return;
-
-            // Simple validation to check duplicates
-            const isExist = admins.some(admin => admin.email === email);
-            if (isExist) {
-                showToast("User dengan email ini sudah ditambahkan sebagai admin!", "error");
-                return;
-            }
-
-            // Extract beautiful names from email address
-            let name = email.split('@')[0];
-            name = name.split(/[._-]/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-
-            const today = new Date();
-            const formattedDate = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
-
-            // Create new administrative entity
-            const newAdmin = {
-                name: name,
-                email: email,
-                addedAt: formattedDate,
-                status: "ACTIVE"
-            };
-
-            admins.unshift(newAdmin);
-            renderAdmins();
-            emailInput.value = "";
-            showToast(`Berhasil menambahkan ${name} sebagai admin baru!`, "success");
-        }
-
-        // Action: Toggle Status (Active / Inactive)
-        function toggleAdminStatus(index) {
-            admins[index].status = admins[index].status === "ACTIVE" ? "INACTIVE" : "ACTIVE";
-            renderAdmins();
-            showToast(`Status admin "${admins[index].name}" diperbarui!`, "info");
-        }
-
-        // Modal Confirmation Handling (Meets no-alert rule)
-        function openDeleteConfirm(index) {
-            deleteTargetIndex = index;
-            const messageEl = document.getElementById("confirm-message");
-            messageEl.innerText = `Apakah Anda yakin ingin menghapus hak akses admin dari "${admins[index].name}" (${admins[index].email})?`;
-            
-            const modal = document.getElementById("confirm-modal");
-            modal.classList.remove("hidden");
-            // Slide animation context
-            setTimeout(() => {
-                modal.firstElementChild.classList.remove("scale-95");
-                modal.firstElementChild.classList.add("scale-100");
-            }, 50);
-
-            // Set dynamic click binding
-            document.getElementById("confirm-action-btn").onclick = confirmDelete;
-        }
-
-        function closeConfirmModal() {
-            const modal = document.getElementById("confirm-modal");
-            modal.firstElementChild.classList.remove("scale-100");
-            modal.firstElementChild.classList.add("scale-95");
-            setTimeout(() => {
-                modal.classList.add("hidden");
-                deleteTargetIndex = null;
-            }, 150);
-        }
-
-        function confirmDelete() {
-            if (deleteTargetIndex !== null) {
-                const removedName = admins[deleteTargetIndex].name;
-                admins.splice(deleteTargetIndex, 1);
-                renderAdmins();
-                closeConfirmModal();
-                showToast(`Hak akses admin "${removedName}" berhasil dicabut.`, "success");
-            }
-        }
-
-        // Mock Demonstration Seeding Utility
-        function toggleMockData() {
-            admins = [
-                { name: "Andhika Pratama", email: "andhika.p@domain.com", addedAt: "15/06/2026", status: "ACTIVE" },
-                { name: "Cindy Widjaja", email: "cindy.widjaja@domain.com", addedAt: "12/05/2026", status: "ACTIVE" },
-                { name: "rkthooriq", email: "kemall5@gmail.com", addedAt: "19/04/2026", status: "ACTIVE" },
-                { name: "Dev Octa", email: "devocta@domain.com", addedAt: "10/02/2026", status: "INACTIVE" }
-            ];
-            renderAdmins();
-            showToast("Berhasil mengisi daftar demo admin!", "success");
-        }
-
-        // Clear everything
-        function clearAllAdmins() {
-            admins = [];
-            renderAdmins();
-            showToast("Semua admin tambahan telah dihapus dari antarmuka.", "info");
-        }
-    </script>
 </body>
+
 </html>
