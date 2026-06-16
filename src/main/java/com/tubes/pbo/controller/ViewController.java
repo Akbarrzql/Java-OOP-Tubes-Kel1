@@ -117,10 +117,10 @@ public class ViewController {
         return "admin/settings/settings";
     }
 
-    @GetMapping("/admin/destination")
-    public String adminDestination() {
-        return "admin/destination/destination";
-    }
+    // @GetMapping("/admin/destination")
+    // public String adminDestination() {
+    //     return "admin/destination/destination";
+    // }
 
     // @GetMapping("/admin/accommodation")
     // public String adminAccommodation() {
