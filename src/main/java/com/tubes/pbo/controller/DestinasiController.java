@@ -16,7 +16,7 @@ import com.tubes.pbo.model.Destinasi;
 import com.tubes.pbo.service.DestinasiService;
 
 @Controller
-@RequestMapping("/admin/destinasi")
+@RequestMapping("/admin/destination")
 public class DestinasiController {
 
     @Autowired
@@ -25,12 +25,12 @@ public class DestinasiController {
     @GetMapping("")
     public String listDestinasi(Model model) {
         model.addAttribute("listDestinasi", destinasiService.getAllDestinasi());
-        return "admin/destinasi/destinasi";
+        return "admin/destination/destination";
     }
 
     @PostMapping("/save")
     public String saveDestinasi(@ModelAttribute Destinasi destinasi,
-                                RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes) {
         try {
             if (destinasi.getProvinsiId() == null) {
                 destinasi.setProvinsiId(1);
@@ -46,12 +46,12 @@ public class DestinasiController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Gagal menambahkan destinasi: " + e.getMessage());
         }
-        return "redirect:/admin/destinasi";
+        return "redirect:/admin/destination";
     }
 
     @PostMapping("/update")
     public String updateDestinasi(@ModelAttribute Destinasi destinasi,
-                                  RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes) {
         try {
             if (destinasi.getProvinsiId() == null) {
                 Optional<Destinasi> existing = destinasiService.getDestinasiById(destinasi.getDestinasiId());
@@ -62,18 +62,18 @@ public class DestinasiController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Gagal mengupdate destinasi: " + e.getMessage());
         }
-        return "redirect:/admin/destinasi";
+        return "redirect:/admin/destination";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteDestinasi(@PathVariable("id") Integer id,
-                                  RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes) {
         try {
             destinasiService.deleteDestinasi(id);
             redirectAttributes.addFlashAttribute("success", "Destinasi berhasil dihapus!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Gagal menghapus destinasi: " + e.getMessage());
         }
-        return "redirect:/admin/destinasi";
+        return "redirect:/admin/destination";
     }
 }

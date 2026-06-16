@@ -1,291 +1,210 @@
 <!DOCTYPE html>
-<html lang="id"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Destination Management</title>
-  <link rel="stylesheet"
-        th:href="@{/css/admin.css}">
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<base target="_blank">
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body class="admin-body">
 
-<!-- SIDEBAR -->
-<div th:replace="fragments/admin-sidebar ::
-adminSidebar('destination')">
-</div>
+  <!-- SIDEBAR -->
+  <div th:replace="fragments/admin-sidebar :: adminSidebar('destination')"></div>
 
-<!-- MAIN -->
-<main class="main-content">
+  <!-- MAIN -->
+  <main class="main-content">
 
-  <!-- TOPBAR -->
-  <div th:replace="fragments/admin-topbar ::
-    adminTopbar(
-        'Destination Management',
-        'Kelola seluruh destinasi wisata'
-    )">
-  </div>
-
-  <!-- FLASH MESSAGE -->
-  <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-  <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
-
-  <!-- ACTION -->
-  <div class="page-action">
-    <button class="btn-primary"
-            onclick="openDestinationModal()">
-      <i class="fas fa-plus"></i>
-      Tambah Destinasi
-    </button>
-  </div>
-
-  <!-- TABLE -->
-  <section class="table-wrapper">
-    <table class="transport-table">
-      <thead>
-      <tr>
-        <th>Nama</th>
-        <th>Lokasi</th>
-        <th>Harga</th>
-        <th>Rating</th>
-        <th>Aksi</th>
-      </tr>
-      </thead>
-      <tbody>
-      <!-- ============================================ -->
-      <!-- DATA HARDCODED (Contoh/Default) - TETAP ADA -->
-      <!-- ============================================ -->
-      <tr>
-        <td>Bali</td>
-        <td>Indonesia</td>
-        <td>Rp 2.500.000</td>
-        <td>4.9 ⭐</td>
-        <td>
-          <div class="table-actions">
-            <button onclick="openEditDestinationModal('1', 'Bali', 'Indonesia', '2500000', '4.9', 'Pulau wisata terbaik')">
-              Edit
-            </button>
-            <a href="#" onclick="return confirm('Yakin hapus?')">
-              Hapus
-            </a>
-          </div>
-        </td>
-      </tr>
-
-      <!-- ============================================ -->
-      <!-- DATA DINAMIS DARI DATABASE -->
-      <!-- ============================================ -->
-      <tr th:each="destinasi : ${listDestinasi}" th:if="${listDestinasi != null}">
-        <td th:text="${destinasi.nama}"></td>
-        <td th:text="${destinasi.lokasi} ?: '-'"></td>
-        <td th:text="${destinasi.harga != null} ? 'Rp ' + ${#numbers.formatDecimal(destinasi.harga, 0, 'POINT', 0, 'COMMA')} : '-'"></td>
-        <td th:text="${destinasi.rating != null} ? ${destinasi.rating} + ' ⭐' : '-'"></td>
-        <td>
-          <div class="table-actions">
-            <button th:onclick="openEditDestinationModal([[${destinasi.destinasiId}]], [[${destinasi.nama}]], [[${destinasi.lokasi}]], [[${destinasi.harga}]], [[${destinasi.rating}]], [[${destinasi.deskripsi}]])">
-              Edit
-            </button>
-            <a th:href="@{/admin/destinasi/delete/{id}(id=${destinasi.destinasiId})}"
-               onclick="return confirm('Yakin hapus?')">
-              Hapus
-            </a>
-          </div>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </section>
-
-</main>
-
-<!-- ADD MODAL -->
-<div class="modal-overlay"
-     id="destinationModal">
-  <div class="modern-modal">
-    <button class="modal-close"
-            onclick="closeDestinationModal()">
-      <i class="fas fa-times"></i>
-    </button>
-    <div class="modal-header">
-      <div class="modal-icon">
-        <i class="fas fa-map-marked-alt"></i>
-      </div>
-      <div>
-        <h3>Tambah Destinasi</h3>
-        <p>Tambahkan destinasi wisata baru</p>
-      </div>
+    <!-- TOPBAR -->
+    <div
+      th:replace="fragments/admin-topbar :: adminTopbar('Destination Management', 'Kelola seluruh destinasi wisata')">
     </div>
-    <form class="modern-form"
-          th:action="@{/admin/destinasi/save}"
-          method="post">
-      <div class="form-grid">
-        <div class="form-group">
-          <label>Nama Destinasi</label>
-          <input type="text"
-                 name="nama"
-                 placeholder="Bali"
-                 required>
-        </div>
-        <div class="form-group">
-          <label>Lokasi</label>
-          <input type="text"
-                 name="lokasi"
-                 placeholder="Indonesia">
-        </div>
-      </div>
-      <div class="form-grid">
-        <div class="form-group">
-          <label>Harga Estimasi</label>
-          <input type="number"
-                 name="harga"
-                 placeholder="2500000"
-                 step="0.01"
-                 min="0">
-        </div>
-        <div class="form-group">
-          <label>Rating</label>
-          <input type="number"
-                 name="rating"
-                 step="0.1"
-                 placeholder="4.9"
-                 min="0"
-                 max="5">
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Deskripsi</label>
-        <textarea rows="5"
-                  name="deskripsi"></textarea>
-      </div>
-      <div class="form-group">
-        <label>Upload Gambar</label>
-        <input type="file">
-      </div>
-      <div class="form-actions">
-        <button type="button"
-                class="btn-secondary"
-                onclick="closeDestinationModal()">
-          Cancel
-        </button>
-        <button type="submit"
-                class="btn-primary">
-          Save Destination
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
 
-<!-- EDIT MODAL -->
-<div class="modal-overlay"
-     id="editDestinationModal">
-  <div class="modern-modal">
-    <button class="modal-close"
-            onclick="closeEditDestinationModal()">
-      <i class="fas fa-times"></i>
-    </button>
-    <div class="modal-header">
-      <div class="modal-icon">
-        <i class="fas fa-map-marked-alt"></i>
-      </div>
-      <div>
-        <h3>Edit Destination</h3>
-        <p>Update destinasi wisata</p>
-      </div>
+    <!-- FLASH MESSAGE -->
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+    <!-- ACTION -->
+    <div class="page-action">
+      <button class="btn-primary" onclick="openDestinationModal()">
+        <i class="fas fa-plus"></i>
+        Tambah Destinasi
+      </button>
     </div>
-    <form class="modern-form"
-          th:action="@{/admin/destinasi/update}"
-          method="post">
-      <input type="hidden"
-             id="editDestinationId"
-             name="destinasiId">
-      <div class="form-grid">
-        <div class="form-group">
-          <label>Nama</label>
-          <input type="text"
-                 id="editDestinationName"
-                 name="nama"
-                 required>
+
+    <!-- TABLE -->
+    <section class="table-wrapper">
+      <table class="transport-table">
+        <thead>
+          <tr>
+            <th>Nama</th>
+            <th>Lokasi</th>
+            <th>Harga</th>
+            <th>Rating</th>
+            <th>Deskripsi</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="destinasi : ${listDestinasi}" th:if="${listDestinasi != null}">
+            <td th:text="${destinasi.nama}"></td>
+            <td th:text="${destinasi.lokasi} ?: '-'"></td>
+            <td
+              th:text="${destinasi.harga != null} ? 'Rp ' + ${#numbers.formatDecimal(destinasi.harga, 0, 'POINT', 0, 'COMMA')} : '-'">
+            </td>
+            <td th:text="${destinasi.rating != null} ? ${destinasi.rating} + ' ⭐' : '-'"></td>
+            <td th:text="${destinasi.deskripsi} ?: '-'"></td>
+            <td>
+              <div class="table-actions">
+                <button class="btn-edit" th:data-id="${destinasi.destinasiId}" th:data-nama="${destinasi.nama}"
+                  th:data-lokasi="${destinasi.lokasi}" th:data-harga="${destinasi.harga}"
+                  th:data-rating="${destinasi.rating}" th:data-deskripsi="${destinasi.deskripsi}"
+                  onclick="editFromData(this)">
+                  Edit
+                </button>
+                <a th:href="@{/admin/destination/delete/{id}(id=${destinasi.destinasiId})}"
+                  onclick="return confirm('Yakin hapus?')">
+                  Hapus
+                </a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <!-- ADD MODAL -->
+  <div class="modal-overlay" id="destinationModal">
+    <div class="modern-modal">
+      <button class="modal-close" onclick="closeDestinationModal()">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="modal-header">
+        <div class="modal-icon">
+          <i class="fas fa-map-marked-alt"></i>
         </div>
-        <div class="form-group">
-          <label>Lokasi</label>
-          <input type="text"
-                 id="editDestinationLocation"
-                 name="lokasi">
+        <div>
+          <h3>Tambah Destinasi</h3>
+          <p>Tambahkan destinasi wisata baru</p>
         </div>
       </div>
-      <div class="form-grid">
-        <div class="form-group">
-          <label>Harga</label>
-          <input type="number"
-                 id="editDestinationPrice"
-                 name="harga"
-                 step="0.01"
-                 min="0">
+      <form class="modern-form" action="/admin/destination/save" method="post">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nama Destinasi</label>
+            <input type="text" name="nama" placeholder="Masukkan nama destinasi" required>
+          </div>
+          <div class="form-group">
+            <label>Lokasi</label>
+            <input type="text" name="lokasi" placeholder="Masukkan lokasi destinasi">
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Harga Estimasi</label>
+            <input type="number" name="harga" placeholder="Masukkan harga estimasi" step="0.01" min="0">
+          </div>
+          <div class="form-group">
+            <label>Rating</label>
+            <input type="number" name="rating" step="0.1" placeholder="Masukkan rating (0-5)" min="0" max="5">
+          </div>
         </div>
         <div class="form-group">
-          <label>Rating</label>
-          <input type="number"
-                 id="editDestinationRating"
-                 name="rating"
-                 step="0.1"
-                 min="0"
-                 max="5">
+          <label>Deskripsi</label>
+          <textarea rows="5" name="deskripsi" placeholder="Masukkan deskripsi destinasi"></textarea>
         </div>
-      </div>
-      <div class="form-group">
-        <label>Deskripsi</label>
-        <textarea rows="5"
-                  id="editDestinationDescription"
-                  name="deskripsi"></textarea>
-      </div>
-      <div class="form-actions">
-        <button type="button"
-                class="btn-secondary"
-                onclick="closeEditDestinationModal()">
-          Cancel
-        </button>
-        <button type="submit"
-                class="btn-primary">
-          Update Destination
-        </button>
-      </div>
-    </form>
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" onclick="closeDestinationModal()">Batal</button>
+          <button type="submit" class="btn-primary">Simpan Destinasi</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 
-<script>
-  const destinationModal = document.getElementById('destinationModal');
-  const editDestinationModal = document.getElementById('editDestinationModal');
+  <!-- EDIT MODAL -->
+  <div class="modal-overlay" id="editDestinationModal">
+    <div class="modern-modal">
+      <button class="modal-close" onclick="closeEditDestinationModal()">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="modal-header">
+        <div class="modal-icon">
+          <i class="fas fa-map-marked-alt"></i>
+        </div>
+        <div>
+          <h3>Edit Destination</h3>
+          <p>Update destinasi wisata</p>
+        </div>
+      </div>
+      <form class="modern-form" action="/admin/destination/update" method="post">
+        <input type="hidden" id="editDestinationId" name="destinasiId">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nama</label>
+            <input type="text" id="editDestinationName" name="nama" required>
+          </div>
+          <div class="form-group">
+            <label>Lokasi</label>
+            <input type="text" id="editDestinationLocation" name="lokasi">
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Harga</label>
+            <input type="number" id="editDestinationPrice" name="harga" step="0.01" min="0">
+          </div>
+          <div class="form-group">
+            <label>Rating</label>
+            <input type="number" id="editDestinationRating" name="rating" step="0.1" min="0" max="5">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Deskripsi</label>
+          <textarea rows="5" id="editDestinationDescription" name="deskripsi"
+            placeholder="Deskripsi destinasi"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" onclick="closeEditDestinationModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Update Destination</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-  function openDestinationModal() {
-    destinationModal.classList.add('active');
-  }
+  <script>
+    const destinationModal = document.getElementById('destinationModal');
+    const editDestinationModal = document.getElementById('editDestinationModal');
 
-  function closeDestinationModal() {
-    destinationModal.classList.remove('active');
-  }
+    function openDestinationModal() { destinationModal.classList.add('active'); }
+    function closeDestinationModal() { destinationModal.classList.remove('active'); }
 
-  function openEditDestinationModal(id, name, location, price, rating, description) {
-    editDestinationModal.classList.add('active');
-    document.getElementById('editDestinationId').value = id;
-    document.getElementById('editDestinationName').value = name || '';
-    document.getElementById('editDestinationLocation').value = location || '';
-    document.getElementById('editDestinationPrice').value = price || '';
-    document.getElementById('editDestinationRating').value = rating || '';
-    document.getElementById('editDestinationDescription').value = description || '';
-  }
+    function editFromData(btn) {
+      const id = btn.getAttribute('data-id');
+      const nama = btn.getAttribute('data-nama');
+      const lokasi = btn.getAttribute('data-lokasi');
+      const harga = btn.getAttribute('data-harga');
+      const rating = btn.getAttribute('data-rating');
+      const deskripsi = btn.getAttribute('data-deskripsi');
 
-  function closeEditDestinationModal() {
-    editDestinationModal.classList.remove('active');
-  }
-</script>
+      editDestinationModal.classList.add('active');
+      document.getElementById('editDestinationId').value = id;
+      document.getElementById('editDestinationName').value = nama || '';
+      document.getElementById('editDestinationLocation').value = lokasi || '';
+      document.getElementById('editDestinationPrice').value = harga || '';
+      document.getElementById('editDestinationRating').value = rating || '';
+      document.getElementById('editDestinationDescription').value = deskripsi || '';
+    }
+
+    function closeEditDestinationModal() { editDestinationModal.classList.remove('active'); }
+
+    destinationModal.addEventListener('click', function (e) { if (e.target === destinationModal) closeDestinationModal(); });
+    editDestinationModal.addEventListener('click', function (e) { if (e.target === editDestinationModal) closeEditDestinationModal(); });
+  </script>
 
 </body>
+
 </html>
