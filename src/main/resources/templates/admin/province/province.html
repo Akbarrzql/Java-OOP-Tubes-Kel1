@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Province Management</title>
+    <title>Manajemen Provinsi</title>
     <link rel="stylesheet" th:href="@{/css/admin.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -18,14 +18,14 @@
     <main class="main-content">
 
         <!-- TOPBAR -->
-        <div th:replace="fragments/admin-topbar :: adminTopbar('Province Management', 'Kelola seluruh data provinsi')">
+        <div th:replace="fragments/admin-topbar :: adminTopbar('Manajemen Provinsi', 'Kelola seluruh data provinsi')">
         </div>
 
         <!-- ACTION -->
         <div class="page-action">
             <button class="btn-primary" onclick="openProvinceModal()">
                 <i class="fas fa-plus"></i>
-                Tambah Province
+                Tambah Provinsi
             </button>
         </div>
 
@@ -35,21 +35,21 @@
                 <div class="stat-icon"><i class="fas fa-map"></i></div>
                 <div>
                     <h3 th:text="${totalProvince}">0</h3>
-                    <p>Total Province</p>
+                    <p>Total Provinsi</p>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-location-dot"></i></div>
                 <div>
                     <h3 th:text="${totalDestination}">0</h3>
-                    <p>Total Destination</p>
+                    <p>Total Destinasi</p>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-fire"></i></div>
                 <div>
                     <h3 th:text="${mostPopular}">-</h3>
-                    <p>Most Popular</p>
+                    <p>Paling Populer</p>
                 </div>
             </div>
         </section>
@@ -59,7 +59,7 @@
             <div class="table-header">
                 <div class="table-search">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Cari province...">
+                    <input type="text" placeholder="Cari provinsi...">
                 </div>
             </div>
 
@@ -67,9 +67,9 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Province</th>
-                        <th>City</th>
-                        <th>Description</th>
+                        <th>Provinsi</th>
+                        <th>Kota</th>
+                        <th>Deskripsi</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -110,29 +110,29 @@
             <div class="modal-header">
                 <div class="modal-icon"><i class="fas fa-map"></i></div>
                 <div>
-                    <h3>Tambah Province</h3>
-                    <p>Tambahkan province baru</p>
+                    <h3>Tambah Provinsi</h3>
+                    <p>Tambahkan provinsi baru</p>
                 </div>
             </div>
 
             <form class="modern-form" action="/admin/province/add" method="post">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>Province Name</label>
-                        <input type="text" name="nama" placeholder="Enter province name" required>
+                        <label>Nama Provinsi</label>
+                        <input type="text" name="nama" placeholder="Masukkan nama provinsi" required>
                     </div>
                     <div class="form-group">
-                        <label>City</label>
-                        <input type="text" name="kota" placeholder="Enter city name" required>
+                        <label>Kota</label>
+                        <input type="text" name="kota" placeholder="Masukkan nama kota" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Description</label>
-                    <textarea rows="5" name="deskripsi" placeholder="Enter province description"></textarea>
+                    <label>Deskripsi</label>
+                    <textarea rows="5" name="deskripsi" placeholder="Masukkan deskripsi provinsi"></textarea>
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn-secondary" onclick="closeProvinceModal()">Cancel</button>
-                    <button type="submit" class="btn-primary">Save Province</button>
+                    <button type="button" class="btn-secondary" onclick="closeProvinceModal()">Batal</button>
+                    <button type="submit" class="btn-primary">Simpan</button>
                 </div>
             </form>
         </div>
@@ -149,8 +149,8 @@
             <div class="modal-header">
                 <div class="modal-icon"><i class="fas fa-pen"></i></div>
                 <div>
-                    <h3>Edit Province</h3>
-                    <p>Update province data</p>
+                    <h3>Edit Provinsi</h3>
+                    <p>Perbarui data provinsi</p>
                 </div>
             </div>
 
@@ -158,22 +158,24 @@
                 <input type="hidden" id="editProvinceId">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>Province Name</label>
-                        <input type="text" id="editProvinceName" name="nama" placeholder="Enter province name" required>
+                        <label>Nama Provinsi</label>
+                        <input type="text" id="editProvinceName" name="nama" placeholder="Masukkan nama provinsi"
+                            required>
                     </div>
                     <div class="form-group">
-                        <label>City</label>
-                        <input type="text" id="editProvinceCapital" name="kota" placeholder="Enter city name" required>
+                        <label>Kota</label>
+                        <input type="text" id="editProvinceCapital" name="kota" placeholder="Masukkan nama kota"
+                            required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Description</label>
+                    <label>Deskripsi</label>
                     <textarea rows="5" id="editProvinceDescription" name="deskripsi"
-                        placeholder="Enter province description"></textarea>
+                        placeholder="Masukkan deskripsi provinsi"></textarea>
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn-secondary" onclick="closeEditProvinceModal()">Cancel</button>
-                    <button type="submit" class="btn-primary">Update Province</button>
+                    <button type="button" class="btn-secondary" onclick="closeEditProvinceModal()">Batal</button>
+                    <button type="submit" class="btn-primary">Perbarui</button>
                 </div>
             </form>
         </div>
