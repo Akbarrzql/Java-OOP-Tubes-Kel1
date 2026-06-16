@@ -89,6 +89,17 @@ public class AuthServiceImpl implements AuthService {
         return userRepository.existsByEmail(normalize(email));
     }
 
+    @Override
+    @Transactional
+    public void resetPassword(String email, String newPassword) {
+        String normalizedEmail = normalize(email);
+        User user = userRepository.findByEmail(normalizedEmail)
+                .orElseThrow(() -> new IllegalArgumentException("Email tidak ditemukan."));
+        
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
     private boolean passwordMatches(String rawPassword, String storedPassword) {
         if (rawPassword == null || storedPassword == null) {
             return false;

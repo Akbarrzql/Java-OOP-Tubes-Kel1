@@ -80,6 +80,32 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/forgot-password")
+    public String handleForgotPassword(@RequestParam String email,
+            @RequestParam String newPassword,
+            @RequestParam String confirmPassword,
+            RedirectAttributes redirectAttributes) {
+
+        if (email == null || email.isBlank() || newPassword == null || newPassword.isBlank()) {
+            redirectAttributes.addFlashAttribute("error", "Email dan password baru wajib diisi.");
+            return "redirect:/forgot-password";
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            redirectAttributes.addFlashAttribute("error", "Konfirmasi password tidak cocok.");
+            return "redirect:/forgot-password";
+        }
+
+        try {
+            authService.resetPassword(email, newPassword);
+            redirectAttributes.addFlashAttribute("success", "Password berhasil diperbarui. Silakan login kembali.");
+            return "redirect:/login";
+        } catch (IllegalArgumentException ex) {
+            redirectAttributes.addFlashAttribute("error", ex.getMessage());
+            return "redirect:/forgot-password";
+        }
+    }
+
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();

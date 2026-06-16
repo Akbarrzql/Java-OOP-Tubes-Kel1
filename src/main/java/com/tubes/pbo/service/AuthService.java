@@ -12,5 +12,6 @@ public interface AuthService {
     String determineRole(Integer userId);
 
     boolean emailExists(String email);
+    
+    void resetPassword(String email, String newPassword);
 }
-
