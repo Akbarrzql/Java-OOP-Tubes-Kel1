@@ -122,8 +122,8 @@ public class ViewController {
         return "admin/destination/destination";
     }
 
-    @GetMapping("/admin/accommodation")
-    public String adminAccommodation() {
-        return "admin/accommodation/accommodation";
-    }    
+    // @GetMapping("/admin/accommodation")
+    // public String adminAccommodation() {
+    //     return "admin/accommodation/accommodation";
+    // }    
 }
