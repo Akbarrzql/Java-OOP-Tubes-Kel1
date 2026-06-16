@@ -89,11 +89,11 @@
                 </div>
                 <div class="admin-card">
                     <h3>Total Destinasi</h3>
-                    <span>-</span>
+                    <span th:text="${totalDestinasi}">0</span>
                 </div>
                 <div class="admin-card">
                     <h3>Total Akomodasi</h3>
-                    <span>-</span>
+                    <span th:text="${totalAkomodasi}">0</span>
                 </div>
             </section>
 
@@ -118,6 +118,68 @@
                                 <td th:text="${provinsi.kota}"></td>
                                 <td th:text="${provinsi.deskripsi}"></td>
                                 <td th:text="${#temporals.format(provinsi.createdAt, 'dd MMM yyyy HH:mm')}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+
+            <!-- RECENT DESTINASI -->
+            <div>
+                <p class="section-title">Daftar Destinasi Yang Baru Ditambahkan</p>
+                <section class="table-wrapper">
+                    <table class="transport-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Destinasi</th>
+                                <th>Lokasi</th>
+                                <th>Harga</th>
+                                <th>Rating</th>
+                                <th>Ditambahkan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="destinasi, iterStat : ${recentDestinasi}">
+                                <td th:text="${iterStat.count}"></td>
+                                <td th:text="${destinasi.nama}"></td>
+                                <td th:text="${destinasi.lokasi} ?: '-'"></td>
+                                <td
+                                    th:text="${destinasi.harga != null} ? 'Rp ' + ${#numbers.formatDecimal(destinasi.harga, 0, 'POINT', 0, 'COMMA')} : '-'">
+                                </td>
+                                <td th:text="${destinasi.rating != null} ? ${destinasi.rating} + ' ⭐' : '-'"></td>
+                                <td th:text="${#temporals.format(destinasi.createdAt, 'dd MMM yyyy HH:mm')}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+
+            <!-- RECENT AKOMODASI -->
+            <div>
+                <p class="section-title">Daftar Akomodasi Yang Baru Ditambahkan</p>
+                <section class="table-wrapper">
+                    <table class="transport-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Hotel</th>
+                                <th>Lokasi</th>
+                                <th>Harga / Malam</th>
+                                <th>Rating</th>
+                                <th>Ditambahkan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="akomodasi, iterStat : ${recentAkomodasi}">
+                                <td th:text="${iterStat.count}"></td>
+                                <td th:text="${akomodasi.nama}"></td>
+                                <td th:text="${akomodasi.lokasi} ?: '-'"></td>
+                                <td
+                                    th:text="${akomodasi.hargaPerMalam != null} ? 'Rp ' + ${#numbers.formatDecimal(akomodasi.hargaPerMalam, 0, 'POINT', 0, 'COMMA')} : '-'">
+                                </td>
+                                <td th:text="${akomodasi.rating != null} ? ${akomodasi.rating} + ' ⭐' : '-'"></td>
+                                <td th:text="${#temporals.format(akomodasi.createdAt, 'dd MMM yyyy HH:mm')}"></td>
                             </tr>
                         </tbody>
                     </table>
