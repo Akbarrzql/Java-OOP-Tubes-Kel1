@@ -11,25 +11,27 @@
 </head>
 <body>
 
-    <!--  NAVBAR  -->
+    <!-- Flash Messages -->
+    <div th:if="${successMessage}" class="flash-message success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="flash-message error" th:text="${errorMessage}"></div>
+
+    <!-- NAVBAR -->
     <nav class="navbar dashboard-navbar">
         <div class="container">
-            <!-- LOGO -->
             <div class="logo">
                 <span class="logo-icon">◉</span>
                 TRIPINAJA
             </div>
 
-            <!-- NAV CENTER (MENU) -->
             <div class="nav-center">
                 <a href="/dashboard">Dashboard</a>
                 <a href="/itinerary/list">My Trips</a>
             </div>
 
-            <!-- PROFILE  -->
+            <!-- PROFILE -->
             <a href="/profile" class="profile-menu">
-                <div class="profile-avatar">A</div>
-                <span class="profile-name">Akbar</span>
+                <div class="profile-avatar" th:text="${avatarInitial}"></div>
+                <span class="profile-name" th:text="${user.name}"></span>
             </a>
         </div>
     </nav>
@@ -40,31 +42,11 @@
             <section class="profile-header-section">
                 <div class="profile-header">
                     <div class="avatar-container">
-                        <div class="profile-avatar-large">A</div>
-                        <div class="verified-badge">
-                            <i class="fas fa-check"></i>
-                        </div>
+                        <div class="profile-avatar-large" th:text="${avatarInitial}"></div>
                     </div>
                     <div class="profile-details">
-                        <h1 class="profile-name-display">Akbar</h1>
-                        <p class="membership-status">
-                            <i class="fas fa-crown"></i>
-                            Premium Member since 2022
-                        </p>
-                        <div class="stats-row">
-                            <div class="stat-item">
-                                <span class="stat-number">12</span>
-                                <span class="stat-label">Destinations<br>Visited</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-number">12,450</span>
-                                <span class="stat-label">Points<br>Earned</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-number">4.9</span>
-                                <span class="stat-label">Traveler<br>Rating</span>
-                            </div>
-                        </div>
+                        <h1 class="profile-name-display" th:text="${user.name}"></h1>
+                        <p class="membership-status" th:text="${user.email}"></p>
                     </div>
                 </div>
             </section>
@@ -73,31 +55,43 @@
 
                 <div class="profile-left">
 
+                    <!-- PERSONAL DETAILS CARD -->
                     <div class="profile-card">
                         <div class="card-header">
                             <h2><i class="fas fa-user"></i> Personal Details</h2>
                             <a href="#" class="edit-link" onclick="enableEditMode(event)">Edit Info</a>
                         </div>
-                        <div class="form-grid">
+                        
+                        <!-- VIEW MODE -->
+                        <div class="form-grid" id="view-mode">
                             <div class="form-group">
                                 <label>Full Name</label>
-                                <input type="text" value="Akbar" readonly>
+                                <input type="text" th:value="${user.name}" readonly>
                             </div>
                             <div class="form-group">
                                 <label>Email Address</label>
-                                <input type="email" value="akbar@mail.com" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label>Phone Number</label>
-                                <input type="tel" value="0821335566" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label>Home Base</label>
-                                <input type="text" value="Semarang, Indonesia" readonly>
+                                <input type="email" th:value="${user.email}" readonly>
                             </div>
                         </div>
+
+                        <!-- EDIT MODE -->
+                        <form th:action="@{/profile/update}" method="post" class="form-grid" id="edit-mode" style="display: none;">
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" name="name" th:value="${user.name}">
+                            </div>
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" name="email" th:value="${user.email}" >
+                            </div>
+                            <div class="form-group" style="grid-column: span 2;">
+                                <button type="submit" class="btn-premium">Save Changes</button>
+                                <button type="button" class="btn-outline" onclick="disableEditMode()">Cancel</button>
+                            </div>
+                        </form>
                     </div>
 
+                    <!-- SECURITY CARD -->
                     <div class="profile-card">
                         <div class="card-header">
                             <h2><i class="fas fa-shield-alt"></i> Security</h2>
@@ -106,50 +100,48 @@
                             <div class="security-item">
                                 <div class="security-info">
                                     <h3>Password</h3>
-                                    <p>Last changed 1 month ago</p>
+                                    <p>Change your password regularly for security</p>
                                 </div>
                                 <button class="btn-outline" onclick="openChangePasswordModal()">Change Password</button>
-                            </div>
-                            <div class="security-item">
-                                <div class="security-info">
-                                    <h3>Two-Factor Authentication</h3>
-                                    <p>Protect your account with an extra layer of security</p>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" checked onchange="toggle2FA(this)">
-                                    <span class="toggle-slider"></span>
-                                </label>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="profile-right">
-
-                    <div class="premium-card">
-                        <span class="premium-badge">CURRENT TIER</span>
-                        <h2>Premium Explorer</h2>
-                        <p>You have access to airport lounge and priority booking assistance 24/7</p>
-                        <button class="btn-premium" onclick="window.location.href='/profile/benefits'">
-                            View Benefits <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
-
-                    <div class="help-card">
-                        <h3>Need help?</h3>
-                        <p>Our dedicated support team is available 24/7 for Premium members</p>
-                        <a href="#" class="chat-link" onclick="openLiveChat(event)">
-                            <i class="far fa-comment-alt"></i> Start Live Chat
+                    <div class="logout-card">
+                        <a href="/auth/logout" class="logout-link" onclick="return confirmLogout(event)">
+                            <i class="fas fa-sign-out-alt"></i> Log Out
                         </a>
                     </div>
 
-                    <a href="/logout" class="logout-link" onclick="return confirmLogout(event)">
-                        <i class="fas fa-sign-out-alt"></i> Log Out
-                    </a>
                 </div>
             </div>
         </div>
     </main>
+
+    <!-- CHANGE PASSWORD MODAL -->
+    <div id="passwordModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Change Password</h3>
+            <form th:action="@{/profile/change-password}" method="post">
+                <div class="form-group">
+                    <label>Current Password</label>
+                    <input type="password" name="currentPassword" required>
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" name="newPassword" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" name="confirmPassword" required>
+                </div>
+                <button type="submit" class="btn-premium">Update Password</button>
+                <button type="button" class="btn-outline" onclick="closeChangePasswordModal()">Cancel</button>
+            </form>
+        </div>
+    </div>
 
     <footer class="footer">
         <div class="footer-container">

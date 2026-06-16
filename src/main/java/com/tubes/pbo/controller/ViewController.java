@@ -86,10 +86,10 @@ public class ViewController {
         return "traveler/itinerary/detail-itinerary";
     }
 
-    @GetMapping("/profile")
-    public String profile() {
-        return "traveler/profile/profile";
-    }
+    // @GetMapping("/profile")
+    // public String profile() {
+    //     return "traveler/profile/profile";
+    // }
 
     /*
      * =========================
@@ -126,4 +126,8 @@ public class ViewController {
     // public String adminAccommodation() {
     //     return "admin/accommodation/accommodation";
     // }    
+//    @GetMapping("/admin/itinerary")
+//     public String adminItinerary() {
+//         return "admin/itinerary/itinerary";
+//     }
 }
