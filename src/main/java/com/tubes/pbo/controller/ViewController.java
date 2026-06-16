@@ -99,10 +99,10 @@ public class ViewController {
         return "admin/profile/profile";
     }
 
-    @GetMapping("/admin/settings")
-    public String adminSettings() {
-        return "admin/settings/settings";
-    }
+    // @GetMapping("/admin/settings")
+    // public String adminSettings() {
+    //     return "admin/settings/settings";
+    // }
 
     // @GetMapping("/admin/destination")
     // public String adminDestination() {
