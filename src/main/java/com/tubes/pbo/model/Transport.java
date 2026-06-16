@@ -30,16 +30,18 @@ public class Transport {
     @Column(name = "harga")
     private Double harga;
 
+    @Column(name = "pajak")
+    private Double pajak;
+
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "jadwal")
     private String jadwal;
 
-    // Constructors
-    public Transport() {}
+    public Transport() {
+    }
 
-    // Getters & Setters
     public Integer getTransportId() {
         return transportId;
     }
@@ -78,6 +80,14 @@ public class Transport {
 
     public void setHarga(Double harga) {
         this.harga = harga;
+    }
+
+    public Double getPajak() {
+        return pajak;
+    }
+
+    public void setPajak(Double pajak) {
+        this.pajak = pajak;
     }
 
     public LocalDateTime getCreatedAt() {
