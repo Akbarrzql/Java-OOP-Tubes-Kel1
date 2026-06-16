@@ -3,489 +3,280 @@
       xmlns:th="http://www.thymeleaf.org">
 
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>
-        Accommodation Management
-    </title>
-
-    <link rel="stylesheet"
-          th:href="@{/css/admin.css}">
-
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+  <title>Accommodation Management</title>
+  <link rel="stylesheet"
+        th:href="@{/css/admin.css}">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<base target="_blank">
 </head>
 
 <body class="admin-body">
 
-<div th:replace="
-fragments/admin-sidebar ::
+<!-- SIDEBAR -->
+<div th:replace="fragments/admin-sidebar ::
 adminSidebar('accommodation')">
 </div>
 
+<!-- MAIN -->
 <main class="main-content">
 
-    <div th:replace="
-    fragments/admin-topbar ::
+  <!-- TOPBAR -->
+  <div th:replace="fragments/admin-topbar ::
     adminTopbar(
         'Accommodation Management',
-        'Kelola seluruh penginapan'
+        'Kelola seluruh akomodasi dan penginapan'
     )">
-    </div>
-
-    <div class="page-action">
-
-        <button class="btn-primary"
-                onclick="openAccommodationModal()">
-
-            <i class="fas fa-plus"></i>
-
-            Tambah Akomodasi
-
-        </button>
-
-    </div>
-
-    <!-- TABLE -->
-    <section class="table-wrapper">
-
-        <table class="transport-table">
-
-            <thead>
-
-            <tr>
-
-                <th>Nama</th>
-                <th>Lokasi</th>
-                <th>Harga / Malam</th>
-                <th>Rating</th>
-                <th>Availability</th>
-                <th>Aksi</th>
-
-            </tr>
-
-            </thead>
-
-            <tbody>
-
-            <tr>
-
-                <td>Hotel Santika</td>
-                <td>Bali</td>
-                <td>Rp 850.000</td>
-                <td>4.8 ⭐</td>
-                <td>Available</td>
-
-                <td>
-
-                    <div class="table-actions">
-
-                        <!-- BUTTON EDIT -->
-                        <button
-                                onclick="
-openEditAccommodationModal(
-'1',
-'Hotel Santika',
-'Bali',
-'850000',
-'4.8',
-'Available',
-'WiFi, Pool'
-)
-">
-
-                            Edit
-
-                        </button>
-
-                        <!-- EDIT MODAL -->
-                        <div class="modal-overlay"
-                             id="editAccommodationModal">
-
-                            <div class="modern-modal">
-
-                                <button class="modal-close"
-                                        onclick="closeEditAccommodationModal()">
-
-                                    <i class="fas fa-times"></i>
-
-                                </button>
-
-                                <div class="modal-header">
-
-                                    <div class="modal-icon">
-
-                                        <i class="fas fa-hotel"></i>
-
-                                    </div>
-
-                                    <div>
-
-                                        <h3>Edit Accommodation</h3>
-
-                                        <p>Update data penginapan</p>
-
-                                    </div>
-
-                                </div>
-
-                                <form class="modern-form">
-
-                                    <input type="hidden"
-                                           id="editAccommodationId">
-
-                                    <div class="form-grid">
-
-                                        <div class="form-group">
-
-                                            <label>Nama</label>
-
-                                            <input type="text"
-                                                   id="editAccommodationName">
-
-                                        </div>
-
-                                        <div class="form-group">
-
-                                            <label>Lokasi</label>
-
-                                            <input type="text"
-                                                   id="editAccommodationLocation">
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="form-grid">
-
-                                        <div class="form-group">
-
-                                            <label>Harga / Malam</label>
-
-                                            <input type="number"
-                                                   id="editAccommodationPrice">
-
-                                        </div>
-
-                                        <div class="form-group">
-
-                                            <label>Rating</label>
-
-                                            <input type="number"
-                                                   step="0.1"
-                                                   id="editAccommodationRating">
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="form-group">
-
-                                        <label>Availability</label>
-
-                                        <select id="editAccommodationAvailability">
-
-                                            <option>
-                                                Available
-                                            </option>
-
-                                            <option>
-                                                Full Booked
-                                            </option>
-
-                                        </select>
-
-                                    </div>
-
-                                    <div class="form-group">
-
-                                        <label>Fasilitas</label>
-
-                                        <textarea rows="5"
-                                                  id="editAccommodationFacility"></textarea>
-
-                                    </div>
-
-                                    <div class="form-actions">
-
-                                        <button type="button"
-                                                class="btn-secondary"
-                                                onclick="closeEditAccommodationModal()">
-
-                                            Cancel
-
-                                        </button>
-
-                                        <button type="submit"
-                                                class="btn-primary">
-
-                                            Update Accommodation
-
-                                        </button>
-
-                                    </div>
-
-                                </form>
-
-                            </div>
-
-                        </div>
-
-                        <script>
-
-                            const editAccommodationModal =
-                                document.getElementById(
-                                    'editAccommodationModal'
-                                );
-
-                            function openEditAccommodationModal(
-                                id,
-                                name,
-                                location,
-                                price,
-                                rating,
-                                availability,
-                                facility
-                            ){
-
-                                editAccommodationModal.classList.add(
-                                    'active'
-                                );
-
-                                document.getElementById(
-                                    'editAccommodationId'
-                                ).value = id;
-
-                                document.getElementById(
-                                    'editAccommodationName'
-                                ).value = name;
-
-                                document.getElementById(
-                                    'editAccommodationLocation'
-                                ).value = location;
-
-                                document.getElementById(
-                                    'editAccommodationPrice'
-                                ).value = price;
-
-                                document.getElementById(
-                                    'editAccommodationRating'
-                                ).value = rating;
-
-                                document.getElementById(
-                                    'editAccommodationAvailability'
-                                ).value = availability;
-
-                                document.getElementById(
-                                    'editAccommodationFacility'
-                                ).value = facility;
-
-                            }
-
-                            function closeEditAccommodationModal(){
-
-                                editAccommodationModal.classList.remove(
-                                    'active'
-                                );
-
-                            }
-
-                        </script>
-
-                        <a href="#">
-                            Hapus
-                        </a>
-
-                    </div>
-
-                </td>
-
-            </tr>
-
-            </tbody>
-
-        </table>
-
-    </section>
+  </div>
+
+  <!-- FLASH MESSAGE -->
+  <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+  <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+  <!-- ACTION -->
+  <div class="page-action">
+    <button class="btn-primary"
+            onclick="openAccommodationModal()">
+      <i class="fas fa-plus"></i>
+      Tambah Akomodasi
+    </button>
+  </div>
+
+  <!-- TABLE -->
+  <section class="table-wrapper">
+    <table class="transport-table">
+      <thead>
+      <tr>
+        <th>Nama</th>
+        <th>Lokasi</th>
+        <th>Harga / Malam</th>
+        <th>Rating</th>
+        <th>Availability</th>
+        <th>Aksi</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- ============================================ -->
+      <!-- DATA HARDCODED (Contoh/Default) - TETAP ADA -->
+      <!-- ============================================ -->
+      <tr>
+        <td>Hotel Santika</td>
+        <td>Bali</td>
+        <td>Rp 850.000</td>
+        <td>4.8 ⭐</td>
+        <td>Available</td>
+        <td>
+          <div class="table-actions">
+            <button onclick="openEditAccommodationModal('1', 'Hotel Santika', 'Bali', '850000', '4.8')">
+              Edit
+            </button>
+            <a href="#" onclick="return confirm('Yakin hapus?')">
+              Hapus
+            </a>
+          </div>
+        </td>
+      </tr>
+
+      <!-- ============================================ -->
+      <!-- DATA DINAMIS DARI DATABASE -->
+      <!-- ============================================ -->
+      <tr th:each="acc : ${listAccommodation}" th:if="${listAccommodation != null}">
+        <td th:text="${acc.nama}"></td>
+        <td th:text="${acc.lokasi} ?: '-'"></td>
+        <td th:text="${acc.hargaPerMalam != null} ? 'Rp ' + ${#numbers.formatDecimal(acc.hargaPerMalam, 0, 'POINT', 0, 'COMMA')} : '-'"></td>
+        <td th:text="${acc.rating != null} ? ${acc.rating} + ' ⭐' : '-'"></td>
+        <td>Available</td>
+        <td>
+          <div class="table-actions">
+            <button th:onclick="openEditAccommodationModal([[${acc.accommodationId}]], [[${acc.nama}]], [[${acc.lokasi}]], [[${acc.hargaPerMalam}]], [[${acc.rating}]])">
+              Edit
+            </button>
+            <a th:href="@{/admin/accommodation/delete/{id}(id=${acc.accommodationId})}"
+               onclick="return confirm('Yakin hapus?')">
+              Hapus
+            </a>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
 
 </main>
 
-<!-- MODAL -->
+<!-- ADD MODAL -->
 <div class="modal-overlay"
      id="accommodationModal">
-
-    <div class="modern-modal">
-
-        <button class="modal-close"
-                onclick="closeAccommodationModal()">
-
-            <i class="fas fa-times"></i>
-
-        </button>
-
-        <div class="modal-header">
-
-            <div class="modal-icon">
-
-                <i class="fas fa-hotel"></i>
-
-            </div>
-
-            <div>
-
-                <h3>
-                    Tambah Akomodasi
-                </h3>
-
-                <p>
-                    Tambahkan hotel/penginapan baru
-                </p>
-
-            </div>
-
-        </div>
-
-        <form class="modern-form">
-
-            <div class="form-grid">
-
-                <div class="form-group">
-
-                    <label>
-                        Nama Akomodasi
-                    </label>
-
-                    <input type="text"
-                           placeholder="Hotel Santika">
-
-                </div>
-
-                <div class="form-group">
-
-                    <label>
-                        Lokasi
-                    </label>
-
-                    <input type="text"
-                           placeholder="Bali">
-
-                </div>
-
-            </div>
-
-            <div class="form-grid">
-
-                <div class="form-group">
-
-                    <label>
-                        Harga Per Malam
-                    </label>
-
-                    <input type="number"
-                           placeholder="850000">
-
-                </div>
-
-                <div class="form-group">
-
-                    <label>
-                        Rating
-                    </label>
-
-                    <input type="number"
-                           step="0.1"
-                           placeholder="4.8">
-
-                </div>
-
-            </div>
-
-            <div class="form-group">
-
-                <label>
-                    Availability
-                </label>
-
-                <select>
-
-                    <option>
-                        Available
-                    </option>
-
-                    <option>
-                        Full Booked
-                    </option>
-
-                </select>
-
-            </div>
-
-            <div class="form-group">
-
-                <label>
-                    Fasilitas
-                </label>
-
-                <textarea rows="5"
-                          placeholder="WiFi, Pool, Breakfast"></textarea>
-
-            </div>
-
-            <div class="form-actions">
-
-                <button type="button"
-                        class="btn-secondary"
-                        onclick="closeAccommodationModal()">
-
-                    Cancel
-
-                </button>
-
-                <button type="submit"
-                        class="btn-primary">
-
-                    Save Accommodation
-
-                </button>
-
-            </div>
-
-        </form>
-
+  <div class="modern-modal">
+    <button class="modal-close"
+            onclick="closeAccommodationModal()">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="modal-header">
+      <div class="modal-icon">
+        <i class="fas fa-hotel"></i>
+      </div>
+      <div>
+        <h3>Tambah Akomodasi</h3>
+        <p>Tambahkan akomodasi baru</p>
+      </div>
     </div>
+    <form class="modern-form"
+          th:action="@{/admin/accommodation/save}"
+          method="post">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nama Akomodasi</label>
+          <input type="text"
+                 name="nama"
+                 placeholder="Hotel Santika"
+                 required>
+        </div>
+        <div class="form-group">
+          <label>Lokasi</label>
+          <input type="text"
+                 name="lokasi"
+                 placeholder="Bali, Indonesia">
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Harga / Malam</label>
+          <input type="number"
+                 name="hargaPerMalam"
+                 placeholder="850000"
+                 step="0.01"
+                 min="0">
+        </div>
+        <div class="form-group">
+          <label>Rating</label>
+          <input type="number"
+                 name="rating"
+                 step="0.1"
+                 placeholder="4.8"
+                 min="0"
+                 max="5">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Upload Gambar</label>
+        <input type="file">
+      </div>
+      <div class="form-actions">
+        <button type="button"
+                class="btn-secondary"
+                onclick="closeAccommodationModal()">
+          Cancel
+        </button>
+        <button type="submit"
+                class="btn-primary">
+          Save Accommodation
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 
+<!-- EDIT MODAL -->
+<div class="modal-overlay"
+     id="editAccommodationModal">
+  <div class="modern-modal">
+    <button class="modal-close"
+            onclick="closeEditAccommodationModal()">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="modal-header">
+      <div class="modal-icon">
+        <i class="fas fa-hotel"></i>
+      </div>
+      <div>
+        <h3>Edit Accommodation</h3>
+        <p>Update data penginapan</p>
+      </div>
+    </div>
+    <form class="modern-form"
+          th:action="@{/admin/accommodation/update}"
+          method="post">
+      <input type="hidden"
+             id="editAccommodationId"
+             name="accommodationId">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nama</label>
+          <input type="text"
+                 id="editAccommodationName"
+                 name="nama"
+                 required>
+        </div>
+        <div class="form-group">
+          <label>Lokasi</label>
+          <input type="text"
+                 id="editAccommodationLocation"
+                 name="lokasi">
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Harga / Malam</label>
+          <input type="number"
+                 id="editAccommodationPrice"
+                 name="hargaPerMalam"
+                 step="0.01"
+                 min="0">
+        </div>
+        <div class="form-group">
+          <label>Rating</label>
+          <input type="number"
+                 id="editAccommodationRating"
+                 name="rating"
+                 step="0.1"
+                 min="0"
+                 max="5">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button"
+                class="btn-secondary"
+                onclick="closeEditAccommodationModal()">
+          Cancel
+        </button>
+        <button type="submit"
+                class="btn-primary">
+          Update Accommodation
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <script>
+  const accommodationModal = document.getElementById('accommodationModal');
+  const editAccommodationModal = document.getElementById('editAccommodationModal');
 
-    const accommodationModal =
-        document.getElementById(
-            'accommodationModal'
-        );
+  function openAccommodationModal() {
+    accommodationModal.classList.add('active');
+  }
 
-    function openAccommodationModal(){
+  function closeAccommodationModal() {
+    accommodationModal.classList.remove('active');
+  }
 
-        accommodationModal.classList.add(
-            'active'
-        );
+  function openEditAccommodationModal(id, name, location, pricePerNight, rating) {
+    editAccommodationModal.classList.add('active');
+    document.getElementById('editAccommodationId').value = id;
+    document.getElementById('editAccommodationName').value = name || '';
+    document.getElementById('editAccommodationLocation').value = location || '';
+    document.getElementById('editAccommodationPrice').value = pricePerNight || '';
+    document.getElementById('editAccommodationRating').value = rating || '';
+  }
 
-    }
-
-    function closeAccommodationModal(){
-
-        accommodationModal.classList.remove(
-            'active'
-        );
-
-    }
-
+  function closeEditAccommodationModal() {
+    editAccommodationModal.classList.remove('active');
+  }
 </script>
 
 </body>
 </html>
-

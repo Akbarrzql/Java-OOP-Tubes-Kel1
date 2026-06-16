@@ -1,11 +1,11 @@
 package com.tubes.pbo.controller;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ViewController {
@@ -122,8 +122,8 @@ public class ViewController {
         return "admin/destination/destination";
     }
 
-    @GetMapping("/admin/accommodation")
-    public String adminAccommodation() {
-        return "admin/accommodation/accommodation";
-    }    
+    // @GetMapping("/admin/accommodation")
+    // public String adminAccommodation() {
+    //     return "admin/accommodation/accommodation";
+    // }    
 }
