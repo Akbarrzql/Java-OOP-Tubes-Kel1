@@ -7,11 +7,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "itinerary_total")
 public class Itinerary {
+
+    @ManyToOne
+    @JoinColumn(name = "traveler_id", insertable = false, updatable = false)
+    private Traveler traveler;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +30,8 @@ public class Itinerary {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "total_hari")
-    private Integer totalHari;
+        @Column(name = "total_hari")
+        private Integer totalHari;
 
     @Column(name = "total_biaya")
     private Double totalBiaya;
@@ -95,5 +101,8 @@ public class Itinerary {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    public Traveler getTraveler() { return traveler; }
+    public void setTraveler(Traveler traveler) { this.traveler = traveler; }
 
 }

@@ -1,12 +1,16 @@
 package com.tubes.pbo.repository;
 
-import java.util.List;
+import com.tubes.pbo.model.ItineraryDayDestinasi;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.tubes.pbo.model.ItineraryDayDestinasi;
+
+import java.util.List;
 
 @Repository
 public interface ItineraryDayDestinasiRepository extends JpaRepository<ItineraryDayDestinasi, Integer> {
-    List<ItineraryDayDestinasi> findByDayId(Integer dayId);
+    
+    // PAKAI EntityGraph agar Destinasi selalu di-load
+    @EntityGraph(attributePaths = {"destinasi", "itineraryDay"})
+    List<ItineraryDayDestinasi> findByItineraryDay_DayIdOrderByWaktuAsc(Integer dayId);
 }
-

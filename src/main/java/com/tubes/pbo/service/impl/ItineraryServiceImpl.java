@@ -105,7 +105,7 @@ public class ItineraryServiceImpl implements ItineraryService {
         itinerary.setStatus("ITINERARY");
 
         if (request.getTravelDate() != null && !request.getTravelDate().isBlank()) {
-            itinerary.setCreatedAt(itinerary.getCreatedAt());
+            itinerary.setCreatedAt(java.time.LocalDateTime.now());
         }
 
         Itinerary savedItinerary = itineraryRepository.save(itinerary);
@@ -118,6 +118,8 @@ public class ItineraryServiceImpl implements ItineraryService {
             // Buat itinerary_day
             ItineraryDay itineraryDay = new ItineraryDay(savedItinerary.getItineraryId(), day);
             itineraryDay.setCatatan("Day " + day + " - Explore and Adventure");
+            itineraryDay.setBiayaHari(0.0); 
+            itineraryDay.setCreatedAt(java.time.LocalDateTime.now());
             ItineraryDay savedDay = itineraryDayRepository.save(itineraryDay);
 
             double dayBiaya = 0.0;
@@ -135,6 +137,7 @@ public class ItineraryServiceImpl implements ItineraryService {
                     destCost
                 );
                 dayDestinasi.setDurasiMenit(120); // Default 2 jam
+                dayDestinasi.setCreatedAt(java.time.LocalDateTime.now());
                 itineraryDayDestinasiRepository.save(dayDestinasi);
                 dayBiaya += destCost;
                 destinasiIndex++;
@@ -151,6 +154,7 @@ public class ItineraryServiceImpl implements ItineraryService {
                     1,
                     accCost
                 );
+                dayAccommodation.setCreatedAt(java.time.LocalDateTime.now());
                 itineraryDayAccommodationRepository.save(dayAccommodation);
                 dayBiaya += accCost;
             }
@@ -166,13 +170,14 @@ public class ItineraryServiceImpl implements ItineraryService {
                     1,
                     transCost
                 );
+                dayTransport.setCreatedAt(java.time.LocalDateTime.now()); 
                 itineraryDayTransportRepository.save(dayTransport);
                 dayBiaya += transCost;
             }
 
             // Update biaya hari
-            itineraryDay.setBiayaHari(dayBiaya);
-            itineraryDayRepository.save(itineraryDay);
+            savedDay.setBiayaHari(dayBiaya);
+            itineraryDayRepository.save(savedDay);
             totalBiaya += dayBiaya;
         }
 
