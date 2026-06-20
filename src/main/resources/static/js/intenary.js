@@ -96,11 +96,11 @@ function openEditModal(id, type, itinId, dayId, dataset) {
             <div class="form-row">
                 <div class="form-group">
                     <label>Waktu Berangkat</label>
-                    <input type="datetime-local" class="form-input" name="waktuBerangkat" id="editWaktuBerangkat">
+                    <input type="time" class="form-input" name="waktuBerangkat" id="editWaktuBerangkat">
                 </div>
                 <div class="form-group">
                     <label>Waktu Tiba</label>
-                    <input type="datetime-local" class="form-input" name="waktuTiba" id="editWaktuTiba">
+                    <input type="time" class="form-input" name="waktuTiba" id="editWaktuTiba">
                 </div>
             </div>
             <div class="form-group">
