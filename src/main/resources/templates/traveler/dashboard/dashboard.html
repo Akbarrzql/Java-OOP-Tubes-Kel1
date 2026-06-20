@@ -123,9 +123,9 @@
                     <i class="fas fa-map-marked-alt"></i>
                 </div>
                 <div class="stat-content">
-                    <h3>Destinasi Dikunjungi</h3>
-                    <p class="stat-number">12</p>
-                    <span class="stat-label">Kota & negara telah dikunjungi</span>
+                    <h3>Kota</h3>
+                    <p class="stat-number" th:text="${totalProvinsi}">12</p>
+                    <span class="stat-label">Jumlah Kota</span>
                 </div>
             </div>
         </section>
@@ -164,81 +164,6 @@
                 </div>
                 <div th:if="${itineraries.isEmpty()}" style="padding: 20px; text-align: center; color: #666;">
                     <p>Belum ada itinerary. <a href="/">Buat sekarang</a></p>
-                </div>
-            </div>
-        </section>
-
-        <!-- FEATURED DESTINATIONS -->
-        <section class="featured-section">
-            <div class="section-header">
-                <h2>Destinasi Pilihan</h2>
-                <a href="/explore" class="see-all">Jelajahi Semua →</a>
-            </div>
-
-            <div class="destinations-grid">
-                <div class="destination-card">
-                    <div class="dest-image" style="background: url('https://images.unsplash.com/photo-1537225228614-b4fad34a7d7f?w=400') center/cover;"></div>
-                    <div class="dest-content">
-                        <h3>Bali</h3>
-                        <p>The Island of Gods</p>
-                        <div class="dest-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span>4.8 (324)</span>
-                        </div>
-                        <a href="/explore/destination/1" class="btn-dest">Pelajari Lebih Lanjut</a>
-                    </div>
-                </div>
-                <div class="destination-card">
-                    <div class="dest-image" style="background: url('https://images.unsplash.com/photo-1509391366360-2e938aa1ef14?w=400') center/cover;"></div>
-                    <div class="dest-content">
-                        <h3>Yogyakarta</h3>
-                        <p>Kota Budaya Indonesia</p>
-                        <div class="dest-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <span>4.9 (412)</span>
-                        </div>
-                        <a href="/explore/destination/2" class="btn-dest">Pelajari Lebih Lanjut</a>
-                    </div>
-                </div>
-                <div class="destination-card">
-                    <div class="dest-image" style="background: url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=400') center/cover;"></div>
-                    <div class="dest-content">
-                        <h3>Lombok</h3>
-                        <p>Pantai Eksotis</p>
-                        <div class="dest-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="far fa-star"></i>
-                            <span>4.6 (289)</span>
-                        </div>
-                        <a href="/explore/destination/3" class="btn-dest">Pelajari Lebih Lanjut</a>
-                    </div>
-                </div>
-                <div class="destination-card">
-                    <div class="dest-image" style="background: url('https://images.unsplash.com/photo-1518756131299-26e3c3f81b4b?w=400') center/cover;"></div>
-                    <div class="dest-content">
-                        <h3>Malang</h3>
-                        <p>Kesegaran Pegunungan</p>
-                        <div class="dest-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="far fa-star"></i>
-                            <span>4.5 (156)</span>
-                        </div>
-                        <a href="/explore/destination/4" class="btn-dest">Pelajari Lebih Lanjut</a>
-                    </div>
                 </div>
             </div>
         </section>

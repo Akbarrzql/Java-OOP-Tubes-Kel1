@@ -1,0 +1,1265 @@
+<!doctype html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${itinerary.title} + ' - Tripinaja'">
+      Itinerari - Tripinaja
+    </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" th:href="@{/css/itinerary.css}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* ===== TOAST NOTIFICATION ===== */
+      .toast-container {
+        position: fixed;
+        top: 24px;
+        right: 24px;
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .toast {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 20px;
+        border-radius: 14px;
+        font-family: "Poppins", sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #fff;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        animation:
+          toastIn 0.3s ease,
+          toastOut 0.3s ease 2.7s forwards;
+        min-width: 260px;
+        max-width: 360px;
+      }
+      .toast--success {
+        background: #059669;
+      }
+      .toast--error {
+        background: #dc2626;
+      }
+      .toast i {
+        font-size: 16px;
+        flex-shrink: 0;
+      }
+      @keyframes toastIn {
+        from {
+          opacity: 0;
+          transform: translateX(40px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      @keyframes toastOut {
+        from {
+          opacity: 1;
+          transform: translateX(0);
+        }
+        to {
+          opacity: 0;
+          transform: translateX(40px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- TOAST CONTAINER -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Flash message handler (dari Spring) -->
+    <div
+      th:if="${success}"
+      th:attr="data-toast=${success}"
+      id="flashSuccess"
+    ></div>
+    <div th:if="${error}" th:attr="data-toast=${error}" id="flashError"></div>
+
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="navbar dashboard-navbar">
+      <div class="container">
+        <div class="logo">
+          <span class="logo-icon">&#9673;</span>
+          TRIPINAJA
+        </div>
+
+        <!-- TAMBAH NAV CENTER -->
+        <div class="nav-center" th:if="${user != null}">
+          <a th:href="@{/dashboard}">Dashboard</a>
+          <a th:href="@{/itinerary/list}">My Trips</a>
+        </div>
+
+        <a
+          th:href="@{/profile}"
+          class="profile-menu"
+          style="text-decoration: none; color: inherit"
+        >
+          <div
+            class="profile-avatar"
+            th:text="${session.loggedInUserName != null ? #strings.substring(session.loggedInUserName, 0, 1) : 'U'}"
+          >
+            U
+          </div>
+          <span
+            class="profile-name"
+            th:text="${session.loggedInUserName != null ? session.loggedInUserName : 'Guest'}"
+            >Guest</span
+          >
+          <i class="fas fa-chevron-down"></i>
+        </a>
+
+        <!-- Logout button -->
+        <a
+          th:href="@{/auth/logout}"
+          class="profile-menu"
+          style="margin-left: 16px; text-decoration: none"
+        >
+          <div
+            class="profile-avatar"
+            style="background: #f3f4f6; color: #111827"
+          >
+            <i class="fas fa-right-from-bracket"></i>
+          </div>
+          <span class="profile-name">Logout</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="trip-hero">
+      <img
+        class="trip-hero__bg"
+        src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1400&q=80"
+        alt="Trip Cover"
+      />
+      <div class="trip-hero__overlay"></div>
+      <div class="trip-hero__content">
+        <div class="hero-left">
+          <div class="hero-meta-top">
+            <span class="hero-badge">
+              <span class="badge-label">RENCANA</span>
+              <span class="badge-divider"></span>
+              <span class="badge-type">PERJALANAN</span>
+            </span>
+            <span class="hero-date">
+              <i class="fas fa-calendar-alt"></i>
+              <span
+                th:text="${#temporals.format(itinerary.createdAt, 'dd MMM yyyy')}"
+                >12 Okt 2024</span
+              >
+            </span>
+          </div>
+          <h1 class="trip-hero__title" th:text="${itinerary.title}">
+            Explorer Bali
+          </h1>
+          <div class="hero-meta-bottom">
+            <span class="meta-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Indonesia</span>
+            </span>
+            <span class="meta-item">
+              <i class="fas fa-moon"></i>
+              <span th:text="${itinerary.totalHari} + ' Hari'">5 Hari</span>
+            </span>
+          </div>
+        </div>
+        <div class="hero-budget-card">
+          <span class="budget-label">ESTIMASI BIAYA</span>
+          <span
+            class="budget-amount"
+            th:text="'Rp ' + ${#numbers.formatInteger(itinerary.totalBiaya, 1, 'COMMA')}"
+            >Rp 1.250.000</span
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ACTION BAR ==================== -->
+    <div class="action-bar">
+      <div class="container">
+        <div class="action-bar__inner">
+          <div class="action-bar__left">
+            <i class="fas fa-list"></i>
+            <span>Rincian Perjalanan Anda</span>
+          </div>
+          <div class="action-bar__right">
+            <a
+              href="#"
+              class="btn btn--primary btn--sm"
+              onclick="
+                openModal('modalAddDay');
+                return false;
+              "
+            >
+              <i class="fas fa-calendar-plus"></i> Tambah Hari
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="dashboard-main">
+      <div class="container">
+        <div class="page-body">
+          <!-- DAYS COLUMN -->
+          <div class="days-column">
+            <div class="day-card" th:each="day : ${days}">
+              <div class="day-card__header">
+                <div class="day-card__header-left">
+                  <span
+                    class="day-label"
+                    th:text="'Hari ' + ${day.hariKe} + ': ' + ${day.judul}"
+                    >Hari 1</span
+                  >
+                  <span
+                    class="day-date"
+                    th:text="${day.tanggal != null} ? ${#temporals.format(day.tanggal, 'EEEE, dd MMM yyyy', new java.util.Locale('id'))} : ${#temporals.format(day.createdAt, 'EEEE, dd MMM yyyy', new java.util.Locale('id'))}"
+                  >
+                    Sabtu, 12 Okt
+                  </span>
+                </div>
+                <div class="day-card__header-right">
+                  <button
+                    class="icon-btn btn-delete-day"
+                    th:data-itin="${itinerary.itineraryId}"
+                    th:data-day="${day.dayId}"
+                    th:data-name="${day.judul}"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="activity-list">
+                <!-- TRANSPORT -->
+                <div
+                  class="activity-item activity-item--transport"
+                  th:each="t : ${day.transports}"
+                >
+                  <div
+                    class="activity-time"
+                    th:text="${t.waktuBerangkat != null ? #temporals.format(t.waktuBerangkat, 'HH:mm') : '-'}"
+                  >
+                    13:00
+                  </div>
+                  <div class="activity-dot">
+                    <span class="dot dot--transport"></span>
+                  </div>
+                  <div class="activity-body">
+                    <div class="activity-header">
+                      <span class="activity-name" th:text="${t.transport.jenis}"
+                        >Transport</span
+                      >
+                      <span
+                        class="activity-type-badge activity-type-badge--transport"
+                      >
+                        <i class="fas fa-car"></i> Transportasi
+                      </span>
+                      <span
+                        class="activity-price"
+                        th:text="'Rp ' + ${#numbers.formatInteger(t.biaya, 1, 'COMMA')}"
+                        >Rp 0</span
+                      >
+                      <div class="activity-actions">
+                        <button
+                          class="icon-btn icon-btn--edit btn-edit"
+                          th:data-id="${t.id}"
+                          data-type="transport"
+                          th:data-itin="${itinerary.itineraryId}"
+                          th:data-day="${day.dayId}"
+                          th:data-transport-id="${t.transport.transportId}"
+                          th:data-biaya="${t.biaya}"
+                          th:data-catatan="${t.catatan}"
+                          th:data-waktu-berangkat="${t.waktuBerangkat != null ? #temporals.format(t.waktuBerangkat, 'yyyy-MM-dd''T''HH:mm') : ''}"
+                          th:data-waktu-tiba="${t.waktuTiba != null ? #temporals.format(t.waktuTiba, 'yyyy-MM-dd''T''HH:mm') : ''}"
+                          title="Edit"
+                        >
+                          <i class="fas fa-pencil-alt"></i>
+                        </button>
+                        <button
+                          class="icon-btn btn-delete-activity"
+                          data-type="transport"
+                          th:data-id="${t.id}"
+                          th:data-itin="${itinerary.itineraryId}"
+                          th:data-day="${day.dayId}"
+                          th:data-name="${t.transport.jenis}"
+                          title="Hapus"
+                        >
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <p class="activity-desc" th:text="${t.catatan}">-</p>
+                    <div class="activity-footer">
+                      <span class="activity-detail">
+                        <i class="fas fa-shuttle-van"></i>
+                        <span th:text="${t.transport.provider}">Provider</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ACCOMMODATION -->
+                <div
+                  class="activity-item activity-item--accommodation"
+                  th:each="a : ${day.accommodations}"
+                >
+                  <div
+                    class="activity-time"
+                    th:text="${a.checkinTime != null ? #temporals.format(a.checkinTime, 'HH:mm') : '-'}"
+                  >
+                    14:00
+                  </div>
+                  <div class="activity-dot">
+                    <span class="dot dot--accommodation"></span>
+                  </div>
+                  <div class="activity-body">
+                    <div class="activity-header">
+                      <span
+                        class="activity-name"
+                        th:text="${a.accommodation.nama}"
+                        >Hotel</span
+                      >
+                      <span
+                        class="activity-type-badge activity-type-badge--accommodation"
+                      >
+                        <i class="fas fa-hotel"></i> Penginapan
+                      </span>
+                      <span
+                        class="activity-price"
+                        th:text="'Rp ' + ${#numbers.formatInteger(a.biaya, 1, 'COMMA')}"
+                        >Rp 0</span
+                      >
+                      <div class="activity-actions">
+                        <button
+                          class="icon-btn icon-btn--edit btn-edit"
+                          th:data-id="${a.id}"
+                          data-type="accommodation"
+                          th:data-itin="${itinerary.itineraryId}"
+                          th:data-day="${day.dayId}"
+                          th:data-accommodation-id="${a.accommodation.accommodationId}"
+                          th:data-biaya="${a.biaya}"
+                          th:data-catatan="${a.catatan}"
+                          th:data-malam="${a.malam}"
+                          th:data-checkin="${a.checkinTime != null ? #temporals.format(a.checkinTime, 'yyyy-MM-dd''T''HH:mm') : ''}"
+                          th:data-checkout="${a.checkoutTime != null ? #temporals.format(a.checkoutTime, 'yyyy-MM-dd''T''HH:mm') : ''}"
+                          title="Edit"
+                        >
+                          <i class="fas fa-pencil-alt"></i>
+                        </button>
+                        <button
+                          class="icon-btn btn-delete-activity"
+                          data-type="accommodation"
+                          th:data-id="${a.id}"
+                          th:data-itin="${itinerary.itineraryId}"
+                          th:data-day="${day.dayId}"
+                          th:data-name="${a.accommodation.nama}"
+                          title="Hapus"
+                        >
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <p
+                      class="activity-desc"
+                      th:text="${a.catatan != null ? a.catatan : 'Check-in di ' + a.accommodation.nama}"
+                    >
+                      -
+                    </p>
+                    <div class="activity-footer">
+                      <span class="activity-detail">
+                        <i class="fas fa-map-pin"></i>
+                        <span th:text="${a.accommodation.lokasi}">Lokasi</span>
+                      </span>
+                      <span class="activity-detail">
+                        <i class="fas fa-star"></i>
+                        <span th:text="'Rating ' + ${a.accommodation.rating}"
+                          >Rating</span
+                        >
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- DESTINASI -->
+                <div class="activity-item" th:each="d : ${day.destinasiList}">
+                  <div
+                    class="activity-time"
+                    th:text="${d.waktu != null ? #temporals.format(d.waktu, 'HH:mm') : '-'}"
+                  >
+                    -
+                  </div>
+                  <div class="activity-dot"><span class="dot"></span></div>
+                  <div class="activity-body">
+                    <div class="activity-header">
+                      <span class="activity-name" th:text="${d.destinasi.nama}"
+                        >Destinasi</span
+                      >
+                      <span
+                        class="activity-type-badge"
+                        style="background: #d1fae5; color: #059669"
+                      >
+                        <i class="fas fa-umbrella-beach"></i> Aktivitas
+                      </span>
+                      <span
+                        class="activity-price"
+                        th:text="'Rp ' + ${#numbers.formatInteger(d.biaya, 1, 'COMMA')}"
+                        >Rp 0</span
+                      >
+                      <div class="activity-actions">
+                        <button
+                          class="icon-btn icon-btn--edit btn-edit"
+                          th:data-id="${d.id}"
+                          data-type="destinasi"
+                          th:data-itin="${itinerary.itineraryId}"
+                          th:data-day="${day.dayId}"
+                          th:data-destinasi-id="${d.destinasi.destinasiId}"
+                          th:data-biaya="${d.biaya}"
+                          th:data-catatan="${d.catatan}"
+                          th:data-durasi="${d.durasiMenit}"
+                          th:data-waktu="${d.waktu != null ? d.waktu : ''}"
+                          title="Edit"
+                        >
+                          <i class="fas fa-pencil-alt"></i>
+                        </button>
+                        <button
+                          class="icon-btn btn-delete-activity"
+                          data-type="destinasi"
+                          th:data-id="${d.id}"
+                          th:data-itin="${itinerary.itineraryId}"
+                          th:data-day="${day.dayId}"
+                          th:data-name="${d.destinasi.nama}"
+                          title="Hapus"
+                        >
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <p
+                      class="activity-desc"
+                      th:text="${d.catatan != null && !d.catatan.isEmpty()} ? ${d.catatan} : ${d.destinasi.deskripsi}"
+                    >
+                      -
+                    </p>
+                    <div class="activity-footer">
+                      <span class="activity-detail">
+                        <i class="fas fa-map-pin"></i>
+                        <span th:text="${d.destinasi.lokasi}">Lokasi</span>
+                      </span>
+                      <span
+                        class="activity-detail"
+                        th:if="${d.durasiMenit != null}"
+                      >
+                        <i class="fas fa-clock"></i>
+                        <span th:text="${d.durasiMenit} + ' menit'">-</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="day-card__footer">
+                <div class="day-footer-inner">
+                  <span class="day-footer-label">
+                    <i class="fas fa-wallet"></i> Total Biaya Hari Ini
+                  </span>
+                  <span
+                    class="day-footer-amount"
+                    th:text="'Rp ' + ${#numbers.formatInteger(day.biayaHari != null ? day.biayaHari : 0, 1, 'COMMA')}"
+                  >
+                    Rp 0
+                  </span>
+                </div>
+              </div>
+              <div class="add-activity-row">
+                <a
+                  href="#"
+                  class="add-activity-btn btn-add-activity"
+                  th:data-itin="${itinerary.itineraryId}"
+                  th:data-day="${day.dayId}"
+                >
+                  <i class="fas fa-plus-circle"></i> Tambah Aktivitas
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- BUDGET SIDEBAR -->
+          <aside class="budget-sidebar">
+            <div class="budget-card">
+              <h3 class="budget-card__title">
+                <i class="fas fa-wallet"></i> Ringkasan Biaya
+              </h3>
+              <div class="budget-total">
+                <span class="budget-total__label">TOTAL ESTIMASI</span>
+                <div class="budget-total__row">
+                  <span
+                    class="budget-total__amount"
+                    th:text="'Rp ' + ${#numbers.formatInteger(itinerary.totalBiaya, 1, 'COMMA')}"
+                    >Rp 0</span
+                  >
+                </div>
+                <div class="budget-progress-bar">
+                  <div class="progress-fill"></div>
+                </div>
+              </div>
+              <ul class="budget-breakdown">
+                <li class="budget-item">
+                  <span class="budget-dot" style="background: #6c63ff"></span>
+                  <span class="budget-item__name">Penginapan</span>
+                  <span
+                    class="budget-item__amount"
+                    th:text="'Rp ' + ${#numbers.formatInteger(totalAkomodasi, 1, 'COMMA')}"
+                    >Rp 0</span
+                  >
+                </li>
+                <li class="budget-item">
+                  <span class="budget-dot" style="background: #3b82f6"></span>
+                  <span class="budget-item__name">Transportasi</span>
+                  <span
+                    class="budget-item__amount"
+                    th:text="'Rp ' + ${#numbers.formatInteger(totalTransport, 1, 'COMMA')}"
+                    >Rp 0</span
+                  >
+                </li>
+                <li class="budget-item">
+                  <span class="budget-dot" style="background: #10b981"></span>
+                  <span class="budget-item__name">Aktivitas</span>
+                  <span
+                    class="budget-item__amount"
+                    th:text="'Rp ' + ${#numbers.formatInteger(totalAktivitas, 1, 'COMMA')}"
+                    >Rp 0</span
+                  >
+                </li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-brand">
+              <h2>TRIPINAJA</h2>
+              <p>Smart Travel Itinerary untuk perjalanan sempurna Anda.</p>
+              <span>&copy; 2026 TRIPINAJA. Hak Cipta Dilindungi.</span>
+            </div>
+            <div class="footer-links">
+              <div class="footer-column">
+                <h4>Menu</h4>
+                <a th:href="@{/}">Beranda</a>
+                <a th:href="@{/explore}">Jelajah</a>
+                <a th:href="@{/itinerary/list}">Itinerari Saya</a>
+              </div>
+              <div class="footer-column">
+                <h4>Bantuan</h4>
+                <a href="#">FAQ</a>
+                <a href="#">Hubungi Kami</a>
+              </div>
+              <div class="footer-column">
+                <h4>Legal</h4>
+                <a href="#">Syarat &amp; Ketentuan</a>
+                <a href="#">Kebijakan Privasi</a>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </main>
+
+    <!-- ==================== MODAL: TAMBAH HARI ==================== -->
+    <div class="modal-overlay" id="modalAddDay">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3><i class="fas fa-calendar-plus"></i> Tambah Hari Baru</h3>
+          <button class="modal-close" onclick="closeModal('modalAddDay')">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <form
+          th:action="@{/itinerary/{id}/day/add(id=${itinerary.itineraryId})}"
+          method="post"
+        >
+          <div class="modal-body">
+            <p class="form-section-title">
+              <i class="fas fa-info-circle"></i> Info Hari
+            </p>
+            <div class="form-group">
+              <label>Judul Hari</label>
+              <input
+                type="text"
+                class="form-input"
+                name="judul"
+                placeholder="cth. Hari Pantai & Surfing"
+                required
+              />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Tanggal</label>
+                <input type="date" class="form-input" name="tanggal" />
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn--outline btn--sm"
+              onclick="closeModal('modalAddDay')"
+            >
+              Batal
+            </button>
+            <button type="submit" class="btn btn--primary btn--sm">
+              <i class="fas fa-plus"></i> Tambah Hari
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ==================== MODAL: TAMBAH AKTIVITAS ==================== -->
+    <div class="modal-overlay" id="modalAddActivity">
+      <div class="modal-box modal-box--md">
+        <div class="modal-header">
+          <h3><i class="fas fa-plus-circle"></i> Tambah Aktivitas</h3>
+          <button class="modal-close" onclick="closeModal('modalAddActivity')">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="activity-type-tabs">
+            <button
+              class="activity-tab active"
+              data-tab="transport"
+              onclick="switchActivityTab('transport')"
+            >
+              <i class="fas fa-car"></i><span>Transportasi</span>
+            </button>
+            <button
+              class="activity-tab"
+              data-tab="accommodation"
+              onclick="switchActivityTab('accommodation')"
+            >
+              <i class="fas fa-hotel"></i><span>Penginapan</span>
+            </button>
+            <button
+              class="activity-tab"
+              data-tab="destinasi"
+              onclick="switchActivityTab('destinasi')"
+            >
+              <i class="fas fa-umbrella-beach"></i><span>Destinasi</span>
+            </button>
+          </div>
+
+          <!-- TAB TRANSPORT -->
+          <div id="tabContentTransport" class="activity-tab-content active">
+            <form id="formTransport" method="post">
+              <p class="form-section-title">
+                <i class="fas fa-car"></i> Detail Transportasi
+              </p>
+              <div class="form-group">
+                <label>Pilih Transport</label>
+                <select class="form-input" name="transportId" required>
+                  <option value="">-- Pilih Transport --</option>
+                  <option
+                    th:each="t : ${allTransport}"
+                    th:value="${t.transportId}"
+                    th:text="${t.jenis} + ' - ' + ${t.provider}"
+                  ></option>
+                </select>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Waktu Berangkat</label>
+                  <input
+                    type="time"
+                    class="form-input"
+                    name="waktuBerangkat"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Waktu Tiba</label>
+                  <input
+                    type="time"
+                    class="form-input"
+                    name="waktuTiba"
+                  />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Biaya (Rp)</label>
+                  <input
+                    type="number"
+                    class="form-input"
+                    name="biaya"
+                    placeholder="0"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Catatan</label>
+                <textarea
+                  class="form-input"
+                  name="catatan"
+                  rows="2"
+                  placeholder="Catatan tambahan..."
+                ></textarea>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn--outline btn--sm"
+                  onclick="closeModal('modalAddActivity')"
+                >
+                  Batal
+                </button>
+                <button type="submit" class="btn btn--primary btn--sm">
+                  <i class="fas fa-plus"></i> Tambah
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- TAB ACCOMMODATION -->
+          <div id="tabContentAccommodation" class="activity-tab-content">
+            <form id="formAccommodation" method="post">
+              <p class="form-section-title">
+                <i class="fas fa-hotel"></i> Detail Penginapan
+              </p>
+              <div class="form-group">
+                <label>Pilih Akomodasi</label>
+                <select class="form-input" name="accommodationId" required>
+                  <option value="">-- Pilih Akomodasi --</option>
+                  <option
+                    th:each="a : ${allAccommodation}"
+                    th:value="${a.accommodationId}"
+                    th:text="${a.nama} + ' - ' + ${a.lokasi}"
+                  ></option>
+                </select>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Check-in</label>
+                  <input
+                    type="datetime-local"
+                    class="form-input"
+                    name="checkinTime"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Check-out</label>
+                  <input
+                    type="datetime-local"
+                    class="form-input"
+                    name="checkoutTime"
+                  />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Jumlah Malam</label>
+                  <input
+                    type="number"
+                    class="form-input"
+                    name="malam"
+                    placeholder="1"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Biaya (Rp)</label>
+                  <input
+                    type="number"
+                    class="form-input"
+                    name="biaya"
+                    placeholder="0"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Catatan</label>
+                <textarea class="form-input" name="catatan" rows="2"></textarea>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn--outline btn--sm"
+                  onclick="closeModal('modalAddActivity')"
+                >
+                  Batal
+                </button>
+                <button type="submit" class="btn btn--primary btn--sm">
+                  <i class="fas fa-plus"></i> Tambah
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- TAB DESTINASI -->
+          <div id="tabContentDestinasi" class="activity-tab-content">
+            <form id="formDestinasi" method="post">
+              <p class="form-section-title">
+                <i class="fas fa-umbrella-beach"></i> Detail Destinasi
+              </p>
+              <div class="form-group">
+                <label>Pilih Destinasi</label>
+                <select class="form-input" name="destinasiId" required>
+                  <option value="">-- Pilih Destinasi --</option>
+                  <option
+                    th:each="d : ${allDestinasi}"
+                    th:value="${d.destinasiId}"
+                    th:text="${d.nama} + ' - ' + ${d.lokasi}"
+                  ></option>
+                </select>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Waktu (HH:mm)</label>
+                  <input type="time" class="form-input" name="waktu" />
+                </div>
+                <div class="form-group">
+                  <label>Durasi (menit)</label>
+                  <input
+                    type="number"
+                    class="form-input"
+                    name="durasiMenit"
+                    placeholder="60"
+                  />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Biaya (Rp)</label>
+                  <input
+                    type="number"
+                    class="form-input"
+                    name="biaya"
+                    placeholder="0"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Catatan</label>
+                <textarea class="form-input" name="catatan" rows="2"></textarea>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn--outline btn--sm"
+                  onclick="closeModal('modalAddActivity')"
+                >
+                  Batal
+                </button>
+                <button type="submit" class="btn btn--primary btn--sm">
+                  <i class="fas fa-plus"></i> Tambah
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== MODAL: EDIT AKTIVITAS ==================== -->
+    <div class="modal-overlay" id="modalEditActivity">
+      <div class="modal-box modal-box--md">
+        <div class="modal-header">
+          <h3 id="editActivityModalTitle">
+            <i class="fas fa-pencil-alt"></i> Edit Aktivitas
+          </h3>
+          <button class="modal-close" onclick="closeModal('modalEditActivity')">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <form id="formEdit" method="post">
+          <div class="modal-body" id="editActivityModalBody"></div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn--outline btn--sm"
+              onclick="closeModal('modalEditActivity')"
+            >
+              Batal
+            </button>
+            <button type="submit" class="btn btn--primary btn--sm">
+              <i class="fas fa-save"></i> Simpan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ==================== MODAL: KONFIRMASI HAPUS HARI ==================== -->
+    <div class="modal-overlay" id="modalDeleteDay">
+      <div class="modal-box modal-box--sm">
+        <div class="modal-header modal-header--danger">
+          <h3><i class="fas fa-trash"></i> Hapus Hari</h3>
+          <button class="modal-close" onclick="closeModal('modalDeleteDay')">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body modal-body--center">
+          <div class="delete-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <p class="delete-title">Apakah Anda yakin?</p>
+          <p class="delete-desc">
+            Hari <strong id="deleteDayName">"Hari"</strong> beserta seluruh
+            aktivitasnya akan dihapus permanen.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn--outline btn--sm"
+            onclick="closeModal('modalDeleteDay')"
+          >
+            Batal
+          </button>
+          <form id="formDeleteDay" method="post" style="display: inline">
+            <button type="submit" class="btn btn--danger btn--sm">
+              <i class="fas fa-trash"></i> Ya, Hapus
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== MODAL: KONFIRMASI HAPUS AKTIVITAS ==================== -->
+    <div class="modal-overlay" id="modalDeleteActivity">
+      <div class="modal-box modal-box--sm">
+        <div class="modal-header modal-header--danger">
+          <h3><i class="fas fa-trash"></i> Hapus Aktivitas</h3>
+          <button
+            class="modal-close"
+            onclick="closeModal('modalDeleteActivity')"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body modal-body--center">
+          <div class="delete-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <p class="delete-title">Apakah Anda yakin?</p>
+          <p class="delete-desc">
+            Aktivitas <strong id="deleteActivityName">"Aktivitas"</strong> akan
+            dihapus permanen.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn--outline btn--sm"
+            onclick="closeModal('modalDeleteActivity')"
+          >
+            Batal
+          </button>
+          <form id="formDeleteActivity" method="post" style="display: inline">
+            <button type="submit" class="btn btn--danger btn--sm">
+              <i class="fas fa-trash"></i> Ya, Hapus
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script th:src="@{/js/itinerary.js}"></script>
+    <script th:inline="javascript">
+      const itineraryId = [[${itinerary.itineraryId}]];
+
+      // ===== DATA DROPDOWN DARI THYMELEAF =====
+      const allTransport     = /*[[${allTransport}]]*/ [];
+      const allAccommodation = /*[[${allAccommodation}]]*/ [];
+      const allDestinasi     = /*[[${allDestinasi}]]*/ [];
+
+      // ===== TOAST =====
+      function showToast(msg, type = 'success') {
+          const container = document.getElementById('toastContainer');
+          const toast = document.createElement('div');
+          toast.className = `toast toast--${type}`;
+          toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i><span>${msg}</span>`;
+          container.appendChild(toast);
+          setTimeout(() => toast.remove(), 3000);
+      }
+
+      // Flash message dari Spring
+      const flashSuccess = document.getElementById('flashSuccess');
+      const flashError   = document.getElementById('flashError');
+      if (flashSuccess) showToast(flashSuccess.dataset.toast, 'success');
+      if (flashError)   showToast(flashError.dataset.toast, 'error');
+
+      // ===== MODAL =====
+      function openModal(id) {
+          document.getElementById(id).classList.add('active');
+      }
+      function closeModal(id) {
+          document.getElementById(id).classList.remove('active');
+      }
+
+      // Close modal saat klik overlay
+      document.querySelectorAll('.modal-overlay').forEach(o => {
+          o.addEventListener('click', e => {
+              if (e.target === o) closeModal(o.id);
+          });
+      });
+
+      // ===== SWITCH TAB AKTIVITAS =====
+      function switchActivityTab(tab) {
+          document.querySelectorAll('.activity-tab').forEach(b => {
+              b.classList.toggle('active', b.dataset.tab === tab);
+          });
+          document.querySelectorAll('.activity-tab-content').forEach(content => {
+              content.classList.remove('active');
+          });
+          const tabNames = {
+              'transport': 'tabContentTransport',
+              'accommodation': 'tabContentAccommodation',
+              'destinasi': 'tabContentDestinasi'
+          };
+          const target = document.getElementById(tabNames[tab]);
+          if (target) target.classList.add('active');
+      }
+
+      // ===== ADD ACTIVITY =====
+      function openAddActivityModal(itin, dayId) {
+          document.getElementById('formTransport').action     = `/itinerary/${itin}/day/${dayId}/transport/add`;
+          document.getElementById('formAccommodation').action = `/itinerary/${itin}/day/${dayId}/accommodation/add`;
+          document.getElementById('formDestinasi').action     = `/itinerary/${itin}/day/${dayId}/destinasi/add`;
+          switchActivityTab('transport');
+          openModal('modalAddActivity');
+      }
+
+      // ===== DELETE DAY =====
+      function confirmDeleteDay(itinId, dayId, name) {
+          document.getElementById('deleteDayName').textContent = '"' + name + '"';
+          document.getElementById('formDeleteDay').action = `/itinerary/${itinId}/day/${dayId}/delete`;
+          openModal('modalDeleteDay');
+      }
+
+      // ===== DELETE ACTIVITY =====
+      function confirmDeleteActivity(type, id, itinId, dayId, name) {
+          document.getElementById('deleteActivityName').textContent = '"' + name + '"';
+          let url = '';
+          if (type === 'transport')     url = `/itinerary/${itinId}/day/${dayId}/transport/${id}/delete`;
+          if (type === 'accommodation') url = `/itinerary/${itinId}/day/${dayId}/accommodation/${id}/delete`;
+          if (type === 'destinasi')     url = `/itinerary/${itinId}/day/${dayId}/destinasi/${id}/delete`;
+          document.getElementById('formDeleteActivity').action = url;
+          openModal('modalDeleteActivity');
+      }
+
+      // ===== BUILD DROPDOWN OPTIONS =====
+      function buildTransportOptions(selectedId = '') {
+          if (!allTransport || allTransport.length === 0) {
+              return '<option value="">-- Data transport tidak tersedia --</option>';
+          }
+          return allTransport.map(t =>
+              `<option value="${t.transportId}" ${t.transportId == selectedId ? 'selected' : ''}>${t.jenis} - ${t.provider}</option>`
+          ).join('');
+      }
+
+      function buildAccommodationOptions(selectedId = '') {
+          if (!allAccommodation || allAccommodation.length === 0) {
+              return '<option value="">-- Data akomodasi tidak tersedia --</option>';
+          }
+          return allAccommodation.map(a =>
+              `<option value="${a.accommodationId}" ${a.accommodationId == selectedId ? 'selected' : ''}>${a.nama} - ${a.lokasi}</option>`
+          ).join('');
+      }
+
+      function buildDestinasiOptions(selectedId = '') {
+          if (!allDestinasi || allDestinasi.length === 0) {
+              return '<option value="">-- Data destinasi tidak tersedia --</option>';
+          }
+          return allDestinasi.map(d =>
+              `<option value="${d.destinasiId}" ${d.destinasiId == selectedId ? 'selected' : ''}>${d.nama} - ${d.lokasi}</option>`
+          ).join('');
+      }
+
+      // ===== EDIT MODAL =====
+      function openEditModal(id, type, itinId, dayId, dataset) {
+          const title = document.getElementById('editActivityModalTitle');
+          const body  = document.getElementById('editActivityModalBody');
+          const form  = document.getElementById('formEdit');
+
+          if (type === 'transport') {
+              title.innerHTML = '<i class="fas fa-car"></i> Edit Transportasi';
+              form.action = `/itinerary/${itinId}/day/${dayId}/transport/${id}/edit`;
+              body.innerHTML = `
+                  <p class="form-section-title"><i class="fas fa-car"></i> Detail Transportasi</p>
+                  <div class="form-group">
+                      <label>Pilih Transport</label>
+                      <select class="form-input" name="transportId" id="editTransportId" required>
+                          <option value="">-- Pilih Transport --</option>
+                          ${buildTransportOptions(dataset.transportId)}
+                      </select>
+                  </div>
+                  <div class="form-row">
+                      <div class="form-group">
+                          <label>Waktu Berangkat</label>
+                          <input type="time" class="form-input" name="waktuBerangkat" id="editWaktuBerangkat">
+                      </div>
+                      <div class="form-group">
+                          <label>Waktu Tiba</label>
+                          <input type="time" class="form-input" name="waktuTiba" id="editWaktuTiba">
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label>Biaya (Rp)</label>
+                      <input type="number" class="form-input" name="biaya" id="editBiaya" placeholder="0" required>
+                  </div>
+                  <div class="form-group">
+                      <label>Catatan</label>
+                      <textarea class="form-input" name="catatan" id="editCatatan" rows="2"></textarea>
+                  </div>`;
+
+              setTimeout(() => {
+                  document.getElementById('editWaktuBerangkat').value = dataset.waktuBerangkat || '';
+                  document.getElementById('editWaktuTiba').value = dataset.waktuTiba || '';
+                  document.getElementById('editBiaya').value = dataset.biaya || '';
+                  document.getElementById('editCatatan').value = dataset.catatan || '';
+              }, 0);
+
+          } else if (type === 'accommodation') {
+              title.innerHTML = '<i class="fas fa-hotel"></i> Edit Penginapan';
+              form.action = `/itinerary/${itinId}/day/${dayId}/accommodation/${id}/edit`;
+              body.innerHTML = `
+                  <p class="form-section-title"><i class="fas fa-hotel"></i> Detail Penginapan</p>
+                  <div class="form-group">
+                      <label>Pilih Akomodasi</label>
+                      <select class="form-input" name="accommodationId" id="editAccommodationId" required>
+                          <option value="">-- Pilih Akomodasi --</option>
+                          ${buildAccommodationOptions(dataset.accommodationId)}
+                      </select>
+                  </div>
+                  <div class="form-row">
+                      <div class="form-group">
+                          <label>Check-in</label>
+                          <input type="datetime-local" class="form-input" name="checkinTime" id="editCheckinTime">
+                      </div>
+                      <div class="form-group">
+                          <label>Check-out</label>
+                          <input type="datetime-local" class="form-input" name="checkoutTime" id="editCheckoutTime">
+                      </div>
+                  </div>
+                  <div class="form-row">
+                      <div class="form-group">
+                          <label>Jumlah Malam</label>
+                          <input type="number" class="form-input" name="malam" id="editMalam" placeholder="1">
+                      </div>
+                      <div class="form-group">
+                          <label>Biaya (Rp)</label>
+                          <input type="number" class="form-input" name="biaya" id="editBiaya" placeholder="0" required>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label>Catatan</label>
+                      <textarea class="form-input" name="catatan" id="editCatatan" rows="2"></textarea>
+                  </div>`;
+
+              setTimeout(() => {
+                  document.getElementById('editCheckinTime').value = dataset.checkin || '';
+                  document.getElementById('editCheckoutTime').value = dataset.checkout || '';
+                  document.getElementById('editMalam').value = dataset.malam || '';
+                  document.getElementById('editBiaya').value = dataset.biaya || '';
+                  document.getElementById('editCatatan').value = dataset.catatan || '';
+              }, 0);
+
+          } else if (type === 'destinasi') {
+              title.innerHTML = '<i class="fas fa-umbrella-beach"></i> Edit Destinasi';
+              form.action = `/itinerary/${itinId}/day/${dayId}/destinasi/${id}/edit`;
+              body.innerHTML = `
+                  <p class="form-section-title"><i class="fas fa-umbrella-beach"></i> Detail Destinasi</p>
+                  <div class="form-group">
+                      <label>Pilih Destinasi</label>
+                      <select class="form-input" name="destinasiId" id="editDestinasiId" required>
+                          <option value="">-- Pilih Destinasi --</option>
+                          ${buildDestinasiOptions(dataset.destinasiId)}
+                      </select>
+                  </div>
+                  <div class="form-row">
+                      <div class="form-group">
+                          <label>Waktu (HH:mm)</label>
+                          <input type="time" class="form-input" name="waktu" id="editWaktuDestinasi">
+                      </div>
+                      <div class="form-group">
+                          <label>Durasi (menit)</label>
+                          <input type="number" class="form-input" name="durasiMenit" id="editDurasiMenit" placeholder="60">
+                      </div>
+                  </div>
+                  <div class="form-row">
+                      <div class="form-group">
+                          <label>Biaya (Rp)</label>
+                          <input type="number" class="form-input" name="biaya" id="editBiaya" placeholder="0" required>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label>Catatan</label>
+                      <textarea class="form-input" name="catatan" id="editCatatan" rows="2"></textarea>
+                  </div>`;
+
+              setTimeout(() => {
+                  document.getElementById('editWaktuDestinasi').value = dataset.waktu || '';
+                  document.getElementById('editDurasiMenit').value = dataset.durasi || '';
+                  document.getElementById('editBiaya').value = dataset.biaya || '';
+                  document.getElementById('editCatatan').value = dataset.catatan || '';
+              }, 0);
+          }
+          openModal('modalEditActivity');
+      }
+
+      // ===== EVENT DELEGATION (SATU AJA!) =====
+      document.addEventListener('click', function(e) {
+          const btnDeleteDay = e.target.closest('.btn-delete-day');
+          if (btnDeleteDay) {
+              e.preventDefault();
+              confirmDeleteDay(btnDeleteDay.dataset.itin, btnDeleteDay.dataset.day, btnDeleteDay.dataset.name);
+              return;
+          }
+
+          const btnAddActivity = e.target.closest('.btn-add-activity');
+          if (btnAddActivity) {
+              e.preventDefault();
+              openAddActivityModal(btnAddActivity.dataset.itin, btnAddActivity.dataset.day);
+              return;
+          }
+
+          const btnEdit = e.target.closest('.btn-edit');
+          if (btnEdit) {
+              e.preventDefault();
+              openEditModal(btnEdit.dataset.id, btnEdit.dataset.type, btnEdit.dataset.itin, btnEdit.dataset.day, btnEdit.dataset);
+              return;
+          }
+
+          const btnDeleteActivity = e.target.closest('.btn-delete-activity');
+          if (btnDeleteActivity) {
+              e.preventDefault();
+              confirmDeleteActivity(
+                  btnDeleteActivity.dataset.type,
+                  btnDeleteActivity.dataset.id,
+                  btnDeleteActivity.dataset.itin,
+                  btnDeleteActivity.dataset.day,
+                  btnDeleteActivity.dataset.name
+              );
+              return;
+          }
+      });
+    </script>
+  </body>
+</html>

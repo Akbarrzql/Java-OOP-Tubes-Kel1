@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.tubes.pbo.model.Itinerary;
-import com.tubes.pbo.dto.GenerateItineraryRequest;
+import com.tubes.pbo.model.GenerateItineraryRequest;
 
 public interface ItineraryService {
     List<Itinerary> getAllItinerary();

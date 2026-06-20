@@ -1,4 +1,4 @@
-package com.tubes.pbo.dto;
+package com.tubes.pbo.model;
 
 import lombok.Getter;
 import lombok.Setter;

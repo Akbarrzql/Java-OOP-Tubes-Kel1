@@ -15,7 +15,7 @@ import com.tubes.pbo.model.ItineraryDay;
 import com.tubes.pbo.model.ItineraryDayDestinasi;
 import com.tubes.pbo.model.ItineraryDayAccommodation;
 import com.tubes.pbo.model.ItineraryDayTransport;
-import com.tubes.pbo.dto.GenerateItineraryRequest;
+import com.tubes.pbo.model.GenerateItineraryRequest;
 import com.tubes.pbo.repository.ItineraryRepository;
 import com.tubes.pbo.repository.DestinasiRepository;
 import com.tubes.pbo.repository.AccommodationRepository;
@@ -86,6 +86,10 @@ public class ItineraryServiceImpl implements ItineraryService {
     @Override
     public Itinerary generateItinerary(GenerateItineraryRequest request, Integer travelerId) {
         Random random = new Random();
+        java.time.LocalDate startDate = null;
+        if (request.getTravelDate() != null && !request.getTravelDate().isBlank()) {
+            startDate = java.time.LocalDate.parse(request.getTravelDate());
+        }
 
         // 1. Ambil semua destinasi dari provinsi
         List<Destinasi> destinasiList = destinasiRepository.findByProvinsiId(request.getProvinceId());
@@ -94,7 +98,8 @@ public class ItineraryServiceImpl implements ItineraryService {
 
         // Validasi data minimal
         if (destinasiList.isEmpty() || accommodationList.isEmpty() || transportList.isEmpty()) {
-            throw new IllegalArgumentException("Province tidak memiliki destinasi, akomodasi, atau transport yang cukup");
+            throw new IllegalArgumentException(
+                    "Province tidak memiliki destinasi, akomodasi, atau transport yang cukup");
         }
 
         // 2. Buat itinerary utama
@@ -105,7 +110,7 @@ public class ItineraryServiceImpl implements ItineraryService {
         itinerary.setStatus("ITINERARY");
 
         if (request.getTravelDate() != null && !request.getTravelDate().isBlank()) {
-            itinerary.setCreatedAt(itinerary.getCreatedAt());
+            itinerary.setCreatedAt(java.time.LocalDateTime.now());
         }
 
         Itinerary savedItinerary = itineraryRepository.save(itinerary);
@@ -116,10 +121,22 @@ public class ItineraryServiceImpl implements ItineraryService {
 
         for (int day = 1; day <= request.getTotalDays(); day++) {
             // Buat itinerary_day
-            ItineraryDay itineraryDay = new ItineraryDay(savedItinerary.getItineraryId(), day);
-            itineraryDay.setCatatan("Day " + day + " - Explore and Adventure");
+            ItineraryDay itineraryDay = new ItineraryDay(savedItinerary.getItineraryId(),
+                    day);
+            // itineraryDay.setCatatan("Day " + day + " of " + request.getTotalDays());
+            // Ambil judul trip, hapus prefix "Day X - " kalau ada
+            String tripTitle = request.getTitle();
+            if (tripTitle != null) {
+                tripTitle = tripTitle.replaceAll("(?i)^day\\s*\\d+\\s*(-)?\\s*", "").trim();
+            }
+            itineraryDay.setCatatan(tripTitle);
+            itineraryDay.setBiayaHari(0.0);
+            itineraryDay.setCreatedAt(java.time.LocalDateTime.now());
             ItineraryDay savedDay = itineraryDayRepository.save(itineraryDay);
 
+            if (startDate != null) {
+                itineraryDay.setTanggal(startDate.plusDays(day - 1));
+            }
             double dayBiaya = 0.0;
 
             // Tambahkan 1-2 destinasi per hari (round-robin)
@@ -129,12 +146,12 @@ public class ItineraryServiceImpl implements ItineraryService {
                 double destCost = dest.getHarga() != null ? dest.getHarga() : 0.0;
 
                 ItineraryDayDestinasi dayDestinasi = new ItineraryDayDestinasi(
-                    savedDay.getDayId(),
-                    dest.getDestinasiId(),
-                    d + 1,
-                    destCost
-                );
+                        savedDay.getDayId(),
+                        dest.getDestinasiId(),
+                        d + 1,
+                        destCost);
                 dayDestinasi.setDurasiMenit(120); // Default 2 jam
+                dayDestinasi.setCreatedAt(java.time.LocalDateTime.now());
                 itineraryDayDestinasiRepository.save(dayDestinasi);
                 dayBiaya += destCost;
                 destinasiIndex++;
@@ -146,11 +163,11 @@ public class ItineraryServiceImpl implements ItineraryService {
                 double accCost = acc.getHargaPerMalam() != null ? acc.getHargaPerMalam() : 0.0;
 
                 ItineraryDayAccommodation dayAccommodation = new ItineraryDayAccommodation(
-                    savedDay.getDayId(),
-                    acc.getAccommodationId(),
-                    1,
-                    accCost
-                );
+                        savedDay.getDayId(),
+                        acc.getAccommodationId(),
+                        1,
+                        accCost);
+                dayAccommodation.setCreatedAt(java.time.LocalDateTime.now());
                 itineraryDayAccommodationRepository.save(dayAccommodation);
                 dayBiaya += accCost;
             }
@@ -161,18 +178,18 @@ public class ItineraryServiceImpl implements ItineraryService {
                 double transCost = trans.getHarga() != null ? trans.getHarga() : 0.0;
 
                 ItineraryDayTransport dayTransport = new ItineraryDayTransport(
-                    savedDay.getDayId(),
-                    trans.getTransportId(),
-                    1,
-                    transCost
-                );
+                        savedDay.getDayId(),
+                        trans.getTransportId(),
+                        1,
+                        transCost);
+                dayTransport.setCreatedAt(java.time.LocalDateTime.now());
                 itineraryDayTransportRepository.save(dayTransport);
                 dayBiaya += transCost;
             }
 
             // Update biaya hari
-            itineraryDay.setBiayaHari(dayBiaya);
-            itineraryDayRepository.save(itineraryDay);
+            savedDay.setBiayaHari(dayBiaya);
+            itineraryDayRepository.save(savedDay);
             totalBiaya += dayBiaya;
         }
 

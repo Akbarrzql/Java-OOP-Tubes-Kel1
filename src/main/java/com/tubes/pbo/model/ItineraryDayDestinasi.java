@@ -1,14 +1,8 @@
 package com.tubes.pbo.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "itinerary_day_destinasi")
@@ -16,104 +10,78 @@ public class ItineraryDayDestinasi {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Integer id;
 
-    @Column(name = "day_id", nullable = false)
-    private Integer dayId;
+    @ManyToOne(fetch = FetchType.EAGER) 
+    @JoinColumn(name = "day_id")
+    private ItineraryDay itineraryDay;
 
-    @Column(name = "destinasi_id", nullable = false)
-    private Integer destinasiId;
+    @ManyToOne(fetch = FetchType.EAGER) 
+    @JoinColumn(name = "destinasi_id")
+    private Destinasi destinasi;
 
-    @Column(name = "urutan", nullable = false)
     private Integer urutan;
 
     @Column(name = "durasi_menit")
     private Integer durasiMenit;
 
-    @Column(name = "biaya", nullable = false)
-    private Double biaya = 0.0;
+    private Double biaya;
+    private String catatan;
 
-    @Column(name = "created_at", insertable = false, updatable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Transient
-    private Destinasi destinasiObj;
+    @Column(name = "waktu")
+    private LocalTime waktu;
 
-    // Constructors
     public ItineraryDayDestinasi() {}
 
+    // Constructor 
     public ItineraryDayDestinasi(Integer dayId, Integer destinasiId, Integer urutan, Double biaya) {
-        this.dayId = dayId;
-        this.destinasiId = destinasiId;
+        ItineraryDay day = new ItineraryDay();
+        day.setDayId(dayId);
+        this.itineraryDay = day;
+        
+        Destinasi dest = new Destinasi();
+        dest.setDestinasiId(destinasiId);
+        this.destinasi = dest;
+        
         this.urutan = urutan;
         this.biaya = biaya;
     }
+    // Getter & Setter
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
-    // Getters & Setters
-    public Integer getId() {
-        return id;
-    }
+    public ItineraryDay getItineraryDay() { return itineraryDay; }
+    public void setItineraryDay(ItineraryDay itineraryDay) { this.itineraryDay = itineraryDay; }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    public Destinasi getDestinasi() { return destinasi; }
+    public void setDestinasi(Destinasi destinasi) { this.destinasi = destinasi; }
 
-    public Integer getDayId() {
-        return dayId;
-    }
+    public Integer getUrutan() { return urutan; }
+    public void setUrutan(Integer urutan) { this.urutan = urutan; }
 
-    public void setDayId(Integer dayId) {
-        this.dayId = dayId;
-    }
+    public Integer getDurasiMenit() { return durasiMenit; }
+    public void setDurasiMenit(Integer durasiMenit) { this.durasiMenit = durasiMenit; }
+    
+    public LocalTime getWaktu() { return waktu; }
+    public void setWaktu(LocalTime waktu) { this.waktu = waktu; }
+
+    public Double getBiaya() { return biaya; }
+    public void setBiaya(Double biaya) { this.biaya = biaya; }
+
+    public String getCatatan() { return catatan; }
+    public void setCatatan(String catatan) { this.catatan = catatan; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
     public Integer getDestinasiId() {
-        return destinasiId;
+        return destinasi != null ? destinasi.getDestinasiId() : null;
     }
 
-    public void setDestinasiId(Integer destinasiId) {
-        this.destinasiId = destinasiId;
-    }
-
-    public Integer getUrutan() {
-        return urutan;
-    }
-
-    public void setUrutan(Integer urutan) {
-        this.urutan = urutan;
-    }
-
-    public Integer getDurasiMenit() {
-        return durasiMenit;
-    }
-
-    public void setDurasiMenit(Integer durasiMenit) {
-        this.durasiMenit = durasiMenit;
-    }
-
-    public Double getBiaya() {
-        return biaya;
-    }
-
-    public void setBiaya(Double biaya) {
-        this.biaya = biaya;
-    }
-
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Destinasi getDestinasiObj() {
-        return destinasiObj;
-    }
-
-    public void setDestinasiObj(Destinasi destinasiObj) {
-        this.destinasiObj = destinasiObj;
+    public void setDestinasiObj(Destinasi destinasi) {
+        this.destinasi = destinasi;
     }
 }
-

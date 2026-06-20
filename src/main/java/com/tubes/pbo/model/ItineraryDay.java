@@ -1,14 +1,10 @@
 package com.tubes.pbo.model;
 
+import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "itinerary_day")
@@ -19,111 +15,73 @@ public class ItineraryDay {
     @Column(name = "day_id")
     private Integer dayId;
 
-    @Column(name = "itinerary_id", nullable = false)
-    private Integer itineraryId;
+    @ManyToOne
+    @JoinColumn(name = "itinerary_id")
+    private Itinerary itinerary;
 
-    @Column(name = "hari_ke", nullable = false)
+    @Column(name = "hari_ke")
     private Integer hariKe;
 
-    @Column(name = "catatan", columnDefinition = "TEXT")
-    private String catatan;
+    private String judul;
 
-    @Column(name = "biaya_hari", nullable = false)
-    private Double biayaHari = 0.0;
+    @Column(name = "biaya_hari")
+    private Double biayaHari;
 
-    @Column(name = "created_at", insertable = false, updatable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    // Helper fields (transient - tidak disimpan ke database)
-    @Transient
+    @Column(name = "tanggal")
+    private LocalDate tanggal;
+
+    @OneToMany(mappedBy = "itineraryDay", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ItineraryDayTransport> transports;
+
+    @OneToMany(mappedBy = "itineraryDay", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ItineraryDayAccommodation> accommodations;
+
+    @OneToMany(mappedBy = "itineraryDay", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ItineraryDayDestinasi> destinasiList;
 
-    @Transient
-    private List<ItineraryDayAccommodation> accommodationList;
-
-    @Transient
-    private List<ItineraryDayTransport> transportList;
-
-    // Constructors
     public ItineraryDay() {}
-
+    //constructor
     public ItineraryDay(Integer itineraryId, Integer hariKe) {
-        this.itineraryId = itineraryId;
-        this.hariKe = hariKe;
-        this.biayaHari = 0.0;
-    }
-
-    // Getters & Setters
-    public Integer getDayId() {
-        return dayId;
-    }
-
-    public void setDayId(Integer dayId) {
-        this.dayId = dayId;
-    }
-
-    public Integer getItineraryId() {
-        return itineraryId;
-    }
-
-    public void setItineraryId(Integer itineraryId) {
-        this.itineraryId = itineraryId;
-    }
-
-    public Integer getHariKe() {
-        return hariKe;
-    }
-
-    public void setHariKe(Integer hariKe) {
+        Itinerary itin = new Itinerary();
+        itin.setItineraryId(itineraryId);
+        this.itinerary = itin;
         this.hariKe = hariKe;
     }
+    // Getter & Setter
+    public Integer getDayId() { return dayId; }
+    public void setDayId(Integer dayId) { this.dayId = dayId; }
 
-    public String getCatatan() {
-        return catatan;
-    }
+    public Itinerary getItinerary() { return itinerary; }
+    public void setItinerary(Itinerary itinerary) { this.itinerary = itinerary; }
 
-    public void setCatatan(String catatan) {
-        this.catatan = catatan;
-    }
+    public Integer getHariKe() { return hariKe; }
+    public void setHariKe(Integer hariKe) { this.hariKe = hariKe; }
 
-    public Double getBiayaHari() {
-        return biayaHari;
-    }
+    public String getJudul() { return judul; }
+    public void setJudul(String judul) { this.judul = judul; }
 
-    public void setBiayaHari(Double biayaHari) {
-        this.biayaHari = biayaHari;
-    }
+    public Double getBiayaHari() { return biayaHari; }
+    public void setBiayaHari(Double biayaHari) { this.biayaHari = biayaHari; }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+    public LocalDate getTanggal() { return tanggal; }
+    public void setTanggal(LocalDate tanggal) { this.tanggal = tanggal; }
+    
+    public List<ItineraryDayTransport> getTransports() { return transports; }
+    public void setTransports(List<ItineraryDayTransport> transports) { this.transports = transports; }
 
-    public List<ItineraryDayDestinasi> getDestinasiList() {
-        return destinasiList;
-    }
+    public List<ItineraryDayAccommodation> getAccommodations() { return accommodations; }
+    public void setAccommodations(List<ItineraryDayAccommodation> accommodations) { this.accommodations = accommodations; }
 
-    public void setDestinasiList(List<ItineraryDayDestinasi> destinasiList) {
-        this.destinasiList = destinasiList;
-    }
+    public List<ItineraryDayDestinasi> getDestinasiList() { return destinasiList; }
+    public void setDestinasiList(List<ItineraryDayDestinasi> destinasiList) { this.destinasiList = destinasiList; }
+    public void setCatatan(String catatan) { this.judul = catatan; }
 
-    public List<ItineraryDayAccommodation> getAccommodationList() {
-        return accommodationList;
-    }
-
-    public void setAccommodationList(List<ItineraryDayAccommodation> accommodationList) {
-        this.accommodationList = accommodationList;
-    }
-
-    public List<ItineraryDayTransport> getTransportList() {
-        return transportList;
-    }
-
-    public void setTransportList(List<ItineraryDayTransport> transportList) {
-        this.transportList = transportList;
-    }
+    public void setAccommodationList(List<ItineraryDayAccommodation> list) { this.accommodations = list; }
+    public void setTransportList(List<ItineraryDayTransport> list) { this.transports = list; }
 }
-

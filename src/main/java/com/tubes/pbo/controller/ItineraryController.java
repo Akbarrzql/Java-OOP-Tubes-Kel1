@@ -14,23 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tubes.pbo.model.Itinerary;
-import com.tubes.pbo.model.ItineraryDay;
-import com.tubes.pbo.model.ItineraryDayDestinasi;
-import com.tubes.pbo.model.ItineraryDayAccommodation;
-import com.tubes.pbo.model.ItineraryDayTransport;
-import com.tubes.pbo.model.Destinasi;
-import com.tubes.pbo.model.Accommodation;
-import com.tubes.pbo.model.Transport;
 import com.tubes.pbo.model.Provinsi;
-import com.tubes.pbo.dto.GenerateItineraryRequest;
+import com.tubes.pbo.model.GenerateItineraryRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.tubes.pbo.service.ItineraryService;
-import com.tubes.pbo.repository.ItineraryDayRepository;
-import com.tubes.pbo.repository.ItineraryDayDestinasiRepository;
-import com.tubes.pbo.repository.ItineraryDayAccommodationRepository;
-import com.tubes.pbo.repository.ItineraryDayTransportRepository;
-import com.tubes.pbo.repository.DestinasiRepository;
-import com.tubes.pbo.repository.AccommodationRepository;
-import com.tubes.pbo.repository.TransportRepository;
 import com.tubes.pbo.repository.ProvinsiRepository;
 
 @Controller
@@ -41,37 +28,17 @@ public class ItineraryController {
     private ItineraryService itineraryService;
 
     @Autowired
-    private ItineraryDayRepository itineraryDayRepository;
-
-    @Autowired
-    private ItineraryDayDestinasiRepository itineraryDayDestinasiRepository;
-
-    @Autowired
-    private ItineraryDayAccommodationRepository itineraryDayAccommodationRepository;
-
-    @Autowired
-    private ItineraryDayTransportRepository itineraryDayTransportRepository;
-
-    @Autowired
-    private DestinasiRepository destinasiRepository;
-
-    @Autowired
-    private AccommodationRepository accommodationRepository;
-
-    @Autowired
-    private TransportRepository transportRepository;
-
-    @Autowired
     private ProvinsiRepository provinsiRepository;
 
     // Generate Itinerary dari form home
     @PostMapping("/generate")
     public String generateItinerary(
-            @RequestParam(value = "destination", required = false) String destination,
-            @RequestParam(value = "province", required = false) Integer provinceId,
-            @RequestParam(value = "days", required = false, defaultValue = "3") Integer totalDays,
-            @RequestParam(value = "travelers", required = false) Integer travelers,
-            @RequestParam(value = "travelDate", required = false) String travelDate) {
+        @RequestParam(value = "destination", required = false) String destination,
+        @RequestParam(value = "province", required = false) Integer provinceId,
+        @RequestParam(value = "days", required = false, defaultValue = "3") Integer totalDays,
+        @RequestParam(value = "travelers", required = false) Integer travelers,
+        @RequestParam(value = "travelDate", required = false) String travelDate,
+        RedirectAttributes redirectAttributes){
 
         try {
             // Ambil dari session atau default ke traveler_id = 1
@@ -88,7 +55,8 @@ public class ItineraryController {
             }
 
             if (provinceId == null) {
-                return "redirect:/?error=Silakan pilih province dari dropdown autocomplete";
+                redirectAttributes.addFlashAttribute("error", "Silakan pilih province dari dropdown autocomplete");
+                return "redirect:/itinerary/list";
             }
 
             GenerateItineraryRequest request = new GenerateItineraryRequest();
@@ -110,56 +78,11 @@ public class ItineraryController {
 
             return "redirect:/itinerary/" + itinerary.getItineraryId();
         } catch (Exception e) {
-            return "redirect:/?error=" + e.getMessage();
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/";
         }
     }
 
-    // Detail Itinerary - baca dari database
-    @GetMapping("/{id}")
-    public String detailItinerary(@PathVariable("id") Integer id, Model model) {
-        Optional<Itinerary> itinerary = itineraryService.getItineraryById(id);
-
-        if (itinerary.isEmpty()) {
-            return "redirect:/dashboard?error=Itinerary not found";
-        }
-
-        Itinerary itin = itinerary.get();
-        List<ItineraryDay> itineraryDays = itineraryDayRepository.findByItineraryId(id);
-
-        model.addAttribute("itinerary", itin);
-        model.addAttribute("itineraryDays", itineraryDays);
-
-        // Untuk setiap hari, ambil destinasi, accommodation, transport
-        for (ItineraryDay day : itineraryDays) {
-            List<ItineraryDayDestinasi> destinasiList = itineraryDayDestinasiRepository.findByDayId(day.getDayId());
-            List<ItineraryDayAccommodation> accommodationList = itineraryDayAccommodationRepository.findByDayId(day.getDayId());
-            List<ItineraryDayTransport> transportList = itineraryDayTransportRepository.findByDayId(day.getDayId());
-
-            // Mapping destinasi dengan nama dan detail
-            for (ItineraryDayDestinasi idd : destinasiList) {
-                Optional<Destinasi> dest = destinasiRepository.findById(idd.getDestinasiId());
-                dest.ifPresent(idd::setDestinasiObj);
-            }
-
-            // Mapping accommodation dengan nama dan detail
-            for (ItineraryDayAccommodation ida : accommodationList) {
-                Optional<Accommodation> acc = accommodationRepository.findById(ida.getAccommodationId());
-                acc.ifPresent(ida::setAccommodationObj);
-            }
-
-            // Mapping transport dengan nama dan detail
-            for (ItineraryDayTransport idt : transportList) {
-                Optional<Transport> trans = transportRepository.findById(idt.getTransportId());
-                trans.ifPresent(idt::setTransportObj);
-            }
-
-            day.setDestinasiList(destinasiList);
-            day.setAccommodationList(accommodationList);
-            day.setTransportList(transportList);
-        }
-
-        return "traveler/itinerary/detail-itinerary";
-    }
 
     // LIST Itinerary traveler
     @GetMapping("/list")
