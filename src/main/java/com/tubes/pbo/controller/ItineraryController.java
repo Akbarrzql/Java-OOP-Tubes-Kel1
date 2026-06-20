@@ -14,24 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tubes.pbo.model.Itinerary;
-import com.tubes.pbo.model.ItineraryDay;
-import com.tubes.pbo.model.ItineraryDayDestinasi;
-import com.tubes.pbo.model.ItineraryDayAccommodation;
-import com.tubes.pbo.model.ItineraryDayTransport;
-import com.tubes.pbo.model.Destinasi;
-import com.tubes.pbo.model.Accommodation;
-import com.tubes.pbo.model.Transport;
 import com.tubes.pbo.model.Provinsi;
-import com.tubes.pbo.dto.GenerateItineraryRequest;
+import com.tubes.pbo.model.GenerateItineraryRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.tubes.pbo.service.ItineraryService;
-import com.tubes.pbo.repository.ItineraryDayRepository;
-import com.tubes.pbo.repository.ItineraryDayDestinasiRepository;
-import com.tubes.pbo.repository.ItineraryDayAccommodationRepository;
-import com.tubes.pbo.repository.ItineraryDayTransportRepository;
-import com.tubes.pbo.repository.DestinasiRepository;
-import com.tubes.pbo.repository.AccommodationRepository;
-import com.tubes.pbo.repository.TransportRepository;
 import com.tubes.pbo.repository.ProvinsiRepository;
 
 @Controller
@@ -40,27 +26,6 @@ public class ItineraryController {
 
     @Autowired
     private ItineraryService itineraryService;
-
-    @Autowired
-    private ItineraryDayRepository itineraryDayRepository;
-
-    @Autowired
-    private ItineraryDayDestinasiRepository itineraryDayDestinasiRepository;
-
-    @Autowired
-    private ItineraryDayAccommodationRepository itineraryDayAccommodationRepository;
-
-    @Autowired
-    private ItineraryDayTransportRepository itineraryDayTransportRepository;
-
-    @Autowired
-    private DestinasiRepository destinasiRepository;
-
-    @Autowired
-    private AccommodationRepository accommodationRepository;
-
-    @Autowired
-    private TransportRepository transportRepository;
 
     @Autowired
     private ProvinsiRepository provinsiRepository;

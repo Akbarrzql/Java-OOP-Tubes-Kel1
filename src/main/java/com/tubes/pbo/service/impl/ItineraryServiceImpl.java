@@ -15,7 +15,7 @@ import com.tubes.pbo.model.ItineraryDay;
 import com.tubes.pbo.model.ItineraryDayDestinasi;
 import com.tubes.pbo.model.ItineraryDayAccommodation;
 import com.tubes.pbo.model.ItineraryDayTransport;
-import com.tubes.pbo.dto.GenerateItineraryRequest;
+import com.tubes.pbo.model.GenerateItineraryRequest;
 import com.tubes.pbo.repository.ItineraryRepository;
 import com.tubes.pbo.repository.DestinasiRepository;
 import com.tubes.pbo.repository.AccommodationRepository;
@@ -117,7 +117,7 @@ public class ItineraryServiceImpl implements ItineraryService {
         for (int day = 1; day <= request.getTotalDays(); day++) {
             // Buat itinerary_day
             ItineraryDay itineraryDay = new ItineraryDay(savedItinerary.getItineraryId(), day);
-            itineraryDay.setCatatan("Day " + day + " - Explore and Adventure");
+            itineraryDay.setCatatan("Day " + day + " of " + request.getTotalDays());
             itineraryDay.setBiayaHari(0.0); 
             itineraryDay.setCreatedAt(java.time.LocalDateTime.now());
             ItineraryDay savedDay = itineraryDayRepository.save(itineraryDay);
