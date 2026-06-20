@@ -47,7 +47,7 @@
             day.setItinerary(itinerary);
             day.setHariKe(nextHariKe);
             day.setJudul(judul);
-            day.setTanggal(tanggal);  // <-- TAMBAH INI
+            day.setTanggal(tanggal); 
             day.setBiayaHari(0.0);
             day.setCreatedAt(LocalDateTime.now());
 
@@ -198,7 +198,8 @@
             recalculateDayBiaya(existing.getItineraryDay().getDayId());
             return saved;
         }
-        // ===== RECALCULATE =====
+        
+        // ===== RECALCULATE BIAYA =====
 
         @Transactional
         public void recalculateDayBiaya(Integer dayId) {
