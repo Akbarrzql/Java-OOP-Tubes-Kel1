@@ -69,6 +69,8 @@ public class DashboardController {
         model.addAttribute("itineraries", itineraries);
         model.addAttribute("totalItineraries", itineraries.size());
 
+        model.addAttribute("totalProvinsi", provinsiRepository.count());
+
         return "traveler/dashboard/dashboard";
     }
 }
